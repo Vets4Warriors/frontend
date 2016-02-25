@@ -1,0 +1,11 @@
+/*Vets4Warriors main CSS stylesheet*/
+/*Author: jmcgirr*/
+
+body {
+    background-color: #c12e2a;
+}
+
+#main {
+    width: 90%;
+    margin: 50px;
+}
