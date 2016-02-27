@@ -1,26 +1,30 @@
 <!--Vets4Warriors Database Frontend, main page-->
 <!--Author: jmcgirr-->
 <!DOCTYPE html>
-<html data-ng-app="main" lang="en">
+<html ng-app="main" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Welcome - Vets4Warriors Resource Database</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="res/jquery-2.2.1.min.js"></script>
+	<script type="text/javascript" src="res/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="res/angular.min.js"></script>
+	<script type="text/javascript" src="app/location.js"></script>
+	<script type="text/javascript" src="app/app.js"></script>
 </head>
 <body>
-	<script type="text/javascript" src="res/angular.min.js"></script>
-	<script type="text/javascript" src="res/bootstrap.min.js"></script>
-	<script type="text/javascript" src="res/jquery-2.2.1.min.js"></script>
-	<script type="text/javascript" src="app/app.js"></script>
-
 	<!--<div data-ng-controller="MainController as mainc">-->
 		<!--<h1>{{mainc.btn.name}}</h1>-->
 	<!--</div>-->
+	<header ng-controller="LocationListController as locList">
+		<p ng-repeat="location in locList.locations"> {{location.name}} </p>
+	</header>
 
-	<div id="main">
-		<div id="header">
+	<section id="main">
+		<header id="header">
 			<img src="gfx/logo.png">
-		</div>
-	</div>
+		</header>
+	</section>
 </body>
 </html>
