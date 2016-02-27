@@ -16,4 +16,23 @@
                 $log.error(data);
             });
     }]);
+
+    app.controller('LocationController', function() {
+
+    });
+
+    app.directive('locationCard', function() {
+       return {
+           restrict: 'E',
+           templateUrl: 'locationCard.html'
+       }
+    });
+
+    app.directive('locationRatings', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'locationRating.html'
+        }
+    });
+
 })();
