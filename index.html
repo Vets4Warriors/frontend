@@ -1,14 +1,15 @@
 <!--Vets4Warriors Database Frontend, main page-->
 <!--Author: jmcgirr-->
 <!DOCTYPE html>
-<html ng-app="main" lang="en">
+<html data-ng-app="main" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Welcome - Vets4Warriors Resource Database</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
 	<script type="text/javascript" src="res/jquery-2.2.1.min.js"></script>
 	<script type="text/javascript" src="res/bootstrap.min.js"></script>
-
 	<script type="text/javascript" src="res/angular.min.js"></script>
 	<script type="text/javascript" src="app/shared/location/location.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
@@ -17,14 +18,15 @@
 	<!--<div data-ng-controller="MainController as mainc">-->
 		<!--<h1>{{mainc.btn.name}}</h1>-->
 	<!--</div>-->
-	<header ng-controller="LocationListController as locList">
-		<p ng-repeat="location in locList.locations"> {{location.name}} </p>
+	<!--<header data-ng-controller="LocationListController as locList">-->
+		<!--<p data-ng-repeat="location in locList.locations"> {{location.name}} </p>-->
+	<!--</header>-->
+
+	<header>
+		<img src="gfx/logo.png">
+		<h1>Vets4Warriors <b>Counselor Laptop Resource</b></h1>
+		<br class="clearBoth"/>
 	</header>
 
-	<section id="main">
-		<header id="header">
-			<img src="gfx/logo.png">
-		</header>
-	</section>
 </body>
 </html>
