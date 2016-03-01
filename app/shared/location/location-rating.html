@@ -1,0 +1,6 @@
+<h1>Avg: {{averageRating(location.ratings)}}</h1>
+<article ng-repeat="rating in location.ratings">
+    <blockquote> Stars: {{rating.value}} </blockquote>
+    <p> - {{rating.user}} </p>
+    <p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>
+</article>
