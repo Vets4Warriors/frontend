@@ -1,0 +1,30 @@
+{
+  "name": "vets-4-warriors-frontend",
+  "description": "The frontend for the Vets 4 Warriors Counselor Resource Project",
+  "main": "app.js",
+  "authors": [
+    "austin <austin.cawley@gmail.com>",
+    "jeff <jmcgirr@stevens.edu>"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "vets",
+    "warriors",
+    "hotline",
+    "suicide",
+    "prevention"
+  ],
+  "homepage": "https://github.com/Vets4Warriors/frontend",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.3.0"
+  }
+}
