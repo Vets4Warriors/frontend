@@ -8,7 +8,7 @@
     <script src="../../bower_components/angular/angular.min.js"></script>
     <script src="../../bower_components/angular-route/angular-route.min.js"></script>
 
-    <script src="../shared/location/location-service.js"></script>
+    <!--<script src="../shared/location/location-service.js"></script>-->
     <script src="../shared/location/location.js"></script>
 
     <script src="listPage.js"></script>
@@ -16,6 +16,8 @@
     <title>Locations</title>
 </head>
 <body>
-    <location-card></location-card>
+    <section id="list" ng-controller="LocationController as locCtrl">
+        <location-card ng-repeat="location in locCtrl.locations"></location-card>
+    </section>
 </body>
 </html>

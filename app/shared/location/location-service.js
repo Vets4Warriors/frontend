@@ -6,7 +6,7 @@
 
 (function() {
     "use strict";
-    var locationService = angular.module('locationService', ['ngResource']);
+    var locationService = angular.module('locationService');
 
     locationService.service('Location', [/*'$resource',*/ '$http',
         // Not currently using the resource. Want to be explicit. When I get better at angular.

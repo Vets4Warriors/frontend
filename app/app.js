@@ -3,7 +3,7 @@
  */
 
 (function(){
-    var app = angular.module('main', ['ngRoute', 'listPage']);
+    var app = angular.module('main', ['ngRoute']);
 
     app.controller('mainController', function() {
 
