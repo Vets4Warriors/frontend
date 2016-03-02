@@ -37,7 +37,7 @@ node_modules
 ## Directory-based project format:
 /bower_components
 .idea/
-
+tests/
 
 
 

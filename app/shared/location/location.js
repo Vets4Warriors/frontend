@@ -4,11 +4,12 @@
 (function() {
     var app = angular.module('location-directives', []);
 
-    app.controller('LocationListController', ['$http', '$log', function($http, $log) {
+    app.controller('LocationController', ['$scope', '$log', 'locationService',
+        function($scope, $log, locationService) {
         var list = this;
         list.locations = [];
 
-        $http.get('http://localhost:8000/locations')
+        locationService.query({})
             .success(function(data) {
                 list.locations = angular.fromJson(data);
             })
@@ -20,7 +21,7 @@
     app.directive('locationCard', function() {
        return {
            restrict: 'E',
-           templateUrl: 'app/shared/location/location-card.html',
+           templateUrl: '../shared/location/location-card.html',
            controller: function() {
                this.tab = 0;
 
@@ -33,11 +34,9 @@
     });
 
     app.directive('locationRating', function() {
-
-
         return {
             restrict: 'E',
-            templateUrl: 'app/shared/location/location-rating.html',
+            templateUrl: '../shared/location/location-rating.html',
             controller: ['$scope', function($scope) {
                 $scope.averageRating = function(ratings) {
                     var sum = 0;
