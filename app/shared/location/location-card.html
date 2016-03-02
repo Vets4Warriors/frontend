@@ -1,3 +1,53 @@
-<paper-card heading={{location.name}}>
-    <location-rating ng-show="card.isShowing(0)"></location-rating>
+<!--
+    A template for each location
+
+-->
+
+<link rel="import" href="../../bower_components/paper-card/paper-card.html"/>
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html"/>
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html"/>
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html"/>
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html"/>
+
+<link rel="stylesheet" href="../../_assets/css/bootstrap.min.css"/>
+
+<style is="location-card-style">
+    paper-toolbar {
+        --paper-toolbar-background: var(--paper-red-900);
+        text-align: left;
+    }
+
+    h1 {
+        text-align: left;
+    }
+
+    paper-tabs {
+        width: 300px;
+    }
+
+    paper-icon-button {
+        color: white;
+    }
+
+    .self-end {
+        /* This mixin (from iron-flex-layout) aligns the tabs to the
+           bottom of the toolbar. */
+        @apply(--layout-self-end);
+    }
+</style>
+
+<paper-card>
+    <paper-toolbar class="medium-tall">
+        <paper-icon-button icon="maps:my-location" title="Locate"></paper-icon-button>
+        <h1 class="title">{{location.name}}</h1>
+
+        <paper-tabs selected="0" class="bottom self-end">
+            <paper-tab ng-click="card.setTab(0)">Info</paper-tab>
+            <paper-tab ng-click="card.setTab(1)">Contact</paper-tab>
+            <paper-tab ng-click="card.setTab(2)">Ratings</paper-tab>
+        </paper-tabs>
+    </paper-toolbar>
+    <location-info ng-show="card.isShowing(0)"></location-info>
+    <location-contact ng-show="card.isShowing(1)"></location-contact>
+    <location-rating ng-show="card.isShowing(2)"></location-rating>
 </paper-card>

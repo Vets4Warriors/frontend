@@ -12,13 +12,42 @@
             var baseApiUrl = 'http://localhost:8000/api/1.0/locations';
             var service = this;
 
+            /**
+             *
+             * @type {LocationAddress}
+             */
+            this.LocationAddress = class LocationAddress {
+                constructor(jsonData) {
+                    this.address1 = jsonData['address1'];
+                    this.address2 = jsonData['address2'];
+                    this.city = jsonData['city'];
+                    this.state = jsonData['state'];
+                    this.country = jsonData['country'];
+                    this.latLng = jsonData['latLng'];
+                    this.zipcode = jsonData['zipcode'];
+                }
+
+                /**
+                 *
+                 * @returns {string}
+                 */
+                getFormatted() {
+                    var addrLine = this.address1 + ((this.address2 === '') ? '' : ", " + this.address2);
+                    return addrLine + ", " + this.city + ", " + this.state + ", " + this.country + ", " + this.zipcode;
+                }
+            };
+
+            /**
+             *
+             * @type {LocationRating}
+             */
             this.LocationRating = class LocationRating {
-              constructor(jsonData) {
-                  this.comment = jsonData['comment'];
-                  this.ratedOn = new Date(jsonData['ratedOn'].$date);
-                  this.user = jsonData['user'];
-                  this.value = jsonData['value'];
-              };
+                constructor(jsonData) {
+                    this.comment = jsonData['comment'];
+                    this.ratedOn = new Date(jsonData['ratedOn'].$date);
+                    this.user = jsonData['user'];
+                    this.value = jsonData['value'];
+                };
 
                 static fromJsonArray (jsonArray) {
                     var ratings = [];
@@ -29,7 +58,10 @@
                 }
             };
 
-
+            /**
+             *
+             * @type {Location}
+             */
             this.Location = class Location {
                 constructor(jsonData) {
                     // Duplication but should make posting easy
@@ -38,18 +70,43 @@
                     this.name = jsonData['name'];
                     this.phone = jsonData['phone'];
                     this.email = jsonData['email'];
-                    this.address = jsonData['address'];
-                    this.hqAddress = jsonData['hqAddress'];
+                    this.address = new service.LocationAddress(jsonData['address']);
+                    this.hqAddress = jsonData['hqAddress'] === undefined ?
+                        jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress']);
                     this.locationType = jsonData['locationType'];
                     this.coverage = jsonData['coverage'];
                     this.services = jsonData['services'];
                     this.tags = jsonData['tags'];
                     this.comments = jsonData['comments'];
                     this.rating = jsonData['rating'];
-                    this.ratings = jsonData['ratings'];
+                    this.ratings = service.LocationRating.fromJsonArray(jsonData['ratings']);
                     this.website = jsonData['website'];
                     this.addedOn = new Date(jsonData['addedOn'].$date);
                     this.addedBy = jsonData['addedBy'];
+                }
+
+                /**
+                 * Format the phone number so it's nice and read-able
+                 * @returns {string}
+                 */
+                getPhone() {
+                    return this.phone;
+                }
+
+                /**
+                 *
+                 * @returns {string}
+                 */
+                getFormattedAddr() {
+                    return this.address.getFormatted();
+                }
+
+                /**
+                 *
+                 * @returns {string}
+                 */
+                getFormattedHqAddr() {
+                    return this.hqAddress.getFormatted();
                 }
 
                 /**
@@ -126,8 +183,10 @@
             };
         }]);
 
-
-    app.controller('LocationController', ['$scope', '$log', 'locationService',
+    /**
+     *  This controls the list as a whole
+     */
+    app.controller('LocationsController', ['$scope', '$log', 'locationService',
         function($scope, $log, locationService) {
         var list = this;
         list.locations = [];
@@ -142,6 +201,9 @@
             });
     }]);
 
+    /**
+     *  The main container for each location.
+     */
     app.directive('locationCard', function() {
        return {
            restrict: 'E',
@@ -152,11 +214,18 @@
                this.isShowing = function(tabIndex) {
                    return tabIndex === this.tab;
                };
+
+               this.setTab = function(tabIndex) {
+                   this.tab = tabIndex;
+               }
            },
            controllerAs: "card"
        };
     });
 
+    /**
+     *
+     */
     app.directive('locationRating', function() {
         return {
             restrict: 'E',
@@ -172,6 +241,26 @@
                 };
             }]
         };
+    });
+
+    /**
+     *  Part of the location card. Tab to display basic location info
+     */
+    app.directive('locationInfo', function() {
+       return {
+           restrict: 'E',
+           templateUrl: '../shared/location/location-info.html'
+       }
+    });
+
+    /**
+     *  Part of the location card. Tab to display basic location info
+     */
+    app.directive('locationContact', function() {
+        return {
+            restrict: 'E',
+            templateUrl: '../shared/location/location-contact.html'
+        }
     });
 
 })();

@@ -1,0 +1,33 @@
+{
+  "name": "vets-frontend",
+  "version": "1.0.0",
+  "description": "The Frontend UI for the Vets 4 Warriors counselor resource",
+  "main": "index.html",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vets4Warriors/frontend.git"
+  },
+  "keywords": [
+    "vets",
+    "warriors",
+    "suicide",
+    "prevention"
+  ],
+  "author": "austin <austin.cawley@gmail.com>",
+  "contributors": [
+    "Jeff Mcgirr <jmcgirr@stevens.edu> (https://github.com/coffeeist)",
+    "Austin Cawley-Edwards <austin.cawley@gmail.com> (https://github.com/austincawley)"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vets4Warriors/frontend/issues"
+  },
+  "homepage": "https://github.com/Vets4Warriors/frontend#readme",
+  "private": true
+}
