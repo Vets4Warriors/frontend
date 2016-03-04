@@ -25,7 +25,7 @@
                     this.address = jsonData['address'];
                     this.hqAddress = jsonData['hqAddress'];
                     this.locationType = jsonData['locationType'];
-                    this.coverage = jsonData['coverage'];
+                    this.coverages = jsonData['coverages'];
                     this.services = jsonData['services'];
                     this.tags = jsonData['tags'];
                     this.comments = jsonData['comments'];

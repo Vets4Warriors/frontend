@@ -25,5 +25,5 @@ gulp.task('compileComponents', function() {
 });
 
 gulp.task('default', function() {
-    return 'Good';
+    return ;
 });

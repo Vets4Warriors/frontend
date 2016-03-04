@@ -4,6 +4,15 @@
 (function() {
     var app = angular.module('location-directives', []);
 
+    /*app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
+
+        // We need to setup some parameters for http requests
+        // These three lines are all you need for CORS support
+        $httpProvider.defaults.useXDomain = true;
+        $httpProvider.defaults.withCredentials = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    });*/
+
     app.service('locationService', [/*'$resource',*/ '$http',
         // Not currently using the resource. Want to be explicit. When I get better at angular.
         // Will probably be rewritten using $resource
@@ -17,7 +26,7 @@
              * @type {LocationAddress}
              */
             this.LocationAddress = class LocationAddress {
-                constructor(jsonData) {
+                constructor(jsonData, autoLoad) {
                     this.address1 = jsonData['address1'];
                     this.address2 = jsonData['address2'];
                     this.city = jsonData['city'];
@@ -42,17 +51,30 @@
              * @type {LocationRating}
              */
             this.LocationRating = class LocationRating {
-                constructor(jsonData) {
-                    this.comment = jsonData['comment'];
-                    this.ratedOn = new Date(jsonData['ratedOn'].$date);
-                    this.user = jsonData['user'];
-                    this.value = jsonData['value'];
+                constructor(jsonData, fromForm) {
+                    // When building from the server
+                    if (fromForm) {
+                        this.user = jsonData['user'];
+                        this.value = parseInt(jsonData['value']);
+                        this.comment = jsonData['comment'];
+                    } else {
+                        // From Server
+                        this.user = jsonData['user'];
+                        this.value = jsonData['value'];
+                        this.comment = jsonData['comment'];
+                        this.ratedOn = new Date(jsonData['ratedOn'].$date);
+                    }
                 };
 
+                /**
+                 *
+                 * @param jsonArray
+                 * @returns {Array}
+                 */
                 static fromJsonArray (jsonArray) {
                     var ratings = [];
                     for (var i = 0; i < jsonArray.length; i++) {
-                        ratings.push(new this(jsonArray[i]));
+                        ratings.push(new this(jsonArray[i], false));
                     }
                     return ratings;
                 }
@@ -70,11 +92,11 @@
                     this.name = jsonData['name'];
                     this.phone = jsonData['phone'];
                     this.email = jsonData['email'];
-                    this.address = new service.LocationAddress(jsonData['address']);
+                    this.address = new service.LocationAddress(jsonData['address'], true);
                     this.hqAddress = jsonData['hqAddress'] === undefined ?
-                        jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress']);
+                        jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress'], true);
                     this.locationType = jsonData['locationType'];
-                    this.coverage = jsonData['coverage'];
+                    this.coverages = jsonData['coverage'];
                     this.services = jsonData['services'];
                     this.tags = jsonData['tags'];
                     this.comments = jsonData['comments'];
@@ -109,9 +131,41 @@
                     return this.hqAddress.getFormatted();
                 }
 
+                getFormattedServices() {
+                    return Location.formatArrayToStr(this.services);
+                }
+
+                getFormattedCoverage() {
+                    return Location.formatArrayToStr(this.coverages);
+                }
+
                 /**
                  *
-                 * @param locationsArray
+                 * @returns {string}
+                 */
+                getFormattedTags() {
+                    return Location.formatArrayToStr(this.tags);
+                }
+
+                /**
+                 *
+                 * @param arr
+                 * @returns {string}
+                 */
+                static formatArrayToStr(arr) {
+                    var arrStr = '';
+                    for (var i = 0; i < arr.length; i++) {
+                        if (i == 0)
+                            arrStr += arr[i];
+                        else
+                            arrStr += ', ' + arr[i];
+                    }
+                    return arrStr;
+                }
+
+                /**
+                 *
+                 * @param jsonArray
                  * @returns {Array} of Locations
                  */
                 static fromJsonArray (jsonArray) {
@@ -151,7 +205,12 @@
              * @returns {HttpPromise}
              */
             this.rate = function(id, rating) {
-                return $http.post(baseApiUrl + '/' + id + '/rate', rating);
+                return $http({
+                    url: baseApiUrl + '/' + id + '/rate',
+                    method: "POST",
+                    data: JSON.stringify(rating),
+                    headers: {'Content-Type': 'application/json'}
+                });
             };
 
             /**
@@ -188,17 +247,19 @@
      */
     app.controller('LocationsController', ['$scope', '$log', 'locationService',
         function($scope, $log, locationService) {
-        var list = this;
-        list.locations = [];
-        list.locationService = locationService;
+            var list = this;
+            var Location = locationService.Location;
+            list.locations = [];
+            list.locationService = locationService;
 
-        locationService.query({})
-            .success(function(data) {
-                list.locations = list.locationService.Location.fromJsonArray(angular.fromJson(data));
-            })
-            .error(function(data) {
-                $log.error(data);
-            });
+            locationService.query({})
+                .success(function(data) {
+                    // This is ugly
+                    list.locations = Location.fromJsonArray(angular.fromJson(data));
+                })
+                .error(function(data) {
+                    $log.error(data);
+                });
     }]);
 
     /**
@@ -219,7 +280,7 @@
                    this.tab = tabIndex;
                }
            },
-           controllerAs: "card"
+           controllerAs: 'cardController'
        };
     });
 
@@ -230,7 +291,27 @@
         return {
             restrict: 'E',
             templateUrl: '../shared/location/location-rating.html',
-            controller: ['$scope', function($scope) {
+            controller: ['$scope', '$log', 'locationService', function($scope, $log, locationService) {
+
+                $scope.submitRatingForm = function() {
+                    var form = document.getElementById($scope.location.name);
+
+                    if (form.validate()) {
+                        // Send request to database api
+                        var rating = new locationService.LocationRating(form.serialize(), true);
+
+                        locationService.rate($scope.location.id, rating)
+                            .success(function(data) {
+                                $log.debug(data);
+                                form.reset();
+                            })
+                            .error(function(data) {
+                                $log.error(data);
+                            });
+                    }
+                    return false;
+                };
+
                 $scope.averageRating = function(ratings) {
                     var sum = 0;
                     for (var i = 0; i < ratings.length; i++) {
@@ -239,7 +320,8 @@
 
                     return ratings.length != 0 ? sum/ratings.length : 0;
                 };
-            }]
+            }],
+            controllerAs: 'locRatingController'
         };
     });
 
@@ -259,7 +341,26 @@
     app.directive('locationContact', function() {
         return {
             restrict: 'E',
-            templateUrl: '../shared/location/location-contact.html'
+            templateUrl: '../shared/location/location-contact.html',
+            controller: ['locationService', function() {
+                
+            }],
+            controllerAs: 'contactController'
+        }
+    });
+
+
+    /**
+     * The form to add locations
+     */
+    app.directive('locationAdd', function() {
+        return {
+            restrict: 'E',
+            templateUrl: '../shared/location/location-add.html',
+            controller: ['locationService', function() {
+
+            }],
+            controllerAs: 'contactController'
         }
     });
 

@@ -1,6 +1,7 @@
-<article>
+<article class="cardItemContainer">
     <blockquote>{{location.locationType}}</blockquote>
-    <blockquote>{{location.coverage}}</blockquote>
-    <blockquote>{{location.services}}</blockquote>
-    <blockquote>{{location.tags}}</blockquote>
+    <p>{{location.getFormattedCoverage()}}</p>
+    <p>{{location.getFormattedServices()}}</p>
+    <p>{{location.getFormattedTags()}}</p>
+    <p><em>Added by {{location.addedBy}} on {{location.addedOn}}</em></p>
 </article>

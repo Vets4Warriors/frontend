@@ -1,6 +1,6 @@
-<article>
-    <blockquote>{{location.getPhone()}}</blockquote>
-    <blockquote>{{location.getFormattedAddr()}}</blockquote>
-    <blockquote>{{location.email}}</blockquote>
-    <blockquote>{{location.website}}</blockquote>
+<article class="cardItemContainer">
+    <p>{{location.getPhone()}}</p>
+    <p>{{location.getFormattedAddr()}}</p>
+    <p><a href="mailto:{{location.email}}">{{location.email}}</a></p>
+    <p><a href="{{location.website}}">{{location.website}}</a></p>
 </article>

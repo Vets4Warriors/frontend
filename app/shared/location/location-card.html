@@ -12,42 +12,51 @@
 <link rel="stylesheet" href="../../_assets/css/bootstrap.min.css"/>
 
 <style is="location-card-style">
-    paper-toolbar {
+    .locationCard paper-card {
+        width: 30%;
+    }
+
+    .locationCard paper-toolbar {
         --paper-toolbar-background: var(--paper-red-900);
         text-align: left;
     }
 
-    h1 {
+    .locationCard h1 {
         text-align: left;
     }
 
-    paper-tabs {
+    .locationCard paper-tabs {
         width: 300px;
     }
 
-    paper-icon-button {
+    .locationCard paper-icon-button {
         color: white;
     }
 
-    .self-end {
+    .locationCard .self-end {
         /* This mixin (from iron-flex-layout) aligns the tabs to the
            bottom of the toolbar. */
         @apply(--layout-self-end);
     }
+
+    .locationCard .cardItemContainer {
+        padding: 8px;
+    }
 </style>
 
-<paper-card>
+<paper-card class="locationCard">
     <paper-toolbar class="medium-tall">
-        <paper-icon-button icon="maps:my-location" title="Locate"></paper-icon-button>
         <h1 class="title">{{location.name}}</h1>
+        <paper-icon-button icon="maps:my-location" title="Locate"></paper-icon-button>
 
         <paper-tabs selected="0" class="bottom self-end">
-            <paper-tab ng-click="card.setTab(0)">Info</paper-tab>
-            <paper-tab ng-click="card.setTab(1)">Contact</paper-tab>
-            <paper-tab ng-click="card.setTab(2)">Ratings</paper-tab>
+            <paper-tab ng-click="cardController.setTab(0)">Info</paper-tab>
+            <paper-tab ng-click="cardController.setTab(1)">Contact</paper-tab>
+            <paper-tab ng-click="cardController.setTab(2)">Ratings</paper-tab>
         </paper-tabs>
     </paper-toolbar>
-    <location-info ng-show="card.isShowing(0)"></location-info>
-    <location-contact ng-show="card.isShowing(1)"></location-contact>
-    <location-rating ng-show="card.isShowing(2)"></location-rating>
-</paper-card>
+
+    <location-info ng-show="cardController.isShowing(0)"></location-info>
+    <location-contact ng-show="cardController.isShowing(1)"></location-contact>
+    <location-rating ng-show="cardController.isShowing(2)"></location-rating>
+</paper-card><br/>

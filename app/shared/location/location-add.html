@@ -1,0 +1,46 @@
+<!-- The add form template for locations -->
+<link rel="import" href="../../bower_components/iron-form/iron-form.html"/>
+<link rel="import" href="../../bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="../../bower_components/paper-button/paper-button.html"/>
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+
+<style is="location-add-style">
+    .locationAdd {
+        background: white;
+        width: 100%;
+        height: 100%;
+    }
+    .locationAdd form {
+        padding: 8px;
+    }
+</style>
+
+<paper-material class="locationAdd">
+    <paper-toolbar class="small">
+        <h1 class="title">Add a location</h1>
+        <paper-icon-button icon="close" title="Close" ng-click="listCtrl.setIsAdding(false);"></paper-icon-button>
+    </paper-toolbar>
+
+    <form class="addRatingForm" is="iron-form" name="ratingForm" method="post">
+        <paper-input name="name" label="Name" error-message="Need a name!"
+                     required autovalidate></paper-input>
+
+        <paper-input name="address" label="Address" required></paper-input>
+        <paper-input name="hqAddress" label="HQ Address"></paper-input>
+
+        <paper-input name="locationType" label="Location Type" required></paper-input>
+        <paper-input name="services" label="Services" required></paper-input>
+        <paper-input name="coverage" label="Coverage" required></paper-input>
+        <paper-input name="tags" label="Tags (separated by commas)"></paper-input>
+        <paper-input name="website" label="Website"></paper-input>
+
+        <paper-input name="comment" label="Comment"
+                     autovalidate></paper-input>
+        <paper-input name="addedBy" label="User" error-message="Need to provide your name!"
+                     required autovalidate></paper-input>
+
+        <paper-button type="submit" ng-click="">Add to database</paper-button>
+    </form>
+</paper-material>
