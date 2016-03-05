@@ -123,6 +123,10 @@
                     return this.address.getFormatted();
                 }
 
+                getAddrLatLng() {
+                    return this.address.latLng['coordinates'];
+                }
+
                 /**
                  *
                  * @returns {string}
@@ -278,7 +282,9 @@
 
                this.setTab = function(tabIndex) {
                    this.tab = tabIndex;
-               }
+               };
+
+
            },
            controllerAs: 'cardController'
        };

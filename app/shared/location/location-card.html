@@ -47,7 +47,7 @@
 <paper-card class="locationCard">
     <paper-toolbar class="medium-tall">
         <h1 class="title">{{location.name}}</h1>
-        <paper-icon-button icon="maps:my-location" title="Locate"></paper-icon-button>
+        <paper-icon-button icon="maps:my-location" title="Locate" ng-click="listCtrl.zoomToLocation(location.getAddrLatLng());"></paper-icon-button>
 
         <paper-tabs selected="0" class="bottom self-end">
             <paper-tab ng-click="cardController.setTab(0)">Info</paper-tab>

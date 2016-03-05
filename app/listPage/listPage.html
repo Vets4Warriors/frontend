@@ -2,6 +2,9 @@
 <html lang="en" data-ng-app="listPage">
 <head>
     <meta charset="UTF-8">
+    <title>Locations</title>
+    <link rel="shortcut icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
 
     <link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
     <link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
@@ -17,7 +20,7 @@
 
     <script src="listPage.js"></script>
 
-    <title>Locations</title>
+
 
     <style is="list-page-style">
         html, body {
@@ -47,10 +50,9 @@
             width: 64px;
             height: 64px;
             position: absolute;
-            right: 16px;
-            bottom: 16px;
+            right: 24px;
+            bottom: 24px;
         }
-
         #actions paper-fab {
             height: 100%;
             width: 100%;
@@ -65,12 +67,11 @@
             width: 500px;
             height: auto;
         }
-
     </style>
 </head>
 
 <body ng-controller="ListPageController as listCtrl">
-    <google-map disable-default-ui>
+    <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
         <section id="list" ng-show="!listCtrl.isAdding">
             <!-- Search box -->
             <!-- Results -->

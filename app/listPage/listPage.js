@@ -7,22 +7,39 @@
     var app = angular.module('listPage', ['ngRoute', 'location-directives', 'angular-click-outside']);
 
     app.controller('ListPageController', function() {
+        var listPageCtrl = this;
         this.isAdding = false;
+        this.map = document.querySelector('google-map');
+        this.currentLatLng = null;
+
+        this.map.addEventListener('google-map-ready', function(e) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        //success
+                        console.log("Got the location!");
+                        listPageCtrl.currentLatLng = [position.coords.latitude, position.coords.longitude];
+                        listPageCtrl.zoomToLocation(listPageCtrl.currentLatLng);
+                    }, function (error) {
+                        // error
+                        console.log("error");
+                    });
+            }
+        });
 
         this.setIsAdding = function(show) {
             console.log("isAdding: " + show);
-            if (show) {
-                this.setClickedAdd(true);
-            }
-
             this.isAdding = show;
         };
 
-        this.setClickedAdd = function(clicked) {
-            console.log("Clicked add: " + clicked);
-            this.clickedAdd = clicked;
+        /**
+         *
+         * @param latLng, array [lat, lng]
+         */
+        this.zoomToLocation = function(latLng) {
+            this.map.latitude = latLng[0];
+            this.map.longitude = latLng[1];
         }
-
     });
 
     /**
