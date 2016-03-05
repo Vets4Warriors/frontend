@@ -36,7 +36,12 @@
             left: 2%;
             top: 24px;
         }
+        #searchBox {
+            width: 100%;
+            margin-bottom: 16px;
+        }
         .listContainer {
+            margin-top: 16px;
             overflow: hidden;
             /*overflow-y: scroll;*/
         }
@@ -72,12 +77,17 @@
 
 <body ng-controller="ListPageController as listCtrl">
     <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
-        <section id="list" ng-show="!listCtrl.isAdding">
+        <section id="list" ng-show="!listCtrl.isAdding" ng-controller="LocationsController as locCtrl">
             <!-- Search box -->
+            <location-search-box id="searchBox"></location-search-box>
             <!-- Results -->
-            <article class="listContainer" ng-controller="LocationsController as locCtrl">
+            <article class="listContainer" >
                 <location-card ng-repeat="location in locCtrl.locations"></location-card>
             </article>
+
+            <aside id="filters">
+                <!-- Setup similar to amazon/google/all other search pages -->
+            </aside>
             <!-- Side bar for filtering -->
         </section>
 

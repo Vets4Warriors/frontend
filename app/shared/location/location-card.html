@@ -8,6 +8,8 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html"/>
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html"/>
 <link rel="import" href="../../bower_components/iron-icons/maps-icons.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html"/>
 
 <link rel="stylesheet" href="../../_assets/css/bootstrap.min.css"/>
 
@@ -42,21 +44,44 @@
     .locationCard .cardItemContainer {
         padding: 8px;
     }
+    /*.locationCard #content {
+        height: auto;
+    }*/
+    .locationCard #contentCollapse>div {
+        height: auto;
+    }
 </style>
 
 <paper-card class="locationCard">
     <paper-toolbar class="medium-tall">
         <h1 class="title">{{location.name}}</h1>
-        <paper-icon-button icon="maps:my-location" title="Locate" ng-click="listCtrl.zoomToLocation(location.getAddrLatLng());"></paper-icon-button>
+        <!-- Might want to put the click function within the card controller -->
+        <paper-icon-button icon="maps:my-location" title="Locate"
+                           ng-click="listCtrl.zoomToLocation(location.getAddrLatLng());"></paper-icon-button>
+        <paper-icon-button icon="expand-more" title="Expand" ng-click="cardCtrl.toggleContent();"></paper-icon-button>
 
-        <paper-tabs selected="0" class="bottom self-end">
-            <paper-tab ng-click="cardController.setTab(0)">Info</paper-tab>
-            <paper-tab ng-click="cardController.setTab(1)">Contact</paper-tab>
-            <paper-tab ng-click="cardController.setTab(2)">Ratings</paper-tab>
+
+        <!-- Show a brief description if the card is not expanded -->
+        <p class="bottom" ng-show="!cardCtrl.isExpanded">{{location.getFormattedServices();}}</p>
+        <!-- Only show the tabs if the card has been expanded -->
+        <paper-tabs selected="0" class="bottom self-end" ng-show="cardCtrl.isExpanded">
+            <paper-tab ng-click="cardCtrl.setTab(0)">Info</paper-tab>
+            <paper-tab ng-click="cardCtrl.setTab(1)">Contact</paper-tab>
+            <paper-tab ng-click="cardCtrl.setTab(2)">Ratings</paper-tab>
         </paper-tabs>
     </paper-toolbar>
 
-    <location-info ng-show="cardController.isShowing(0)"></location-info>
-    <location-contact ng-show="cardController.isShowing(1)"></location-contact>
-    <location-rating ng-show="cardController.isShowing(2)"></location-rating>
+    <!--<div id="content" ng-show="cardCtrl.isExpanded">
+        <location-info ng-show="cardCtrl.tabIsShowing(0)"></location-info>
+        <location-contact ng-show="cardCtrl.tabIsShowing(1)"></location-contact>
+        <location-rating ng-show="cardCtrl.tabIsShowing(2)"></location-rating>
+    </div>-->
+
+    <iron-collapse id="contentCollapse">
+        <div>
+            <location-info ng-show="cardCtrl.tabIsShowing(0)"></location-info>
+            <location-contact ng-show="cardCtrl.tabIsShowing(1)"></location-contact>
+            <location-rating ng-show="cardCtrl.tabIsShowing(2)"></location-rating>
+        </div>
+    </iron-collapse>
 </paper-card><br/>

@@ -273,10 +273,13 @@
        return {
            restrict: 'E',
            templateUrl: '../shared/location/location-card.html',
-           controller: function() {
+           controller: ['$element', function($element) {
+               this.isExpanded = false;
                this.tab = 0;
 
-               this.isShowing = function(tabIndex) {
+               this.contentCollapse = $element.find('iron-collapse')[0];
+
+               this.tabIsShowing = function(tabIndex) {
                    return tabIndex === this.tab;
                };
 
@@ -284,9 +287,12 @@
                    this.tab = tabIndex;
                };
 
-
-           },
-           controllerAs: 'cardController'
+               this.toggleContent = function() {
+                   this.isExpanded = !this.isExpanded;
+                   this.contentCollapse.toggle();
+               };
+           }],
+           controllerAs: 'cardCtrl'
        };
     });
 
@@ -369,5 +375,17 @@
             controllerAs: 'contactController'
         }
     });
+
+
+    app.directive('locationSearchBox', function() {
+        return {
+            restrict: 'E',
+            templateUrl: '../shared/location/location-search-box.html',
+            controller: function() {
+               return;
+            },
+            controllerAs: 'locSearchCtrl'
+        }
+    })
 
 })();
