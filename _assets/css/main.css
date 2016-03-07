@@ -2,24 +2,34 @@
 /*Author: jmcgirr*/
 
 html {
-    background-image: url("../gfx/odBack.jpg");
+    background: #d9cebf;
+    font-family: "Trebuchet MS", Helvetica, Arial, SansSerif;
+    color: #000;
+}
+
+body {
+    width: 100%;
 }
 
 header {
+    width:100%;
     background-color: #B7A287;
     margin-top: 50px;
-    box-shadow: inset 0px 0px 1px 2px rgba(0,0,0,.5);
+    box-shadow: 0px 3px 6px 3px rgba(0,0,0,.7);
     height: 100px;
 }
 
 header img {
-    padding: 20px;
-    margin-left: 20px;
+    margin-left: 40px;
     display: inline;
     float: left;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 header h1 {
+    padding-left: 40px;
     display: inline;
     float: left;
     position: relative;
@@ -29,10 +39,24 @@ header h1 {
 
 }
 
+fieldset input {
+    /*padding:0 20px;*/
+}
+
+fieldset label {}
+
+legend {
+    font-weight: bold;
+}
+
 /*Classes*/
 
 .clearBoth {
     clear: both;
+}
+
+.homeBtn:hover {
+    opacity:0.7;
 }
 
 .smallCircle {
@@ -48,26 +72,32 @@ header h1 {
 .circle {
     height: 0;
     border-radius: 50%;
-    border: 10px solid #8c8c8c;
     overflow: hidden;
-    background: #111111;
+    background: #B7A287;
+    box-shadow: 1px 3px 6px 3px rgba(0,0,0,.7);
 }
 
 .circle:hover{
-    background: #3a3a3a;
+    background: #bca98f;
+    box-shadow: 1px 3px 8px 5px rgba(0,0,0,.8);
 }
 
 .circle a {
     display: block;
     float: left;
     width:100%;
-    padding-top: 50%;
+    padding-top: 40%;
     padding-bottom: 50%;
     line-height: 1em;
     margin-top: -0.5em;
     text-align: center;
-    color: #ffffff;
+    color: #000;
     text-decoration: none;
+    font-size: 16pt;
+}
+
+.largeCircle a {
+    font-size: 30pt;
 }
 
 /*IDs*/
@@ -75,8 +105,8 @@ header h1 {
 div#main {
     display: flex;
     flex-direction: row;
-    width: 100%;
     height: 580px;
+    margin: 0 auto;
     margin-top: 50px;
 }
 
@@ -93,4 +123,8 @@ div#right {
     flex-direction:column;
     padding: 30px;
     width: 220px;
+}
+
+#formMain {
+    margin:50px;
 }
