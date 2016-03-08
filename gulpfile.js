@@ -3,16 +3,25 @@
  *
  * This is a simple build system designed to create production
  *
+ * Based off:
+ * https://gist.github.com/kincaidoneil/b7ad507c1bb7bb243828
  */
-var gulp = require('gulp');
-var vulcanize = require('gulp-vulcanize');
+const gulp = require('gulp');
+const vulcanize = require('gulp-vulcanize');
+const minifyHtml = require('gulp-htmlmin');
+const del = require('del');
+
 
 /**
  * Should compile all the Polymer components into single files for efficiency
  */
+gulp.task('clean', function (callback) {
+   return del(['build', 'dist'], callback)
+});
+
 gulp.task('compileComponents', function() {
     // Todo!
-    return gulp.src('')
+    return gulp.src('app')
         .pipe(vulcanize({
             abspath: '',
             exculdes: [],
@@ -24,6 +33,4 @@ gulp.task('compileComponents', function() {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', function() {
-    return ;
-});
+gulp.task('default', ['clean']);

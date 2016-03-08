@@ -2,11 +2,11 @@
  * Created by austin on 3/2/16.
  *
  * A small node.js server to run our angular app
- *
+ *  All node packages should be managed with npm (i.e. not with bower: [jQuery, angular, ...])
  */
 
 require('newrelic');
-
+require('del');
 (function() {
     var express = require('express');
     // For logging
