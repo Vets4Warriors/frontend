@@ -12,16 +12,22 @@
     .cardItemContainer .addRatingForm paper-input {
         margin: 2px;
     }
+    .scroll {
+        height: 300px;
+        overflow-y: scroll;
+    }
 
 </style>
 
 <article class="cardItemContainer">
     <h1>Average rating: {{averageRating(location.ratings)}}</h1>
-    <article ng-repeat="rating in location.ratings track by $index">
-        <blockquote> Stars: {{rating.value}} </blockquote>
-        <p> - {{rating.user}} </p>
-        <p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>
-    </article>
+    <div class="scroll">
+        <article ng-repeat="rating in location.ratings track by $index">
+            <blockquote> Stars: {{rating.value}} </blockquote>
+            <p> - {{rating.user}} </p>
+            <p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>
+        </article>
+    </div>
 
     <form id="{{location.name}}" class="addRatingForm" is="iron-form" name="ratingForm" method="post" action="test">
         <paper-input name="value" label="Rating" error-message="Need to provide a rating 1-5!" type="number" min="1" max="5"
