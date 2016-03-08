@@ -33,6 +33,11 @@
     "expanded-card": "^0.1.6",
     "angular": "angularjs#^1.5.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.7",
-    "iron-elements": "PolymerElements/iron-elements#^1.0.8"
+    "iron-elements": "PolymerElements/iron-elements#^1.0.8",
+    "paper-fab": "PolymerElements/paper-fab#^1.2.0",
+    "arg.js": "argjs#^1.3.1",
+    "angular-route": "^1.5.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.1.3",
+    "jquery": "^2.2.1"
   }
 }
