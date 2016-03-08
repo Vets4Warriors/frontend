@@ -30,6 +30,9 @@
     "google-map": "GoogleWebComponents/google-map#^1.1.10",
     "angular-click-outside": "^2.6.2",
     "gold-phone-input": "PolymerElements/gold-phone-input#^1.0.8",
-    "expanded-card": "^0.1.6"
+    "expanded-card": "^0.1.6",
+    "angular": "angularjs#^1.5.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.8"
   }
 }

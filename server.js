@@ -8,6 +8,7 @@
 require('newrelic');
 require('del');
 (function() {
+    // The basic server
     var express = require('express');
     // For logging
     var morgan = require('morgan');
@@ -18,8 +19,8 @@ require('del');
 
     // Todo: compile _assets and app into one static directory
     app.use('/_assets', express.static(__dirname + '/_assets'));
-    app.use('/bower_components',express.static(__dirname + '/bower_components'));
-    app.use('/app',express.static(__dirname + '/app'));
+    app.use('/bower_components', express.static(__dirname + '/bower_components'));
+    app.use('/app', express.static(__dirname + '/app'));
 
     /* Routes */
     app.get('/', function(req, res) {
