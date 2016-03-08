@@ -6,9 +6,15 @@
 (function() {
     var app = angular.module('listPage', ['ngRoute', 'location-directives', 'angular-click-outside']);
 
-    app.controller('ListPageController', function() {
+    /* Will get fancier with this in the future. Potentially for individual location views. */
+    app.config(['$routeProvider', function($routeProvider) {
+        $routeProvider.when('/call', {controller: 'ListPageController'});   // Will use this for call handling
+        $routeProvider.otherwise({redirectTo: '/list'});
+    }]);
+
+    app.controller('ListPageController', function($scope, $routeParams, $location) {
         var listPageCtrl = this;
-        this.isAdding = false;
+        this.isAdding = $location.$$path === '/add';
         this.map = document.querySelector('google-map');
         this.currentLatLng = null;
 

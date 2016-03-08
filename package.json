@@ -2,8 +2,9 @@
   "name": "vets-frontend",
   "version": "1.0.0",
   "description": "The Frontend UI for the Vets 4 Warriors counselor resource",
-  "main": "index.html",
+  "main": "server.js",
   "directories": {
+    "_assets": "_assests",
     "test": "tests"
   },
   "scripts": {

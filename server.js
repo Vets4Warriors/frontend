@@ -5,21 +5,23 @@
  *
  */
 
+require('newrelic');
+
 (function() {
-    require('newrelic');
     var express = require('express');
-    var app = express();
     // For logging
     var morgan = require('morgan');
 
+    var app = express();
 
-    //app.use(express.static(__dirname + '/public'));  // set the static files location
     app.use(morgan('dev')); // log every request to the console
 
+    // Todo: compile _assets and app into one static directory
     app.use('/_assets', express.static(__dirname + '/_assets'));
     app.use('/bower_components',express.static(__dirname + '/bower_components'));
     app.use('/app',express.static(__dirname + '/app'));
 
+    /* Routes */
     app.get('/', function(req, res) {
         res.sendFile(__dirname + '/index.html');
     });
