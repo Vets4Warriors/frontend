@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a Resource - Vets4Warriors</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../_assets/css/main.css">
+
+    <script type="text/javascript" src="../../_assets/res/jquery-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../_assets/res/angular.min.js"></script>
+    <script src="../../bower_components/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="../../app/shared/location/location.js"></script>
+    <script type="text/javascript" src="../../app/app.js"></script>
+    <script type="text/javascript" src="../../_assets/res/main.js"></script>
+</head>
+<body>
+	<header>
+		<a href="../../index.html"><img class="homeBtn" src="../../_assets/gfx/home.png"></a>
+		<img src="../../_assets/gfx/logo.png">
+		<h1>CLR - <b>Add a Resource</b></h1>
+		<br class="clearBoth"/>
+	</header>
+
+	<div id="formMain">
+		<form>
+			<label for="locName">Name: </label><input type="text" id="locName"><br>
+			Website: <input type="url" id="website"><br>
+			Phone: <input type="tel" id="phone"><br>
+			Email: <input type="email" id="email"><br>
+			<fieldset class="fieldAddr">
+				<legend>Address:</legend>
+				Address Line 1: <input type="text" id="addr1"><br>
+				Address Line 2: <input type="text" id="addr2"><br>
+				City: <input type="text" id="town"> State: <input type="text" id="state"><br>
+				Zip: <input type="number" id="zip">
+			</fieldset>
+			Type: <input type="text" id="locType"><br>
+			<fieldset class="fieldGrid">
+				<legend>Coverage:</legend>
+				<input type="radio" name="cov" id="intl" value="intl"><label for="intl">International</label><br>
+				<input type="radio" name="cov" id="nat" value="nat"><label for="nat">National</label><br>
+				<input type="radio" name="cov" id="reg" value="reg"><label for="reg">Regional</label><br>
+				<input type="radio" name="cov" id="st" value="st"><label for="st">State</label><br>
+				<input type="radio" name="cov" id="loc" value="loc"><label for="loc">Local</label><br>
+			</fieldset>
+			<fieldset class="fieldGrid">
+				<legend>Tags:</legend>
+				<input type="checkbox" name="cov" id="tag1" value="tag1"><label for="tag1">Tag 1</label><br>
+				<input type="checkbox" name="cov" id="tag2" value="tag2"><label for="tag2">Tag 2</label><br>
+				<input type="checkbox" name="cov" id="tag3" value="tag3"><label for="tag3">Tag 3</label><br>
+				<input type="checkbox" name="cov" id="tag4" value="tag4"><label for="tag4">Tag 4</label><br>
+				<input type="checkbox" name="cov" id="tag5" value="tag5"><label for="tag5">Tag 5</label><br>
+			</fieldset>
+			Comments:<br>
+			<textarea id="comments" rows="10" cols="50" wrap="soft"></textarea><br>
+			<br>
+			Submitted by: <input type="text" id="usr"><br>
+			<br>
+			<input type="submit" value="Add Resource">
+		</form>
+	</div>
+</body>
+</html>
