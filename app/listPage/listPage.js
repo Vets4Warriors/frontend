@@ -13,6 +13,7 @@
         this.currentLatLng = null;
 
         this.map.addEventListener('google-map-ready', function(e) {
+            // Try to center the map with the users current position
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
@@ -33,12 +34,12 @@
         };
 
         /**
-         *
-         * @param latLng, array [lat, lng]
+         *  Easier to work with google maps api
+         * @param latLng, {{lat: float, lng: float}}
          */
         this.zoomToLocation = function(latLng) {
-            this.map.latitude = latLng[0];
-            this.map.longitude = latLng[1];
+            this.map.latitude = latLng.lat;
+            this.map.longitude = latLng.lng;
         }
     });
 

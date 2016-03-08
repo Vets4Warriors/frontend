@@ -6,21 +6,20 @@
     <link rel="shortcut icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
 
-    <link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
-    <link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
-    <link rel="import" href="../../bower_components/google-map/google-map.html"/>
+    <link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
+    <link rel="import" href="/bower_components/paper-fab/paper-fab.html"/>
+    <link rel="import" href="/bower_components/paper-material/paper-material.html"/>
+    <link rel="import" href="/bower_components/google-map/google-map.html"/>
 
-    <script src="../../bower_components/arg.js/dist/arg-1.3.min.js"></script>
-    <script src="../../bower_components/angular/angular.min.js"></script>
-    <script src="../../bower_components/angular-route/angular-route.min.js"></script>
-    <script src="../../bower_components/angular-click-outside/clickoutside.directive.js"></script>
+    <script src="/bower_components/arg.js/dist/arg-1.3.min.js"></script>
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script src="/bower_components/angular-route/angular-route.min.js"></script>
+    <script src="/bower_components/angular-click-outside/clickoutside.directive.js"></script>
 
     <!--<script src="../shared/location/location-service.js"></script>-->
-    <script src="../shared/location/location.js"></script>
+    <script src="/app/shared/location/location.js"></script>
 
-    <script src="listPage.js"></script>
-
-
+    <script src="/app/listPage/listPage.js"></script>
 
     <style is="list-page-style">
         html, body {
@@ -31,20 +30,37 @@
         }
 
         /* List styles */
-        #list {
+        #locations {
             position: absolute;
             left: 2%;
             top: 24px;
+            width: calc(350px + 15%);
+            overflow: hidden;
         }
-        #searchBox {
+        #locations #list {
+            margin-top: 16px;
+            float: right;
+        }
+        #locations .listContainer {
+            /*position: absolute;*/
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        #search {
             width: 100%;
             margin-bottom: 16px;
         }
-        .listContainer {
+        #search .locationFilter {
             margin-top: 16px;
-            overflow: hidden;
-            /*overflow-y: scroll;*/
+            /*width: 30%;*/
+            /* Card width and margin */
+            width: calc(100% - 350px - 16px);
+            height: auto;
+            background: white;
+            float: left;
         }
+
         .locationCard {
             width: 350px;
             margin-bottom: 16px;
@@ -75,28 +91,23 @@
     </style>
 </head>
 
-<body ng-controller="ListPageController as listCtrl">
+<body ng-controller="ListPageController as listPageCtrl">
     <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
-        <section id="list" ng-show="!listCtrl.isAdding" ng-controller="LocationsController as locCtrl">
+        <section id="locations" ng-show="!listPageCtrl.isAdding" ng-controller="LocationsController as locCtrl">
             <!-- Search box -->
-            <location-search-box id="searchBox"></location-search-box>
+            <location-search-box id="search"></location-search-box>
             <!-- Results -->
-            <article class="listContainer" >
-                <location-card ng-repeat="location in locCtrl.locations"></location-card>
+            <article class="listContainer" id="list" >
+                <location-card ng-repeat="location in locations"></location-card>
             </article>
-
-            <aside id="filters">
-                <!-- Setup similar to amazon/google/all other search pages -->
-            </aside>
-            <!-- Side bar for filtering -->
         </section>
 
-        <section id="add" ng-focus="listCtrl.isAdding" ng-show="listCtrl.isAdding">
+        <section id="add" ng-focus="listPageCtrl.isAdding" ng-show="listPageCtrl.isAdding">
             <location-add></location-add>
         </section>
 
         <section id="actions">
-            <paper-fab icon="add" ng-click="listCtrl.setIsAdding(true);"></paper-fab>
+            <paper-fab icon="add" ng-click="listPageCtrl.setIsAdding(true);"></paper-fab>
         </section>
     </google-map>
 </body>

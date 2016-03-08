@@ -18,8 +18,8 @@
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
             "use strict";
-            var baseApiUrl = 'http://localhost:8000/api/1.0/locations';
-            var service = this;
+            const baseApiUrl = 'http://localhost:8000/api/1.0/locations';
+            const service = this;
 
             /**
              *
@@ -123,8 +123,15 @@
                     return this.address.getFormatted();
                 }
 
+                /**
+                 *
+                 * @returns {{lat: *, lng: *}}
+                 */
                 getAddrLatLng() {
-                    return this.address.latLng['coordinates'];
+                    return {
+                        lat: this.address.latLng['coordinates'][0],
+                        lng: this.address.latLng['coordinates'][1]
+                    };
                 }
 
                 /**
@@ -149,6 +156,20 @@
                  */
                 getFormattedTags() {
                     return Location.formatArrayToStr(this.tags);
+                }
+
+                getFormattedDateAdded() {
+                    // Could potentially use a library like moment.js
+                    var monthNames = [
+                        "January", "February", "March",
+                        "April", "May", "June", "July",
+                        "August", "September", "October",
+                        "November", "December"
+                    ];
+                    var day = this.addedOn.getDate();
+                    var monthIndex = this.addedOn.getMonth();
+                    var year = this.addedOn.getFullYear();
+                    return day + ' ' + monthNames[monthIndex] + ' ' + year;
                 }
 
                 /**
@@ -253,17 +274,66 @@
         function($scope, $log, locationService) {
             var list = this;
             var Location = locationService.Location;
-            list.locations = [];
-            list.locationService = locationService;
+            $scope.locations = [];
+            this.locationService = locationService;
+            this.map = document.querySelector('google-map');
+            this.mapsApi = null;
 
-            locationService.query({})
-                .success(function(data) {
-                    // This is ugly
-                    list.locations = Location.fromJsonArray(angular.fromJson(data));
-                })
-                .error(function(data) {
-                    $log.error(data);
+            if (this.map != null) {
+                // Wait for the map to load before initializing list
+                this.map.addEventListener('google-map-ready', function(e) {
+                    list.mapsApi = document.querySelector('google-maps-api').api;
+                    list.getLocations({});
                 });
+            } else {
+                // Initialize with an empty query
+                // Will potentially later initialize as an empty list
+                this.getLocations({});
+            }
+
+
+            /*
+            Todo: This is turning into spaghetti code with the map. Need to centralize map functions.
+             */
+            this.getLocations = function(queries) {
+                locationService.query(queries)
+                    .success(function(data) {
+                        // Todo: optimize yeah optimize
+                        var locations = Location.fromJsonArray(angular.fromJson(data));
+
+                        if (list.mapsApi) {
+                            // Remove all the previous markers from the map
+                            for (var i = 0; i < $scope.locations.length; i++) {
+                                $scope.locations[i].marker.setMap(null);
+                                $scope.locations.pop();
+                            }
+                            // Add all the new ones and make bounds
+                            var bounds = new list.mapsApi.LatLngBounds();
+                            for (var i = 0; i < locations.length; i++) {
+                                var marker = new list.mapsApi.Marker({
+                                    map: list.map.map,
+                                    position: new list.mapsApi.LatLng(locations[i].getAddrLatLng()),
+                                    title: locations[i].name
+                                });
+                                // Attach the marker to each location for referencing later
+                                locations[i].marker = marker;
+
+                                bounds.extend(marker.getPosition());
+                                $scope.locations.push(locations[i]);
+                            }
+
+                            // Fit the map around the bounds
+                            // Todo: account for the search / list area
+                            list.map.map.fitBounds(bounds);
+                        }
+
+
+                        //$scope.$apply();
+                    })
+                    .error(function(data) {
+                        $log.error(data);
+                    });
+            };
     }]);
 
     /**
@@ -272,7 +342,7 @@
     app.directive('locationCard', function() {
        return {
            restrict: 'E',
-           templateUrl: '../shared/location/location-card.html',
+           templateUrl: '/app/shared/location/location-card.html',
            controller: ['$element', function($element) {
                this.isExpanded = false;
                this.tab = 0;
@@ -302,7 +372,7 @@
     app.directive('locationRating', function() {
         return {
             restrict: 'E',
-            templateUrl: '../shared/location/location-rating.html',
+            templateUrl: '/app/shared/location/location-rating.html',
             controller: ['$scope', '$log', 'locationService', function($scope, $log, locationService) {
 
                 $scope.submitRatingForm = function() {
@@ -343,7 +413,7 @@
     app.directive('locationInfo', function() {
        return {
            restrict: 'E',
-           templateUrl: '../shared/location/location-info.html'
+           templateUrl: '/app/shared/location/location-info.html'
        }
     });
 
@@ -353,7 +423,7 @@
     app.directive('locationContact', function() {
         return {
             restrict: 'E',
-            templateUrl: '../shared/location/location-contact.html',
+            templateUrl: '/app/shared/location/location-contact.html',
             controller: ['locationService', function() {
                 
             }],
@@ -368,7 +438,7 @@
     app.directive('locationAdd', function() {
         return {
             restrict: 'E',
-            templateUrl: '../shared/location/location-add.html',
+            templateUrl: '/app/shared/location/location-add.html',
             controller: ['locationService', function() {
 
             }],
@@ -380,12 +450,49 @@
     app.directive('locationSearchBox', function() {
         return {
             restrict: 'E',
-            templateUrl: '../shared/location/location-search-box.html',
-            controller: function() {
-               return;
-            },
+            templateUrl: '/app/shared/location/location-search-box.html',
+            controller: ['$scope', function($scope) {
+                var searchCtrl = this;
+
+                var searchBox = document.querySelector('.locationSearchBox>paper-input');
+                var filtersBox = document.querySelector('paper-listbox');
+                var filters = ['name', 'website', 'phone', 'email',
+                    'locationType', 'coverage', 'services', 'tags'];
+
+                var locCtrl = $scope.locCtrl;
+
+                this.getQueryBy = function() {
+                    var queryTerm = filters[filtersBox.selected];
+                    return queryTerm;
+                };
+
+                searchBox.addEventListener('keypress', function(key) {
+                    if (key.keyCode == 13) {
+                        // hit the enter key
+                        searchCtrl.search();
+                    }
+                });
+
+                filtersBox.addEventListener('iron-select', function(e) {
+                    // If changes from the default or is selected
+                    //searchCtrl.search();
+                });
+
+                this.search = function() {
+                    // Grab the input from the search box and the filters
+                    // Build a query
+                    if (searchBox.value === '' || searchBox.validate()) {
+                        var key = searchCtrl.getQueryBy();
+                        // Should we make a custom query object?
+                        var query = {};
+                        query[key] = searchBox.value;
+                        locCtrl.getLocations(query);
+                    }
+                };
+            }],
             controllerAs: 'locSearchCtrl'
         }
-    })
+    });
+
 
 })();
