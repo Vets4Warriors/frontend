@@ -3,15 +3,17 @@
  */
 (function() {
     var app = angular.module('location-directives', []);
-
-    /*app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
-
+    /*app.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
+    }]);*/
+    
+    app.config(['$httpProvider', function ($httpProvider) {
         // We need to setup some parameters for http requests
         // These three lines are all you need for CORS support
         $httpProvider.defaults.useXDomain = true;
-        $httpProvider.defaults.withCredentials = true;
+        $httpProvider.defaults.withCredentials = false;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    });*/
+    }]);
 
     app.service('locationService', [/*'$resource',*/ '$http',
         // Not currently using the resource. Want to be explicit. When I get better at angular.
@@ -57,6 +59,7 @@
                         this.user = jsonData['user'];
                         this.value = parseInt(jsonData['value']);
                         this.comment = jsonData['comment'];
+                        this.ratedOn = new Date();
                     } else {
                         // From Server
                         this.user = jsonData['user'];
@@ -230,12 +233,13 @@
              * @returns {HttpPromise}
              */
             this.rate = function(id, rating) {
-                return $http({
+                return $http.post(baseApiUrl + '/' + id + '/rate', rating);
+                /*return $http({
                     url: baseApiUrl + '/' + id + '/rate',
                     method: "POST",
                     data: JSON.stringify(rating),
                     headers: {'Content-Type': 'application/json'}
-                });
+                });*/
             };
 
             /**
@@ -386,6 +390,8 @@
                             .success(function(data) {
                                 $log.debug(data);
                                 form.reset();
+                                // push the rating into the locations ratings hehe
+                                $scope.location.ratings.push(rating);
                             })
                             .error(function(data) {
                                 $log.error(data);
@@ -399,8 +405,7 @@
                     for (var i = 0; i < ratings.length; i++) {
                         sum += ratings[i].value;
                     }
-
-                    return ratings.length != 0 ? sum/ratings.length : 0;
+                    return ratings.length != 0 ? (sum/ratings.length).toFixed(1) : 0;
                 };
             }],
             controllerAs: 'locRatingController'
@@ -424,9 +429,7 @@
         return {
             restrict: 'E',
             templateUrl: '/app/shared/location/location-contact.html',
-            controller: ['locationService', function() {
-                
-            }],
+            controller: ['locationService', function() {}],
             controllerAs: 'contactController'
         }
     });
@@ -440,6 +443,8 @@
             restrict: 'E',
             templateUrl: '/app/shared/location/location-add.html',
             controller: ['locationService', function() {
+
+
 
             }],
             controllerAs: 'contactController'

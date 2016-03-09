@@ -24,7 +24,7 @@
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
                         //success
-                        console.log("Got the location!");
+                        console.log("Got the users current location!");
                         listPageCtrl.currentLatLng = [position.coords.latitude, position.coords.longitude];
                         listPageCtrl.zoomToLocation(listPageCtrl.currentLatLng);
                     }, function (error) {
@@ -77,9 +77,5 @@
            }
        };
     });*/
-
-    app.config(['$routeProvider', function ($routeProvider) {
-
-    }]);
 
 })();
