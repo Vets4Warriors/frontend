@@ -4,7 +4,7 @@
 
 
 (function() {
-    var app = angular.module('listPage', ['ngRoute', 'location-directives', 'angular-click-outside']);
+    var app = angular.module('list-page', ['ngRoute', 'location-directives']);
 
     /* Will get fancier with this in the future. Potentially for individual location views. */
     app.config(['$routeProvider', function($routeProvider) {

@@ -33,12 +33,12 @@
         <paper-icon-button icon="close" title="Close" ng-click="listPageCtrl.setIsAdding(false);"></paper-icon-button>
     </paper-toolbar>
 
-    <form class="addRatingForm" is="iron-form" name="ratingForm" method="post">
+    <form id="addForm" is="iron-form" ng-keypress="keyPressed($event)">
         <!-- Basics -->
         <paper-input name="name" label="Name" error-message="Need a name!"
                      required auto-validate></paper-input>
-        <gold-phone-input name="phone" label="Phone Number (X-XXX-XXX-XXXX)"
-                          phone-nuber-pattern="X-XXX-XXX-XXXX" auto-validate></gold-phone-input>
+        <gold-phone-input name="phone" label="Phone Number (XXX-XXX-XXXX)"
+                          phone-nuber-pattern="XXX-XXX-XXXX" auto-validate></gold-phone-input>
         <paper-input name="website" label="Website">
             <div prefix>http://</div>
         </paper-input>
@@ -52,11 +52,11 @@
 
         <p class="checkboxes">Coverage</p>
         <section class="checkboxes">
-            <paper-checkbox name="coverage[]" noink>Local</paper-checkbox>
-            <paper-checkbox name="coverage[]" noink>State</paper-checkbox>
-            <paper-checkbox name="coverage[]" noink>Regional</paper-checkbox>
-            <paper-checkbox name="coverage[]" noink>National</paper-checkbox>
-            <paper-checkbox name="coverage[]" noink>International</paper-checkbox>
+            <paper-checkbox name="coverage" value="Local" noink>Local</paper-checkbox>
+            <paper-checkbox name="coverage" value="State" noink>State</paper-checkbox>
+            <paper-checkbox name="coverage" value="Regional" noink>Regional</paper-checkbox>
+            <paper-checkbox name="coverage" value="National" noink>National</paper-checkbox>
+            <paper-checkbox name="coverage" value="International" noink>International</paper-checkbox>
         </section>
 
         <paper-input name="services" label="Services (separated by commas)" required></paper-input>
@@ -65,7 +65,7 @@
         <!-- Extras -->
         <paper-input name="comments" label="Comments"
                      auto-validate></paper-input>
-        <paper-input name="addedBy" label="User" error-message="Need to provide your name!"
+        <paper-input name="addedBy" label="Your name" error-message="Need to provide your name!"
                      required auto-validate></paper-input>
 
         <paper-button type="submit" ng-click="">Add to database</paper-button>

@@ -2,7 +2,7 @@
  * Created by austin on 2/26/16.
  */
 (function() {
-    var app = angular.module('location-directives', []);
+    var app = angular.module('location-directives', ['location-services']);
     /*app.config(['$httpProvider', function($httpProvider) {
         $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
     }]);*/
@@ -15,261 +15,7 @@
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }]);
 
-    app.service('locationService', [/*'$resource',*/ '$http',
-        // Not currently using the resource. Want to be explicit. When I get better at angular.
-        // Will probably be rewritten using $resource
-        function(/*$resource,*/ $http) {
-            "use strict";
-            const baseApiUrl = 'http://localhost:8000/api/1.0/locations';
-            const service = this;
 
-            /**
-             *
-             * @type {LocationAddress}
-             */
-            this.LocationAddress = class LocationAddress {
-                constructor(jsonData, autoLoad) {
-                    this.address1 = jsonData['address1'];
-                    this.address2 = jsonData['address2'];
-                    this.city = jsonData['city'];
-                    this.state = jsonData['state'];
-                    this.country = jsonData['country'];
-                    this.latLng = jsonData['latLng'];
-                    this.zipcode = jsonData['zipcode'];
-                }
-
-                /**
-                 *
-                 * @returns {string}
-                 */
-                getFormatted() {
-                    var addrLine = this.address1 + ((this.address2 === '') ? '' : ", " + this.address2);
-                    return addrLine + ", " + this.city + ", " + this.state + ", " + this.country + ", " + this.zipcode;
-                }
-            };
-
-            /**
-             *
-             * @type {LocationRating}
-             */
-            this.LocationRating = class LocationRating {
-                constructor(jsonData, fromForm) {
-                    // When building from the server
-                    if (fromForm) {
-                        this.user = jsonData['user'];
-                        this.value = parseInt(jsonData['value']);
-                        this.comment = jsonData['comment'];
-                        this.ratedOn = new Date();
-                    } else {
-                        // From Server
-                        this.user = jsonData['user'];
-                        this.value = jsonData['value'];
-                        this.comment = jsonData['comment'];
-                        this.ratedOn = new Date(jsonData['ratedOn'].$date);
-                    }
-                };
-
-                /**
-                 *
-                 * @param jsonArray
-                 * @returns {Array}
-                 */
-                static fromJsonArray (jsonArray) {
-                    var ratings = [];
-                    for (var i = 0; i < jsonArray.length; i++) {
-                        ratings.push(new this(jsonArray[i], false));
-                    }
-                    return ratings;
-                }
-            };
-
-            /**
-             *
-             * @type {Location}
-             */
-            this.Location = class Location {
-                constructor(jsonData) {
-                    // Duplication but should make posting easy
-                    this.rawData = jsonData;
-                    this.id = jsonData['_id']['$oid'];
-                    this.name = jsonData['name'];
-                    this.phone = jsonData['phone'];
-                    this.email = jsonData['email'];
-                    this.address = new service.LocationAddress(jsonData['address'], true);
-                    this.hqAddress = jsonData['hqAddress'] === undefined ?
-                        jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress'], true);
-                    this.locationType = jsonData['locationType'];
-                    this.coverages = jsonData['coverage'];
-                    this.services = jsonData['services'];
-                    this.tags = jsonData['tags'];
-                    this.comments = jsonData['comments'];
-                    this.rating = jsonData['rating'];
-                    this.ratings = service.LocationRating.fromJsonArray(jsonData['ratings']);
-                    this.website = jsonData['website'];
-                    this.addedOn = new Date(jsonData['addedOn'].$date);
-                    this.addedBy = jsonData['addedBy'];
-                }
-
-                /**
-                 * Format the phone number so it's nice and read-able
-                 * @returns {string}
-                 */
-                getPhone() {
-                    return this.phone;
-                }
-
-                /**
-                 *
-                 * @returns {string}
-                 */
-                getFormattedAddr() {
-                    return this.address.getFormatted();
-                }
-
-                /**
-                 *
-                 * @returns {{lat: *, lng: *}}
-                 */
-                getAddrLatLng() {
-                    return {
-                        lat: this.address.latLng['coordinates'][0],
-                        lng: this.address.latLng['coordinates'][1]
-                    };
-                }
-
-                /**
-                 *
-                 * @returns {string}
-                 */
-                getFormattedHqAddr() {
-                    return this.hqAddress.getFormatted();
-                }
-
-                getFormattedServices() {
-                    return Location.formatArrayToStr(this.services);
-                }
-
-                getFormattedCoverage() {
-                    return Location.formatArrayToStr(this.coverages);
-                }
-
-                /**
-                 *
-                 * @returns {string}
-                 */
-                getFormattedTags() {
-                    return Location.formatArrayToStr(this.tags);
-                }
-
-                getFormattedDateAdded() {
-                    // Could potentially use a library like moment.js
-                    var monthNames = [
-                        "January", "February", "March",
-                        "April", "May", "June", "July",
-                        "August", "September", "October",
-                        "November", "December"
-                    ];
-                    var day = this.addedOn.getDate();
-                    var monthIndex = this.addedOn.getMonth();
-                    var year = this.addedOn.getFullYear();
-                    return day + ' ' + monthNames[monthIndex] + ' ' + year;
-                }
-
-                /**
-                 *
-                 * @param arr
-                 * @returns {string}
-                 */
-                static formatArrayToStr(arr) {
-                    var arrStr = '';
-                    for (var i = 0; i < arr.length; i++) {
-                        if (i == 0)
-                            arrStr += arr[i];
-                        else
-                            arrStr += ', ' + arr[i];
-                    }
-                    return arrStr;
-                }
-
-                /**
-                 *
-                 * @param jsonArray
-                 * @returns {Array} of Locations
-                 */
-                static fromJsonArray (jsonArray) {
-                    var locations = [];
-                    for (var i = 0; i < jsonArray.length; i++) {
-                        locations.push(new this(jsonArray[i]));
-                    }
-                    return locations;
-                };
-            };
-
-
-
-            /**
-             *
-             * @param id
-             * @returns {HttpPromise}
-             */
-            this.get = function(id) {
-                return $http.get(baseApiUrl + '/' + id);
-            };
-
-            /**
-             *
-             * @param params
-             * @returns {HttpPromise}
-             */
-            this.query = function(params) {
-                var url = Arg.url(baseApiUrl, params);
-                return $http.get(url);
-            };
-
-            /**
-             *
-             * @param id
-             * @param rating
-             * @returns {HttpPromise}
-             */
-            this.rate = function(id, rating) {
-                return $http.post(baseApiUrl + '/' + id + '/rate', rating);
-                /*return $http({
-                    url: baseApiUrl + '/' + id + '/rate',
-                    method: "POST",
-                    data: JSON.stringify(rating),
-                    headers: {'Content-Type': 'application/json'}
-                });*/
-            };
-
-            /**
-             *
-             * @param id
-             * @param location
-             * @returns {HttpPromise}
-             */
-            this.update = function(id, location) {
-                return $http.put(baseApiUrl + '/' + id, location);
-            };
-
-            /**
-             *
-             * @param id
-             * @returns {HttpPromise}
-             */
-            this.delete = function(id){
-                return $http.delete(baseApiUrl + '/' + id);
-            };
-
-            /**
-             *
-             * @param location
-             * @returns {HttpPromise}
-             */
-            this.add = function(location) {
-                return $http.post(baseApiUrl, location);
-            };
-        }]);
 
     /**
      *  This controls the list as a whole
@@ -379,9 +125,15 @@
             templateUrl: '/app/shared/location/location-rating.html',
             controller: ['$scope', '$log', 'locationService', function($scope, $log, locationService) {
 
-                $scope.submitRatingForm = function() {
-                    var form = document.getElementById($scope.location.name);
+                $scope.keyPressed = function(key) {
+                    if (key.keyCode == 13) {
+                        // hit the enter key
+                        $scope.submitRatingForm();
+                    }
+                };
 
+                $scope.submitRatingForm = function() {
+                    var form = document.getElementById($scope.location.id + '_ratingForm');
                     if (form.validate()) {
                         // Send request to database api
                         var rating = new locationService.LocationRating(form.serialize(), true);
@@ -442,9 +194,66 @@
         return {
             restrict: 'E',
             templateUrl: '/app/shared/location/location-add.html',
-            controller: ['locationService', function() {
+            controller: ['$scope', '$log', 'locationService', function($scope, $log, locationService) {
+
+                /**
+                 * Allow for enter key to be used as submission.
+                 * Todo: This should be made into an attribute directive for all forms
+                 * @param key pressed. The $event var in angular
+                 */
+                $scope.keyPressed = function(key) {
+                    if (key.keyCode == 13) {
+                        // hit the enter key
+                        $scope.submitAddForm();
+                    }
+                };
+
+                $scope.submitAddForm = function() {
+                    var form = document.getElementById("addForm");
+
+                   /*   How @fran did address validation, should we use it?
+
+                   $.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + $('#searchable_address').val() + "&sensor=true", function(data) {
+                        searchable_address = $("#address").val() + " " + $("#city").val() + " " + $("#state").val() + " " + $("#zip").val()+ " " + $("#country").val()
+                        $("#searchable_address").val(searchable_address);
+                        $("#addresses").empty();
+                        for (var i = 0; i < (data['results']).length; i++) {
+                            address = data['results'][i]['formatted_address']
+                            country = address.substr(address.length - 3) //country code at end of formatted address
+                            street_number = address.substr(0, 1)
+                            if ($.isNumeric(street_number) && country == "USA") { // currently only accepting USA addresses with valid street numbers
+                                $('#addresses').append('<li class="address_li">' + address + '</li>');
+                            }
+                        }
+                        // in case we cannot find an address
+                        if ($(".address_li").length == 0) {
+                            $('#addresses').append('<li> We could not find any addresses that match.</li>');
+                        }
+                    });*/
 
 
+                    if (form.validate()) {
+                        // Send request to database api
+                        // Format the form data to fit our models
+                        var locationData = form.serialize();
+                        locationData.services = locationData.services.split(',');
+                        locationData.website = 'http://' + locationData.website;
+
+                        var location = new locationService.Location(form.serialize(), true);
+
+                        locationService.add(location)
+                            .success(function(data) {
+                                $log.debug(data);
+                                form.reset();
+                                // push the rating into the locations ratings hehe
+                                $scope.locations.push(location);
+                            })
+                            .error(function(data) {
+                                // Todo: Show a toast error message
+                            } );
+                    }
+                    return false;
+                };
 
             }],
             controllerAs: 'contactController'
@@ -498,6 +307,4 @@
             controllerAs: 'locSearchCtrl'
         }
     });
-
-
 })();

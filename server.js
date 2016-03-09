@@ -28,7 +28,7 @@ require('del');
     });
 
     app.get('/list', function(req, res) {
-        res.sendFile(__dirname + '/app/listPage/listPage.html');
+        res.sendFile(__dirname + '/app/listPage/list-page.html');
     });
 
     // Start the server on port 8080

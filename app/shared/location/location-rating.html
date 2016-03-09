@@ -23,7 +23,8 @@
         <p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>
     </article>
 
-    <form id="{{location.name}}" class="addRatingForm" is="iron-form" name="ratingForm" method="post" action="test">
+    <form id="{{location.id + '_ratingForm'}}" class="addRatingForm"
+          is="iron-form" ng-keypress="keyPressed($event)">
         <paper-input name="value" label="Rating" error-message="Need to provide a rating 1-5!" type="number" min="1" max="5"
                      placeholder="1-5" required auto-validate prevent-invalid-input></paper-input>
         <paper-input name="user" label="User" error-message="Need to provide your name!"

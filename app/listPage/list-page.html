@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="listPage">
+<html lang="en" data-ng-app="list-page">
 <head>
     <meta charset="UTF-8">
     <title>Locations</title>
@@ -16,10 +16,9 @@
     <script src="/bower_components/angular-route/angular-route.min.js"></script>
     <script src="/bower_components/angular-click-outside/clickoutside.directive.js"></script>
 
-    <!--<script src="../shared/location/location-service.js"></script>-->
+    <script src="/app/shared/location/location-services.js"></script>
     <script src="/app/shared/location/location.js"></script>
-
-    <script src="/app/listPage/listPage.js"></script>
+    <script src="/app/listPage/list-page.js"></script>
 
     <style is="list-page-style">
         html, body {
@@ -105,14 +104,14 @@
     <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
         <section id="locations" ng-show="!listPageCtrl.isAdding" ng-controller="LocationsController as locCtrl">
             <!-- Search box -->
-            <location-search-box id="search"></location-search-box>
+            <location-search-box id="search" ng-focus></location-search-box>
             <!-- Results -->
             <article class="listContainer" id="list" >
-                <location-card ng-repeat="location in locations"></location-card>
+                <location-card ng-repeat="location in locations track by location.id"></location-card>
             </article>
         </section>
 
-        <section id="add" ng-focus="listPageCtrl.isAdding" ng-show="listPageCtrl.isAdding">
+        <section id="add" ng-show="listPageCtrl.isAdding">
             <location-add></location-add>
         </section>
 
