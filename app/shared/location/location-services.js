@@ -13,7 +13,9 @@
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
             "use strict";
-            const baseApiUrl = 'http://localhost:8000/api/1.0/locations';
+            const baseApiUrl = 'http://localhost/api/1.0/locations';
+            //const baseApiUrl = 'http://localhost:8000/1.0/locations';
+            //const baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
             const service = this;
 
             /**
