@@ -29,7 +29,7 @@
                         listPageCtrl.zoomToLocation(listPageCtrl.currentLatLng);
                     }, function (error) {
                         // error
-                        console.log("error");
+                        console.log("Couldn't get user's current location");
                     });
             }
         });
@@ -48,34 +48,4 @@
             this.map.longitude = latLng.lng;
         }
     });
-
-    /**
-     * Show and hide if the add button hasn't been clicked
-     * Just going to use a x button
-     */
-    /*app.directive('clickOutsideClose', function($document) {
-       return {
-           restrict: 'A',
-           link: function postLink($scope, element, attrs) {
-               var onClick = function(event) {
-                   var isChild = element[0].contains(event.target);
-                   var isSelf = element[0] == event.target;
-                   var clickedInside = isChild || isSelf;
-                   if (!clickedInside && !$scope.listCtrl.clickedAdd) {
-                       $scope.$apply(attrs.clickOutsideClose);
-                   }
-                   $scope.listCtrl.setClickedAdd(false);
-               };
-               $scope.$watch(attrs.ngShow, function(newVal, oldVal) {
-                   if (newVal !== oldVal && newVal == true) {
-                       $document.bind('click', onClick);
-                   }
-                   else if (newVal !== oldVal && newVal == false) {
-                       $document.unbind('click', onClick);
-                   }
-               });
-           }
-       };
-    });*/
-
 })();

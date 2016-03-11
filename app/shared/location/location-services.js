@@ -23,7 +23,7 @@
              * @type {LocationAddress}
              */
             this.LocationAddress = class LocationAddress {
-                constructor(jsonData, autoLoad) {
+                constructor(jsonData, fromForm) {
                     this.address1 = jsonData['address1'];
                     this.address2 = jsonData['address2'];
                     this.city = jsonData['city'];
@@ -31,6 +31,18 @@
                     this.country = jsonData['country'];
                     this.latLng = jsonData['latLng'];
                     this.zipcode = jsonData['zipcode'];
+                }
+
+                static makeEmptyAddr() {
+                    return new this({
+                            address1: '',
+                            address2: '',
+                            city: '',
+                            state: '',
+                            country: '',
+                            zipcode: '',
+                            latLng: [0.0, 0.0]
+                        }, false);
                 }
 
                 /**
@@ -88,7 +100,7 @@
 
                     } else {
                         // From server
-                        this.rawData = jsonData;
+                        //this.rawData = jsonData;
                         this.id = jsonData['_id']['$oid'];
                         this.name = jsonData['name'];
                         this.phone = jsonData['phone'];

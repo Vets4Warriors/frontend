@@ -1,0 +1,34 @@
+<link rel="import" href="/bower_components/gold-zip-input/gold-zip-input.html"/>
+<link rel="import" href="/bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
+
+
+<!-- This should be linked to the form and will be used to populate the tough data -->
+
+<style is="map-address-input-style">
+
+</style>
+
+<article class="cardItemContainer">
+
+    <section  ng-show="mapAddrCtrl.inputIsHidden">
+        <paper-button ng-click="mapAddrCtrl.setInputHidden(false);">{{title}}</paper-button>
+        <paper-input id="formattedDisplay"></paper-input>
+    </section>
+
+    <section ng-show="!mapAddrCtrl.inputIsHidden">
+        <paper-input name="address1" label="Address"></paper-input>
+        <paper-input name="address2" label="Address (cont.)"></paper-input>
+
+        <paper-input name="city" label="City"></paper-input>
+        <paper-input name="state" label="State"></paper-input>
+
+        <gold-zip-input name="zip" label="Zip code"
+                        error-message="Please enter a valid zip code."
+                        auto-validate></gold-zip-input>
+
+        <paper-button ng-click="mapAddrCtrl.validate();">Check</paper-button>
+        <paper-button ng-show="mapAddrCtrl.hasValidated">Correct?</paper-button>
+    </section>
+
+</article>
