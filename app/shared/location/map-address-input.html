@@ -1,34 +1,77 @@
 <link rel="import" href="/bower_components/gold-zip-input/gold-zip-input.html"/>
 <link rel="import" href="/bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html"/>
 <link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="/bower_components/iron-form/iron-form.html"/>
+<link rel="import" href="/bower_components/paper-dialog/paper-dialog.html"/>
+<link rel="import" href="/bower_components/paper-material/paper-material.html"/>
 
 
-<!-- This should be linked to the form and will be used to populate the tough data -->
+<!-- This should be linked to the form and will be used to populate the tough data
+        Could potentially be built with Polymer as a custom element in the future. Right now just sticking to angular.
+ -->
 
 <style is="map-address-input-style">
+    /*paper-toolbar.red {
+        --paper-toolbar-background: #7986CB;
+        --paper-toolbar-title: {
+            font-style: italic;
+            font-weight: bold;
+        };
+    }*/
+
+    .addressInputContainer paper-dialog {
+        padding: 0;
+    }
+    .addressInputContainer paper-material {
+        background-color: white;
+    }
 
 </style>
 
-<article class="cardItemContainer">
-
-    <section  ng-show="mapAddrCtrl.inputIsHidden">
+<article class="addressInputContainer">
+    <section>
         <paper-button ng-click="mapAddrCtrl.setInputHidden(false);">{{title}}</paper-button>
-        <paper-input id="formattedDisplay"></paper-input>
+        <p>{{mapAddrCtrl.formattedAddress}}</p>
     </section>
 
-    <section ng-show="!mapAddrCtrl.inputIsHidden">
-        <paper-input name="address1" label="Address"></paper-input>
-        <paper-input name="address2" label="Address (cont.)"></paper-input>
+    <!-- Should pop up and take focus -->
+    <paper-dialog no-cancel-on-outside-click no-cancel-on-esc-key auto-fit-on-attach>
+        <paper-toolbar>
+            <h1 class="title">Add {{title}}</h1>
+            <paper-icon-button icon="close" title="Close" ng-click="mapAddrCtrl.setInputHidden(true);"></paper-icon-button>
+        </paper-toolbar>
 
-        <paper-input name="city" label="City"></paper-input>
-        <paper-input name="state" label="State"></paper-input>
+        <form id="{{'addressForm_' + title }}" is="iron-form" method="post" action="">
+            <paper-input name="address1" label="Address"
+                         prevent-invalid-input auto-validate
+                         required
+                         error-message="Address is required."></paper-input>
+            <paper-input name="address2" label="Address (cont.)"
+                         prevent-invalid-input auto-validate></paper-input>
 
-        <gold-zip-input name="zip" label="Zip code"
-                        error-message="Please enter a valid zip code."
-                        auto-validate></gold-zip-input>
+            <paper-input  name="city" label="City"
+                          prevent-invalid-input auto-validate
+                          required
+                          error-message="City is required."></paper-input>
+            <paper-input class="half" name="state" label="State"
+                         maxlength="2" prevent-invalid-input auto-validate
+                         required
+                         error-message="Please enter a two-letter state code."></paper-input>
 
-        <paper-button ng-click="mapAddrCtrl.validate();">Check</paper-button>
-        <paper-button ng-show="mapAddrCtrl.hasValidated">Correct?</paper-button>
-    </section>
+            <gold-zip-input name="zipcode" label="Zip code"
+                            prevent-invalid-input auto-validate
+                            required
+                            error-message="Please enter a valid zip code."
+                            auto-validate></gold-zip-input>
 
+            <paper-button type="submit" ng-click="validate();">Check</paper-button>
+
+            <div ng-show="mapAddrCtrl.hasValidated">
+                <p>{{mapAddrCtrl.formattedAddress}}</p>
+                <paper-button ng-click="mapAddrCtrl.setConfirmed(true);">Correct?</paper-button>
+            </div>
+        </form>
+    </paper-dialog>
 </article>

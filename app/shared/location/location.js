@@ -21,12 +21,12 @@
             var Location = locationService.Location;
             $scope.locations = [];
             this.locationService = locationService;
-            this.map = document.querySelector('google-map');
+            this.mapContainer = document.querySelector('google-map');
             this.mapsApi = null;
 
-            if (this.map != null) {
-                // Wait for the map to load before initializing list
-                this.map.addEventListener('google-map-ready', function(e) {
+            if (this.mapContainer) {
+                // Wait for the mapContainer to load before initializing list
+                this.mapContainer.addEventListener('google-map-ready', function(e) {
                     list.mapsApi = document.querySelector('google-maps-api').api;
                     // Start by getting all locations
                     list.getLocations({});
@@ -39,12 +39,12 @@
 
 
             /*
-            Todo: This is turning into spaghetti code with the map. Need to centralize map functions.
+            Todo: This is turning into spaghetti code with the mapContainer. Need to centralize mapContainer functions.
              */
             this.getLocations = function(queries) {
                 locationService.query(queries)
                     .success(function(data) {
-                        // Remove all the previous markers from the map
+                        // Remove all the previous markers from the mapContainer
                         var numPrevLocs = $scope.locations.length;
                         for (var i = 0; i < numPrevLocs; i++) {
                             // Null the first marker and pop
@@ -58,7 +58,7 @@
                         for (var i = 0; i < newLocs.length; i++) {
                             var locationToAdd = newLocs[i];
                             var marker = new list.mapsApi.Marker({
-                                map: list.map.map,
+                                map: list.mapContainer.map,
                                 position: new list.mapsApi.LatLng(locationToAdd.getAddrLatLng()),
                                 title: locationToAdd.name
                             });
@@ -71,7 +71,7 @@
 
                         // Fit the map around the bounds
                         // Todo: account for the search / list area
-                        list.map.map.fitBounds(bounds);
+                        list.mapContainer.map.fitBounds(bounds);
                     })
                     .error(function(data) {
                         $log.error(data);
@@ -142,8 +142,9 @@
                  * Todo: This should be made into an attribute directive for all forms
                  * @param key pressed. The $event var in angular
                  */
-                this.addr = locationService.LocationAddress.makeEmptyAddr();
-                this.hqAddr = locationService.LocationAddress.makeEmptyAddr();
+                var locAddCtrl = this;
+                $scope.addr = locationService.LocationAddress.makeEmptyAddr();
+                $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
 
                 $scope.keyPressed = function(key) {
                     if (key.keyCode == 13) {
@@ -152,69 +153,54 @@
                     }
                 };
 
-                $scope.validateAddress = function() {
-                    /*   How @fran did address validation, should we use it?
-
-                     $.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + $('#searchable_address').val() + "&sensor=true", function(data) {
-                     searchable_address = $("#address").val() + " " + $("#city").val() + " " + $("#state").val() + " " + $("#zip").val()+ " " + $("#country").val()
-                     $("#searchable_address").val(searchable_address);
-                     $("#addresses").empty();
-                     for (var i = 0; i < (data['results']).length; i++) {
-                     address = data['results'][i]['formatted_address']
-                     country = address.substr(address.length - 3) //country code at end of formatted address
-                     street_number = address.substr(0, 1)
-                     if ($.isNumeric(street_number) && country == "USA") { // currently only accepting USA addresses with valid street numbers
-                     $('#addresses').append('<li class="address_li">' + address + '</li>');
-                     }
-                     }
-                     // in case we cannot find an address
-                     if ($(".address_li").length == 0) {
-                     $('#addresses').append('<li> We could not find any addresses that match.</li>');
-                     }
-                     });*/
-                    var form = document.getElementById("addForm");
-                    var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-                        form.address.value + "&sensor=true";
-                    $http.get(url)
-                        .success(function(data) {
-                            console.log(data);
-                        })
-                        .error(function(data) {
-                            console.log(data);
-                        });
-                };
-
                 $scope.submitAddForm = function() {
-                    var form = document.getElementById("addForm");
+                    // validate all address input. Have got to make them extend the iron-input / build with polymer
+                    //var addressInputs = form.getElementsByTagName('map-address-input');
 
-                    $scope.validateAddress();
-
-
-                    if (form.validate()) {
+                    if ($scope.form.validate() && $scope.addr.isValid) {
                         // Send request to database api
                         // Format the form data to fit our models
-                        var locationData = form.serialize();
+                        var locationData = $scope.form.serialize();
                         locationData.services = locationData.services.split(',');
-                        locationData.website = 'http://' + locationData.website;
 
-                        var location = new locationService.Location(form.serialize(), true);
+                        if (typeof locationData.coverages === 'string') {
+                            // Need it to be an array
+                            locationData.coverages = [locationData.coverages];
+                        }
+
+                        locationData.tags = locationData.tags.split(',');
+                        locationData.website = 'http://' + locationData.website;
+                        locationData.address = $scope.addr;
+                        // Only add the hq if valid!
+                        if ($scope.hqAddr.isValid) {
+                            locationData.hqAddress = $scope.hqAddr;
+                        }
+
+                        var location = new locationService.Location(locationData, true);
 
                         locationService.add(location)
                             .success(function(data) {
-                                $log.debug(data);
-                                form.reset();
-                                // push the rating into the locations ratings hehe
-                                $scope.locations.push(location);
+                                $scope.form.reset();
+                                var newLocation = new locationService.Location(data, false);
+                                $scope.locations.push(newLocation);
                             })
                             .error(function(data) {
                                 // Todo: Show a toast error message
+                                console.log("Failure!");
                             });
                     }
                     return false;
                 };
 
             }],
-            controllerAs: 'locAddCtrl'
+            controllerAs: 'locAddCtrl',
+            link: function ($scope, $elem, $attrs) {
+                // Fired second after created
+                // Create a link in the scope so it can be referenced as a container for the dialogs
+                $scope.$parentElem = $elem[0].parentElement;
+                $scope.form = $elem[0].querySelector('form');
+                $scope.mapContainer = document.querySelector('google-map');
+            }
         }
     });
 
@@ -222,7 +208,9 @@
      * Handles the custom address input
      * Validates the address,
      * given a LocationAddress in the target, fills with valid address info
-     * Can be given map for marker selection / draggable
+     * Can be given map for marker selection / draggable (?)
+     *
+     * Target will be given a hasValidated and isConfirmed field. Will do better when know more angular
      *
      */
     app.directive('mapAddressInput', function() {
@@ -231,17 +219,60 @@
             templateUrl: '/app/shared/location/map-address-input.html',
             scope: {
                 target: '=target', //Required
-                title: '=title',   // Required
-                map: '=map'
+                title: '@',   // Required, readOnly
+                mapContainer: '=map',
+                required: '=required',
+                container: '=container'
             },
-            controller: ['$scope', function($scope) {
+            controller: ['$scope', '$attrs', '$http', function($scope, $attrs, $http) {
+                var addrInput = this;
+                var marker = null;
                 this.inputIsHidden = true;
                 this.hasValidated = false;
+                this.isConfirmed = false;
+                this.formattedAddress = '';
+                this.required = $scope.$eval($attrs.required);
+                this.containerElem;
+
+                
                 this.setInputHidden = function (isHidden){
                     this.inputIsHidden = isHidden;
+
+                    // Remove the marker if there is one
+                    if (isHidden) {
+                        $scope.inputDialog.close();
+                        if (marker) {
+                            marker.setMap(null);
+                        }
+                    } else {
+                        $scope.inputDialog.refit();
+                        $scope.inputDialog.open();
+                    }
                 };
                 this.setHasValidated = function (hasValidated) {
                     this.hasValidated = hasValidated;
+                    $scope.target.isValid = hasValidated;
+                };
+                /**
+                 * Take use response if the geocoded address is correct
+                 * @param isConfirmed
+                 */
+                this.setConfirmed = function(isConfirmed) {
+                    this.isConfirmed = isConfirmed;
+                    $scope.target.isConfirmed = isConfirmed;
+
+                    if (isConfirmed) {
+                        // Close the input
+                        addrInput.setInputHidden(true);
+                    }
+                };
+
+                /**
+                 * Check if the address has been validated. Probably should check if it has been confirmed as well
+                 * @returns {boolean|*}
+                 */
+                this.isValidated = function() {
+                    return addrInput.hasValidated;
                 };
 
                 /**
@@ -254,19 +285,72 @@
                  *  Show toast showing error message
                  *  Ask to check for errors
                  */
-                this.validate = function() {
-                    this.setHasValidated(true);
-                };
+                $scope.validate = function() {
+                    var form = document.getElementById('addressForm_' + $scope.title);
 
-                /**
-                 * Take use response if the geocoded address is correct
-                 * @param isCorrect
-                 */
-                this.markCorrect = function(isCorrect) {
+                    if (form.validate()) {
+                        var formData = form.serialize();
+                        // Should probably do this with a googleMapsApi obj or at least an apiKey
+                        var geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+                            formData['address1'] + ' ' + formData['address2'] + ' ' + formData['city'] +
+                            ' ' + formData['state'] + ' ' + formData['zipcode'];
 
+                        $http.get(geoUrl)
+                            .success(function(data) {
+                                // Make a address object with the data
+                                console.log(data);
+                                var possibleResults = data['results'];
+                                // For now let's just take the first result, as it's the most likely
+                                // In future we can present a list
+                                var result = possibleResults[0];
+
+                                // Could break it down into address components but nah for now
+                                // This whole directive is pretty much 'nah for now'
+                                var latLng = result['geometry']['location'];
+                                // Put the address into the target object
+                                $scope.target['address1'] = formData['address1'];
+                                $scope.target['address2'] = formData['address2'];
+                                $scope.target['city'] = formData['city'];
+                                $scope.target['state'] = formData['state'];
+                                $scope.target['zipcode'] = formData['zipcode'];
+                                $scope.target['latLng'] = latLng;
+                                addrInput.formattedAddress = result['formatted_address'];
+
+                                // If there's a map, do some fancy stuff with markers
+                                if ($scope.mapContainer.map) {
+                                    console.log("Start doing cool mapContainer.map stuff");
+                                    // Get a copy of the maps api
+                                    var mapsApi = document.querySelector('google-maps-api').api;
+
+                                    // If there was already a marker from a previous search, clear it!
+                                    if (marker) {
+                                        marker.setMap(null);
+                                    }
+
+                                    // Add a marker to the map
+                                    marker = new mapsApi.Marker({
+                                        map: $scope.mapContainer.map,
+                                        position: new mapsApi.LatLng(latLng),
+                                        title: addrInput.formattedAddress
+                                    });
+
+                                    // Zoom to it
+                                    $scope.mapContainer.map.latitude = latLng.lat;
+                                    $scope.mapContainer.map.longitude = latLng.lng;
+                                }
+                            }).error(function() {
+                            // Show a toast saying we couldn't find the address
+                        });
+
+                        addrInput.setHasValidated(true);
+                    }
                 };
             }],
-            controllerAs: 'mapAddrCtrl'
+            controllerAs: 'mapAddrCtrl',
+            link: function ($scope, $elem, $attrs) {
+                $scope.inputDialog = $elem[0].querySelector('paper-dialog');
+                $scope.inputDialog.fitInto = $scope.container;
+            }
         }
     });
 })();

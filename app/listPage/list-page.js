@@ -15,11 +15,11 @@
     app.controller('ListPageController', function($scope, $routeParams, $location) {
         var listPageCtrl = this;
         this.isAdding = $location.$$path === '/add';
-        this.map = document.querySelector('google-map');
+        this.mapContainer = document.querySelector('google-map');
         this.currentLatLng = null;
 
-        this.map.addEventListener('google-map-ready', function(e) {
-            // Try to center the map with the users current position
+        this.mapContainer.addEventListener('google-map-ready', function(e) {
+            // Try to center the mapContainer with the users current position
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
@@ -28,8 +28,8 @@
                         listPageCtrl.currentLatLng = [position.coords.latitude, position.coords.longitude];
                         listPageCtrl.zoomToLocation(listPageCtrl.currentLatLng);
                     }, function (error) {
-                        // error
-                        console.log("Couldn't get user's current location");
+                        // error, todo: show a toast
+                        console.log("Couldn't get user's current location: " + error);
                     });
             }
         });
@@ -44,8 +44,8 @@
          * @param latLng, {{lat: float, lng: float}}
          */
         this.zoomToLocation = function(latLng) {
-            this.map.latitude = latLng.lat;
-            this.map.longitude = latLng.lng;
+            this.mapContainer.latitude = latLng.lat;
+            this.mapContainer.longitude = latLng.lng;
         }
     });
 })();
