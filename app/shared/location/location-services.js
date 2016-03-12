@@ -141,7 +141,7 @@
                         this.hqAddress = jsonData['hqAddress'] === undefined ?
                             jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress'], false);
                         this.locationType = jsonData['locationType'];
-                        this.coverages = jsonData['coverage'];
+                        this.coverages = jsonData['coverages'];
                         this.services = jsonData['services'];
                         this.tags = jsonData['tags'];
                         this.comments = jsonData['comments'];
