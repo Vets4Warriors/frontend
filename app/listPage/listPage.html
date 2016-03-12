@@ -34,36 +34,24 @@
 			/* List styles */
 			::-webkit-scrollbar {
 			width: 5px;
-			height: 5px;
-			}
-			::-webkit-scrollbar-button {
-			width: 25px;
-			height: 25px;
 			}
 			::-webkit-scrollbar-thumb {
-			background: #e1e1e1;
-			border: 0px none #ffffff;
+			background: rgba(96, 125, 139,0.7);
 			border-radius: 25px;
+            box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
 			}
 			::-webkit-scrollbar-thumb:hover {
-			background: #ffffff;
+			background: rgba(96, 125, 139,0.9);
 			}
 			::-webkit-scrollbar-thumb:active {
-			background: #000000;
+			background: rgba(38, 50, 56,0.9);
 			}
 			::-webkit-scrollbar-track {
-			background: #666666;
-			border: 0px none #ffffff;
-			border-radius: 5px;
+			background: rgba(176, 190, 197,0.5);
+			border-radius: 25px;
 			}
 			::-webkit-scrollbar-track:hover {
-			background: #0a0a0a;
-			}
-			::-webkit-scrollbar-track:active {
-			background: #333333;
-			}
-			::-webkit-scrollbar-corner {
-			background: transparent;
+			background: rgba(176, 190, 197,0.9);
 			}
 			
 			#locations {
@@ -75,25 +63,19 @@
 			}
 			#locations #list {
             margin-top: 16px;
+            padding-right:10px;
             float: right;
             height:800px;
             overflow-y: auto;
+            overflow-x: hidden;
 			}
 			#location .listContainer {
             max-height: 100%;
             box-sizing: border-box;
-            overflow-y: auto;
-            overflow-x: hidden;
 			}
 			#locations .listContainer > * {
             display: block;
 			}
-			/*#locations .listContainer {
-            !*position: absolute;*!
-            max-height: 100%;
-            overflow-y: auto;
-            display: block;
-			}*/
 			
 			#search {
             width: 100%;
@@ -101,8 +83,6 @@
 			}
 			#search .locationFilter {
             margin-top: 16px;
-            /*width: 30%;*/
-            /* Card width and margin */
             width: calc(100% - 350px - 16px);
             height: auto;
             background: white;
@@ -136,12 +116,54 @@
             width: 500px;
             height: auto;
 			}
+
+            /* Header styles*/
+            #header {
+                width:300px;
+                height: 92px;
+                position: absolute;
+                top:24px;
+                right: 2%;
+                background: none;
+            }
+            #header > div {
+                height:100%;
+                display: inline-block;
+                text-align: center;
+            }
+            #headImg {
+                width:220px;
+                float: right;
+            }
+            #headHome {
+                width: 80px;
+                float: left;
+            }
+            #header img {
+                margin: 0 auto;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            #header a:hover {
+                opacity: .5;
+            }
+
 		</style>
 	</head>
 	
 	<body ng-controller="ListPageController as listPageCtrl">
-		<google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
-			<section id="locations" ng-show="!listPageCtrl.isAdding" ng-controller="LocationsController as locCtrl">
+
+        <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
+            <div id="header">
+                <div id="headHome">
+                    <a href="/"><img src="/_assets/gfx/home.png"></a>
+                </div>
+                <div id="headImg">
+                    <a href="http://www.vets4warriors.com" target="_blank"><img src="/_assets/gfx/logo.png"></a>
+                </div>
+            </div>
+            <section id="locations" ng-show="!listPageCtrl.isAdding" ng-controller="LocationsController as locCtrl">
 				<!-- Search box -->
 				<location-search-box id="search"></location-search-box>
 				<!-- Results -->
