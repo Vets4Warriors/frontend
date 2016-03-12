@@ -13,9 +13,14 @@
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
             "use strict";
-            const baseApiUrl = 'http://localhost/api/1.0/locations';
-            //const baseApiUrl = 'http://localhost:8000/1.0/locations';
-            //const baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
+            var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0';
+            //var baseApiUrl = 'http://localhost/api/1.0/locations';
+
+            /*$http.get('/_config').success(function(config){
+                baseApiUrl = config['base-vets-api-server'] + '/locations';
+            }).error(function() {
+                console.log("Failed to get the config");
+            });*/
             const service = this;
 
             /**
@@ -23,15 +28,41 @@
              * @type {LocationAddress}
              */
             this.LocationAddress = class LocationAddress {
-                constructor(jsonData, autoLoad) {
+                constructor(jsonData, fromForm) {
+                    if (fromForm) {
+                        this.latLng = jsonData['latLng'];
+                    } else {
+                        // latLng is stored in lng lat form in database
+                        this.latLng = {};
+                        this.latLng.lat = jsonData['latLng'].coordinates[1];
+                        this.latLng.lng = jsonData['latLng'].coordinates[0];
+                    }
                     this.address1 = jsonData['address1'];
                     this.address2 = jsonData['address2'];
                     this.city = jsonData['city'];
                     this.state = jsonData['state'];
                     this.country = jsonData['country'];
-                    this.latLng = jsonData['latLng'];
+
+
                     this.zipcode = jsonData['zipcode'];
                 }
+
+                /**
+                 * Todo: refactor this to be opposite. Aka constructor makes empty
+                 * @returns {LocationAddress}
+                 */
+                static makeEmptyAddr() {
+                    return new this({
+                            address1: '',
+                            address2: '',
+                            city: '',
+                            state: '',
+                            country: '',
+                            zipcode: '',
+                            latLng: {lat: 0.0, lng: 0.0}
+                        }, true);
+                }
+
 
                 /**
                  *
@@ -84,18 +115,31 @@
              */
             this.Location = class Location {
                 constructor(jsonData, fromForm) {
+                    /* Meant explicitly to send to the server */
                     if (fromForm) {
-
+                        console.log("Building location from form!");
+                        this.name = jsonData['name'];
+                        this.phone = jsonData['phone'];
+                        this.email = jsonData['email'];
+                        this.address = jsonData['address'];
+                        this.hqAddress = jsonData['hqAddress'];
+                        this.locationType = jsonData['locationType'];
+                        this.coverages = jsonData['coverages'];
+                        this.services = jsonData['services'];
+                        this.tags = jsonData['tags'];
+                        this.comments = jsonData['comments'];
+                        this.website = jsonData['website'];
+                        this.addedBy  = jsonData['addedBy'];
                     } else {
                         // From server
-                        this.rawData = jsonData;
+                        //this.rawData = jsonData;
                         this.id = jsonData['_id']['$oid'];
                         this.name = jsonData['name'];
                         this.phone = jsonData['phone'];
                         this.email = jsonData['email'];
-                        this.address = new service.LocationAddress(jsonData['address'], true);
+                        this.address = new service.LocationAddress(jsonData['address'], false);
                         this.hqAddress = jsonData['hqAddress'] === undefined ?
-                            jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress'], true);
+                            jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress'], false);
                         this.locationType = jsonData['locationType'];
                         this.coverages = jsonData['coverage'];
                         this.services = jsonData['services'];
@@ -130,10 +174,7 @@
                  * @returns {{lat: *, lng: *}}
                  */
                 getAddrLatLng() {
-                    return {
-                        lat: this.address.latLng['coordinates'][0],
-                        lng: this.address.latLng['coordinates'][1]
-                    };
+                    return this.address.latLng;
                 }
 
                 /**

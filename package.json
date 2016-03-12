@@ -39,6 +39,7 @@
     "express": "^4.13.4",
     "logger": "0.0.1",
     "morgan": "^1.7.0",
-    "newrelic": "^1.25.4"
+    "newrelic": "^1.25.4",
+    "optimist": "^0.6.1"
   }
 }

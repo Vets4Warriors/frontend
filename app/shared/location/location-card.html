@@ -63,7 +63,7 @@
 
 
         <!-- Show a brief description if the card is not expanded -->
-        <p class="bottom" ng-show="!cardCtrl.isExpanded">{{location.getFormattedServices();}}</p>
+        <p class="bottom" ng-show="!cardCtrl.isExpanded">{{location.locationType + ": " + location.getFormattedServices();}}</p>
         <!-- Only show the tabs if the card has been expanded -->
         <paper-tabs selected="0" class="bottom self-end" ng-show="cardCtrl.isExpanded">
             <paper-tab ng-click="cardCtrl.setTab(0)">Info</paper-tab>
