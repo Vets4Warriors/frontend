@@ -1,69 +1,105 @@
 <!DOCTYPE html>
 <html lang="en" data-ng-app="listPage">
-<head>
-    <meta charset="UTF-8">
-    <title>Locations</title>
-    <link rel="shortcut icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
-
-    <link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
-    <link rel="import" href="/bower_components/paper-fab/paper-fab.html"/>
-    <link rel="import" href="/bower_components/paper-material/paper-material.html"/>
-    <link rel="import" href="/bower_components/google-map/google-map.html"/>
-
-    <script src="/bower_components/arg.js/dist/arg-1.3.min.js"></script>
-    <script src="/bower_components/angular/angular.min.js"></script>
-    <script src="/bower_components/angular-route/angular-route.min.js"></script>
-    <script src="/bower_components/angular-click-outside/clickoutside.directive.js"></script>
-
-    <!--<script src="../shared/location/location-service.js"></script>-->
-    <script src="/app/shared/location/location.js"></script>
-
-    <script src="/app/listPage/listPage.js"></script>
-
-    <style is="list-page-style">
-        html, body {
+	<head>
+		<meta charset="UTF-8">
+		<title>Locations</title>
+		<link rel="shortcut icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
+		
+		<link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
+		<link rel="import" href="/bower_components/paper-fab/paper-fab.html"/>
+		<link rel="import" href="/bower_components/paper-material/paper-material.html"/>
+		<link rel="import" href="/bower_components/google-map/google-map.html"/>
+		
+		<script src="/bower_components/arg.js/dist/arg-1.3.min.js"></script>
+		<script src="/bower_components/angular/angular.min.js"></script>
+		<script src="/bower_components/angular-route/angular-route.min.js"></script>
+		<script src="/bower_components/angular-click-outside/clickoutside.directive.js"></script>
+		
+		<!--<script src="../shared/location/location-service.js"></script>-->
+		<script src="/app/shared/location/location.js"></script>
+		
+		<script src="/app/listPage/listPage.js"></script>
+		
+		<style is="list-page-style">
+			html, body {
             width: 100%;
             height: 100%;
             margin: 0;
             overflow: hidden;
-        }
-
-        /* List styles */
-        #locations {
+			}
+			
+			/* Header */
+			
+			/* List styles */
+			::-webkit-scrollbar {
+			width: 5px;
+			height: 5px;
+			}
+			::-webkit-scrollbar-button {
+			width: 25px;
+			height: 25px;
+			}
+			::-webkit-scrollbar-thumb {
+			background: #e1e1e1;
+			border: 0px none #ffffff;
+			border-radius: 25px;
+			}
+			::-webkit-scrollbar-thumb:hover {
+			background: #ffffff;
+			}
+			::-webkit-scrollbar-thumb:active {
+			background: #000000;
+			}
+			::-webkit-scrollbar-track {
+			background: #666666;
+			border: 0px none #ffffff;
+			border-radius: 5px;
+			}
+			::-webkit-scrollbar-track:hover {
+			background: #0a0a0a;
+			}
+			::-webkit-scrollbar-track:active {
+			background: #333333;
+			}
+			::-webkit-scrollbar-corner {
+			background: transparent;
+			}
+			
+			#locations {
             position: absolute;
             left: 2%;
             top: 24px;
             width: calc(350px + 15%);
             overflow: hidden;
-        }
-        #locations #list {
+			}
+			#locations #list {
             margin-top: 16px;
             float: right;
             height:800px;
-            overflow-y: scroll;
-        }
-        #location .listContainer {
+            overflow-y: auto;
+			}
+			#location .listContainer {
             max-height: 100%;
             box-sizing: border-box;
             overflow-y: auto;
             overflow-x: hidden;
-        }
-        #locations .listContainer > * {
+			}
+			#locations .listContainer > * {
             display: block;
-        }
-        /*#locations .listContainer {
+			}
+			/*#locations .listContainer {
             !*position: absolute;*!
             max-height: 100%;
             overflow-y: auto;
             display: block;
-        }*/
-
-        #search {
+			}*/
+			
+			#search {
             width: 100%;
             margin-bottom: 16px;
-        }
-        #search .locationFilter {
+			}
+			#search .locationFilter {
             margin-top: 16px;
             /*width: 30%;*/
             /* Card width and margin */
@@ -71,56 +107,56 @@
             height: auto;
             background: white;
             float: left;
-        }
-
-        .locationCard {
+			}
+			
+			.locationCard {
             width: 350px;
             margin-bottom: 16px;
-        }
-
-        /* Action styles */
-        #actions {
+			}
+			
+			/* Action styles */
+			#actions {
             width: 64px;
             height: 64px;
             position: absolute;
             right: 24px;
             bottom: 24px;
-        }
-        #actions paper-fab {
+			}
+			#actions paper-fab {
             height: 100%;
             width: 100%;
             margin: 0 auto;
-        }
-
-        /* Add styles */
-        #add {
+			}
+			
+			/* Add styles */
+			#add {
             position: absolute;
             top: 24px;
             left: 16px;
             width: 500px;
             height: auto;
-        }
-    </style>
-</head>
-
-<body ng-controller="ListPageController as listPageCtrl">
-    <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
-        <section id="locations" ng-show="!listPageCtrl.isAdding" ng-controller="LocationsController as locCtrl">
-            <!-- Search box -->
-            <location-search-box id="search"></location-search-box>
-            <!-- Results -->
-            <article class="listContainer" id="list" >
-                <location-card ng-repeat="location in locations"></location-card>
-            </article>
-        </section>
-
-        <section id="add" ng-focus="listPageCtrl.isAdding" ng-show="listPageCtrl.isAdding">
-            <location-add></location-add>
-        </section>
-
-        <section id="actions">
-            <paper-fab icon="add" ng-click="listPageCtrl.setIsAdding(true);"></paper-fab>
-        </section>
-    </google-map>
-</body>
+			}
+		</style>
+	</head>
+	
+	<body ng-controller="ListPageController as listPageCtrl">
+		<google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
+			<section id="locations" ng-show="!listPageCtrl.isAdding" ng-controller="LocationsController as locCtrl">
+				<!-- Search box -->
+				<location-search-box id="search"></location-search-box>
+				<!-- Results -->
+				<article class="listContainer" id="list" >
+					<location-card ng-repeat="location in locations"></location-card>
+				</article>
+			</section>
+			
+			<section id="add" ng-focus="listPageCtrl.isAdding" ng-show="listPageCtrl.isAdding">
+				<location-add></location-add>
+			</section>
+			
+			<section id="actions">
+                <paper-fab icon="add" ng-click="listPageCtrl.setIsAdding(true);"></paper-fab>
+			</section>
+		</google-map>
+	</body>
 </html>
