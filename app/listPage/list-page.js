@@ -12,11 +12,18 @@
         $routeProvider.otherwise({redirectTo: '/list'});
     }]);
 
-    app.controller('ListPageController', function($scope, $routeParams, $location) {
+    app.controller('ListPageController', ['$scope', '$routeParams', '$location', '$http',
+        function($scope, $routeParams, $location, $http) {
         var listPageCtrl = this;
         this.isAdding = $location.$$path === '/add';
         this.mapContainer = document.querySelector('google-map');
         this.currentLatLng = null;
+
+        /*$http.get('/_config').success(function(config){
+                listPageCtrl.mapContainer.apiKey = config['google-maps-api-key'];
+            }).error(function() {
+               console.log("Failed to get the config");
+            });*/
 
         this.mapContainer.addEventListener('google-map-ready', function(e) {
             // Try to center the mapContainer with the users current position
@@ -47,5 +54,5 @@
             this.mapContainer.latitude = latLng.lat;
             this.mapContainer.longitude = latLng.lng;
         }
-    });
+    }]);
 })();

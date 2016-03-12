@@ -13,9 +13,14 @@
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
             "use strict";
-            const baseApiUrl = 'http://localhost/api/1.0/locations';
-            //const baseApiUrl = 'http://localhost:8000/1.0/locations';
-            //const baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
+            var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0';
+            //var baseApiUrl = 'http://localhost/api/1.0/locations';
+
+            /*$http.get('/_config').success(function(config){
+                baseApiUrl = config['base-vets-api-server'] + '/locations';
+            }).error(function() {
+                console.log("Failed to get the config");
+            });*/
             const service = this;
 
             /**

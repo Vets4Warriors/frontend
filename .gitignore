@@ -39,7 +39,8 @@ node_modules
 .idea/
 tests/
 
-
+# Logs
+*nohup
 
 
 
