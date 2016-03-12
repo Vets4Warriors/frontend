@@ -37,26 +37,27 @@
         <!-- Basics -->
         <paper-input name="name" label="Name" error-message="Need a name!"
                      required auto-validate></paper-input>
+        <paper-input name="email" label="Email" type="email" error-message="Please enter a valid email."
+                     auto-validate></paper-input>
         <gold-phone-input name="phone" label="Phone Number (XXX-XXX-XXXX)"
-                          phone-nuber-pattern="XXX-XXX-XXXX" auto-validate></gold-phone-input>
+                          phone-number-pattern="XXX-XXX-XXXX" auto-validate></gold-phone-input>
         <paper-input name="website" label="Website">
             <div prefix>http://</div>
         </paper-input>
 
-        <!-- Addresses -->
-        <paper-input name="address" label="Address" required></paper-input>
-        <paper-input name="hqAddress" label="HQ Address"></paper-input>
+        <!--<paper-input name="address" label="Address" required></paper-input>
+        <paper-input name="hqAddress" label="HQ Address"></paper-input>-->
 
         <!-- Deeper info -->
         <paper-input name="locationType" label="Location Type" required></paper-input>
 
         <p class="checkboxes">Coverage</p>
         <section class="checkboxes">
-            <paper-checkbox name="coverage" value="Local" noink>Local</paper-checkbox>
-            <paper-checkbox name="coverage" value="State" noink>State</paper-checkbox>
-            <paper-checkbox name="coverage" value="Regional" noink>Regional</paper-checkbox>
-            <paper-checkbox name="coverage" value="National" noink>National</paper-checkbox>
-            <paper-checkbox name="coverage" value="International" noink>International</paper-checkbox>
+            <paper-checkbox name="coverages" value="Local" noink>Local</paper-checkbox>
+            <paper-checkbox name="coverages" value="State" noink>State</paper-checkbox>
+            <paper-checkbox name="coverages" value="Regional" noink>Regional</paper-checkbox>
+            <paper-checkbox name="coverages" value="National" noink>National</paper-checkbox>
+            <paper-checkbox name="coverages" value="International" noink>International</paper-checkbox>
         </section>
 
         <paper-input name="services" label="Services (separated by commas)" required></paper-input>
@@ -67,7 +68,13 @@
                      auto-validate></paper-input>
         <paper-input name="addedBy" label="Your name" error-message="Need to provide your name!"
                      required auto-validate></paper-input>
-
-        <paper-button type="submit" ng-click="">Add to database</paper-button>
     </form>
+
+    <!-- Addresses -->
+    <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr" map="mapContainer"
+                       required="true"></map-address-input>
+    <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr" map="mapContainer"></map-address-input>
+
+    <paper-button type="submit" ng-click="submitAddForm();">Add to database</paper-button>
+
 </paper-material>
