@@ -14,15 +14,43 @@
         margin: 2px;
     }
 
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(96, 125, 139,0.7);
+        border-radius: 25px;
+        box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(96, 125, 139,0.9);
+    }
+    ::-webkit-scrollbar-thumb:active {
+        background: rgba(38, 50, 56,0.9);
+    }
+    ::-webkit-scrollbar-track {
+        background: rgba(176, 190, 197,0.5);
+        border-radius: 25px;
+    }
+    ::-webkit-scrollbar-track:hover {
+        background: rgba(176, 190, 197,0.9);
+    }
+    .scroll {
+        height: 300px;
+        overflow-y: scroll;
+    }
+
 </style>
 
 <article class="cardItemContainer">
     <h1>Average rating: {{averageRating(location.ratings)}}</h1>
-    <article ng-repeat="rating in location.ratings track by $index">
-        <blockquote> Stars: {{rating.value}} </blockquote>
-        <p> - {{rating.user}} </p>
-        <p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>
-    </article>
+    <div class="scroll">
+        <article ng-repeat="rating in location.ratings track by $index">
+            <blockquote> Stars: {{rating.value}} </blockquote>
+            <p> - {{rating.user}} </p>
+            <p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>
+        </article>
+    </div>
 
     <form id="{{location.id + '_ratingForm'}}" class="addRatingForm"
           is="iron-form" ng-keypress="keyPressed($event)">
