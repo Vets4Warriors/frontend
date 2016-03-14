@@ -19,6 +19,11 @@ gulp.task('clean', function (callback) {
    return del(['build', 'dist'], callback)
 });
 
+gulp.task('prodConfig', function() {
+
+});
+
+
 gulp.task('compileComponents', function() {
     // Todo!
     return gulp.src('app')

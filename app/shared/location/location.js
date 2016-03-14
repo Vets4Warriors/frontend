@@ -143,6 +143,8 @@
                  * @param key pressed. The $event var in angular
                  */
                 var locAddCtrl = this;
+                var successToast = document.getElementById('successToast');
+                var errorToast = document.getElementById('failureToast');
                 $scope.addr = locationService.LocationAddress.makeEmptyAddr();
                 $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
 
@@ -180,12 +182,20 @@
 
                         locationService.add(location)
                             .success(function(data) {
+                                successToast.show({
+                                    text: "Added " + location.name + " to the database!",
+                                    duration: 3000
+                                });
                                 $scope.form.reset();
                                 var newLocation = new locationService.Location(data, false);
                                 $scope.locations.push(newLocation);
                             })
                             .error(function(data) {
-                                // Todo: Show a toast error message
+                                // Todo: animate the paper-fab upwards as well
+                                errorToast.show({
+                                    text: "Failed to add the location!",
+                                    duration: 3000
+                                });
                                 console.log("Failure!");
                             });
                     }
