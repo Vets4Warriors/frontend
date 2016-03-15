@@ -12,24 +12,49 @@
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }]);
 
+
+    var mapRecenter = function(map, mapsApi, latLng, offsetX, offsetY) {
+        var projection = map.getProjection();
+        if (projection) {
+            var point1 = projection.fromLatLngToPoint(
+                (latLng instanceof mapsApi.LatLng) ? latlng : map.getCenter()
+            );
+            var point2 = new mapsApi.Point(
+                ( (typeof(offsetX) == 'number' ? offsetX : 0) / Math.pow(2, map.getZoom()) ) || 0,
+                ( (typeof(offsetY) == 'number' ? offsetY : 0) / Math.pow(2, map.getZoom()) ) || 0
+            );
+            map.setCenter(projection.fromPointToLatLng(new mapsApi.Point(
+                point1.x - point2.x,
+                point1.y + point2.y
+            )));
+        } else {
+            console.log("Couldn't get the projection map :(");
+        }
+    };
+
     /**
      *  This controls the list as a whole
      */
     app.controller('LocationsController', ['$scope', '$log', 'locationService',
         function($scope, $log, locationService) {
-            var list = this;
+            var listCtrl = this;
+
+            var mapContainer = document.querySelector('google-map');
+            var mapsApi = null;
+
             var Location = locationService.Location;
             $scope.locations = [];
-            this.locationService = locationService;
-            this.mapContainer = document.querySelector('google-map');
-            this.mapsApi = null;
+            var locationService = locationService;
 
-            if (this.mapContainer) {
+            $scope.connectionErrorToast = document.getElementById('connectionErrorToast');
+
+            if (mapContainer) {
                 // Wait for the mapContainer to load before initializing list
-                this.mapContainer.addEventListener('google-map-ready', function(e) {
-                    list.mapsApi = document.querySelector('google-maps-api').api;
+                mapContainer.addEventListener('google-map-ready', function(e) {
+                    console.log("Map loaded! From list-page");
+                    mapsApi = document.querySelector('google-maps-api').api;
                     // Start by getting all locations
-                    list.getLocations({});
+                    listCtrl.getLocations({});
                 });
             } else {
                 // Initialize with an empty query
@@ -48,33 +73,56 @@
                         var numPrevLocs = $scope.locations.length;
                         for (var i = 0; i < numPrevLocs; i++) {
                             // Null the first marker and pop
-                            $scope.locations[0].marker.setMap(null);
+                            if ($scope.locations[0].marker) {
+                                $scope.locations[0].marker.setMap(null);
+                            }
                             console.log("Popping: " + $scope.locations.pop());
                         }
 
                         // Add all the new ones and make bounds
                         var newLocs = Location.fromJsonArray(angular.fromJson(data));
-                        var bounds = new list.mapsApi.LatLngBounds();
+                        var bounds = new mapsApi.LatLngBounds();
                         for (var i = 0; i < newLocs.length; i++) {
                             var locationToAdd = newLocs[i];
-                            var marker = new list.mapsApi.Marker({
-                                map: list.mapContainer.map,
-                                position: new list.mapsApi.LatLng(locationToAdd.getAddrLatLng()),
-                                title: locationToAdd.name
-                            });
-                            // Attach the marker to each location for referencing later
-                            locationToAdd.marker = marker;
 
-                            bounds.extend(marker.getPosition());
+                            // Some locations just won't have addresses.
+                            // Only add markers for those that do
+                            var addr = locationToAdd.getLatLngAddr();
+                            if (addr) {
+                                var marker = new mapsApi.Marker({
+                                    map: mapContainer.map,
+                                    position: new mapsApi.LatLng(locationToAdd.getAddrLatLng()),
+                                    title: locationToAdd.name
+                                });
+
+                                var marker = new mapsApi.Marker({
+                                    map: mapContainer.map,
+                                    position: new mapsApi.LatLng(locationToAdd.getAddrLatLng()),
+                                    title: locationToAdd.name
+                                });
+
+                                // Attach the marker to each location for referencing later
+                                locationToAdd.marker = marker;
+
+                                bounds.extend(marker.getPosition());
+                            }
                             $scope.locations.push(locationToAdd);
                         }
 
                         // Fit the map around the bounds
                         // Todo: account for the search / list area
-                        list.mapContainer.map.fitBounds(bounds);
+                        mapContainer.map.fitBounds(bounds);
+                        mapRecenter(mapContainer.map, mapsApi, 500, 0);
                     })
-                    .error(function(data) {
-                        $log.error(data);
+                    .error(function() {
+                        $scope.connectionErrorToast.show(
+                            {
+                                text: "Sorry, we couldn't connect to the server. " +
+                                "Have you checked your internet connection?",
+                                duration: 0
+                            }
+                        );
+                        $scope.connectionErrorToast.resetFit();
                     });
             };
     }]);
@@ -157,9 +205,7 @@
 
                 $scope.submitAddForm = function() {
                     // validate all address input. Have got to make them extend the iron-input / build with polymer
-                    //var addressInputs = form.getElementsByTagName('map-address-input');
-
-                    if ($scope.form.validate() && $scope.addr.isValid) {
+                    if ($scope.form.validate()) {
                         // Send request to database api
                         // Format the form data to fit our models
                         var locationData = $scope.form.serialize();
@@ -170,10 +216,13 @@
                             locationData.coverages = [locationData.coverages];
                         }
 
+                        //Todo: regex. This almost works buuut ((#(\S?!,)*)(\s*)(,))*((\s*)(#\S*)())
                         locationData.tags = locationData.tags.split(',');
                         locationData.website = 'http://' + locationData.website;
-                        locationData.address = $scope.addr;
-                        // Only add the hq if valid!
+                        // Only add the addresses if valid!
+                        if ($scope.addr.isValid) {
+                            locationData.address = $scope.addr;
+                        }
                         if ($scope.hqAddr.isValid) {
                             locationData.hqAddress = $scope.hqAddr;
                         }
@@ -186,7 +235,7 @@
                                     text: "Added " + location.name + " to the database!",
                                     duration: 3000
                                 });
-                                $scope.form.reset();
+                                $scope.resetForm();
                                 var newLocation = new locationService.Location(data, false);
                                 $scope.locations.push(newLocation);
                             })
@@ -201,6 +250,10 @@
                     }
                     return false;
                 };
+
+                $scope.resetForm = function() {
+                    $scope.form.reset();
+                }
 
             }],
             controllerAs: 'locAddCtrl',
@@ -242,7 +295,7 @@
                 this.isConfirmed = false;
                 this.formattedAddress = '';
                 this.required = $scope.$eval($attrs.required);
-                this.containerElem;
+                this.isPristine = true;
 
                 
                 this.setInputHidden = function (isHidden){
@@ -296,6 +349,7 @@
                  *  Ask to check for errors
                  */
                 $scope.validate = function() {
+                    addrInput.isPristine = false;
                     var form = document.getElementById('addressForm_' + $scope.title);
 
                     if (form.validate()) {
@@ -314,15 +368,28 @@
                                 // In future we can present a list
                                 var result = possibleResults[0];
 
-                                // Could break it down into address components but nah for now
-                                // This whole directive is pretty much 'nah for now'
+                                // Steal all the nice formatted data from response 
+
+
                                 var latLng = result['geometry']['location'];
                                 // Put the address into the target object
-                                $scope.target['address1'] = formData['address1'];
-                                $scope.target['address2'] = formData['address2'];
-                                $scope.target['city'] = formData['city'];
-                                $scope.target['state'] = formData['state'];
-                                $scope.target['zipcode'] = formData['zipcode'];
+                                var components = {};
+
+                                // Parse the geocoded response
+                                for (var i = 0; i < result['address_components'].length; i++) {
+                                    components[result['address_components'][i]['types'][0]] = {
+                                        long: result['address_components'][i]['long_name'],
+                                        short: result['address_components'][i]['short_name']
+                                    };
+                                }
+
+                                $scope.target['address1'] = components['street_number'].short + ' '
+                                    + components['route'].short;
+                                $scope.target['address2'] = formData['address2'];   // If they specify it, take it
+                                $scope.target['city'] = components['locality'].long;
+                                $scope.target['state'] = components['administrative_area_level_1'].short;
+                                $scope.target['country'] = components['country'].short;
+                                $scope.target['zipcode'] = components['postal_code'].short;
                                 $scope.target['latLng'] = latLng;
                                 addrInput.formattedAddress = result['formatted_address'];
 

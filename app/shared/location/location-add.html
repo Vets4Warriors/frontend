@@ -1,6 +1,7 @@
 <!-- The add form template for locations -->
 <link rel="import" href="/bower_components/iron-form/iron-form.html"/>
 <link rel="import" href="/bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html"/>
 <link rel="import" href="/bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="/bower_components/paper-material/paper-material.html"/>
 <link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html"/>
@@ -42,13 +43,16 @@
 
     <form id="addForm" is="iron-form" ng-keypress="keyPressed($event)">
         <!-- Basics -->
-        <paper-input name="name" label="Name" error-message="Need a name!"
-                     required auto-validate></paper-input>
-        <paper-input name="email" label="Email" type="email" error-message="Please enter a valid email."
+        <paper-input name="name" label="Resource name"
+                     error-message="Need a name!"
+                     required auto-validate autocapitalize></paper-input>
+        <paper-input name="email" label="Email" type="email"
+                     value=""
+                     error-message="Please enter a valid email."
                      auto-validate></paper-input>
         <gold-phone-input name="phone" label="Phone Number (XXX-XXX-XXXX)"
                           phone-number-pattern="XXX-XXX-XXXX" auto-validate></gold-phone-input>
-        <paper-input name="website" label="Website">
+        <paper-input name="website" label="Website" required="">
             <div prefix>http://</div>
         </paper-input>
 
@@ -56,7 +60,9 @@
         <paper-input name="hqAddress" label="HQ Address"></paper-input>-->
 
         <!-- Deeper info -->
-        <paper-input name="locationType" label="Location Type" required></paper-input>
+        <paper-input name="locationType" label="Resource Type" required></paper-input>
+        <paper-input name="services" label="Services (separated by commas)" required></paper-input>
+        <paper-input name="tags" label="#tags (separated by commas)"></paper-input>
 
         <p class="checkboxes">Coverage</p>
         <section class="checkboxes">
@@ -67,24 +73,24 @@
             <paper-checkbox name="coverages" value="International" noink>International</paper-checkbox>
         </section>
 
-        <paper-input name="services" label="Services (separated by commas)" required></paper-input>
-        <paper-input name="tags" label="Tags (separated by commas)"></paper-input>
-
         <!-- Extras -->
-        <paper-input name="comments" label="Comments"
-                     auto-validate></paper-input>
+        <paper-textarea name="comments" label="Comments" maxlength="500"
+                     auto-validate char-counter prevent-invalid-input></paper-textarea>
         <paper-input name="addedBy" label="Your name" error-message="Need to provide your name!"
                      required auto-validate></paper-input>
     </form>
 
     <!-- Addresses -->
-    <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr" map="mapContainer"
-                       required="true"></map-address-input>
-    <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr" map="mapContainer"></map-address-input>
+    <!-- Can't have a form inside of a form :( -->
+    <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr"
+                       map="mapContainer"></map-address-input>
+    <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr"
+                       map="mapContainer"></map-address-input>
 
     <paper-button type="submit" ng-click="submitAddForm();">Add to database</paper-button>
+    <paper-button type="reset" ng-click="resetForm();">Reset</paper-button>
 
 </paper-material>
 
-<paper-toast id="failureToast" class="fit-bottom" text="Failed to add the location!"></paper-toast>
+<paper-toast id="failureToast" text="Failed to add the location!"></paper-toast>
 <paper-toast id="successToast" text="Added location to the database!"></paper-toast>

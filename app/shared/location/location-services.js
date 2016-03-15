@@ -137,11 +137,12 @@
                         this.name = jsonData['name'];
                         this.phone = jsonData['phone'];
                         this.email = jsonData['email'];
-                        this.address = new service.LocationAddress(jsonData['address'], false);
+                        this.address = jsonData['address'] === undefined ?
+                            jsonData['address'] : new service.LocationAddress(jsonData['address'], false);
                         this.hqAddress = jsonData['hqAddress'] === undefined ?
                             jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress'], false);
                         this.locationType = jsonData['locationType'];
-                        this.coverages = jsonData['coverage'];
+                        this.coverages = jsonData['coverages'];
                         this.services = jsonData['services'];
                         this.tags = jsonData['tags'];
                         this.comments = jsonData['comments'];
@@ -168,6 +169,19 @@
                 getFormattedAddr() {
                     return this.address.getFormatted();
                 }
+
+                /**
+                 * Tries to get an address for map purposes
+                 * Favors
+                 */
+                getLatLngAddr() {
+                    return this.address || this.hqAddress;
+                }
+
+                hasAddr() {
+                    return this.address !== undefined || this.hqAddress !== undefined;
+                }
+
 
                 /**
                  *

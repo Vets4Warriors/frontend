@@ -20,7 +20,7 @@
     }
 
     .locationCard paper-toolbar {
-        --paper-toolbar-background: var(--paper-red-900);
+        --paper-toolbar-background: var(--paper-blue-900);
         text-align: left;
     }
 
@@ -45,9 +45,7 @@
     .locationCard .cardItemContainer {
         padding: 8px;
     }
-    /*.locationCard #content {
-        height: auto;
-    }*/
+
     .locationCard #contentCollapse>div {
         height: auto;
     }
@@ -56,8 +54,7 @@
 <paper-card class="locationCard">
     <paper-toolbar class="medium-tall">
         <h1 class="title">{{location.name}}</h1>
-        <!-- Might want to put the click function within the card controller -->
-        <paper-icon-button icon="maps:my-location" title="Locate"
+        <paper-icon-button icon="maps:my-location" title="Locate" ng-show="location.hasAddr();"
                            ng-click="listPageCtrl.zoomToLocation(location.getAddrLatLng());"></paper-icon-button>
         <paper-icon-button icon="expand-more" title="Expand" ng-click="cardCtrl.toggleContent();"></paper-icon-button>
 

@@ -44,24 +44,18 @@
 
         <form id="{{'addressForm_' + title }}" is="iron-form" method="post" action="">
             <paper-input name="address1" label="Address"
-                         prevent-invalid-input auto-validate
-                         required
-                         error-message="Address is required."></paper-input>
+                         prevent-invalid-input auto-validate autocapitalize></paper-input>
             <paper-input name="address2" label="Address (cont.)"
                          prevent-invalid-input auto-validate></paper-input>
 
             <paper-input  name="city" label="City"
-                          prevent-invalid-input auto-validate
-                          required
-                          error-message="City is required."></paper-input>
+                          prevent-invalid-input auto-validate></paper-input>
             <paper-input class="half" name="state" label="State"
-                         maxlength="2" prevent-invalid-input auto-validate
-                         required
+                         maxlength="2" auto-validate
                          error-message="Please enter a two-letter state code."></paper-input>
 
             <gold-zip-input name="zipcode" label="Zip code"
                             prevent-invalid-input auto-validate
-                            required
                             error-message="Please enter a valid zip code."
                             auto-validate></gold-zip-input>
 

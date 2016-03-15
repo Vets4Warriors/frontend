@@ -62,7 +62,8 @@ require('del');
         res.send(200, config);
     });
 
-    console.log("Vet's frontend listening on port:", config['port']);
+    console.log("Vet's frontend listening on port: " + config['port'],
+        "in " + env + " mode.");
     app.listen(config['port']);
 })();
 
