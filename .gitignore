@@ -42,5 +42,6 @@ tests/
 # Logs
 *nohup
 
-
+# Not sure how we want to deploy yet
+*dist
 

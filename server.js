@@ -23,7 +23,8 @@ require('del');
         .default('e', 'prod')
         .argv;
 
-    utils.setEnv(argv.e);
+    var env = argv.e;
+    utils.setEnv(env);
     var config = utils.config();
 
     app.use(morgan(config['morgan-level'])); // log every request to the console
@@ -34,21 +35,34 @@ require('del');
     app.use('/app', express.static(__dirname + '/app'));
 
     /* Routes */
-    app.get('/', function(req, res) {
-        res.sendFile(__dirname + '/index.html');
-    });
+    if (env === 'dev' || env === 'local') {
+        /* DEV ROUTES */
+        app.get('/', function(req, res) {
+            res.sendFile(__dirname + '/index.html');
+        });
 
-    app.get('/list', function(req, res) {
-        res.sendFile(__dirname + '/app/listPage/list-page.html');
-    });
+        app.get('/list', function(req, res) {
+            res.sendFile(__dirname + '/app/list-page/list-page.html');
+        });
+    } else {    // Default
+        /* PROD ROUTES
+         * Should be the same as dev routes but from the dist directory
+         * -> where our app is compiled */
+        app.get('/', function(req, res) {
+            res.sendFile(__dirname + '/dist_index.html');
+        });
 
-    // Todo: make this into a gulp task
+        app.get('/list', function(req, res) {
+            //res.sendFile(__dirname + '/dist/list-page/list-page.html');
+            res.sendFile(__dirname + '/app/list-page/list-page.html');
+        });
+    }
+
     app.get('/_config', function(req, res) {
         res.send(200, config);
     });
 
-    // Start the server on port 8080
-    console.log("Vet's frontend listening on port 8080!");
+    console.log("Vet's frontend listening on port:", config['port']);
     app.listen(config['port']);
 })();
 
