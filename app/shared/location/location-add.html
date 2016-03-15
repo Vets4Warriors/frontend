@@ -29,6 +29,35 @@
         margin-bottom: 4px;
     }
 
+	/* Scrollbar */
+    ::-webkit-scrollbar {
+	    width: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+	    background: rgba(96, 125, 139,0.7);
+	    border-radius: 25px;
+	    box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+	    background: rgba(96, 125, 139,0.9);
+    }
+    ::-webkit-scrollbar-thumb:active {
+	    background: rgba(38, 50, 56,0.9);
+    }
+    ::-webkit-scrollbar-track {
+	    background: rgba(176, 190, 197,0.5);
+	    border-radius: 25px;
+    }
+    ::-webkit-scrollbar-track:hover {
+	    background: rgba(176, 190, 197,0.9);
+    }
+
+    #formCont {
+	    height: 802px;
+	    overflow-y: auto;
+	    overflow-x: hidden;
+    }
+
     #failureToast {
         --paper-toast-background-color: red;
         --paper-toast-color: white;
@@ -41,54 +70,56 @@
         <paper-icon-button icon="close" title="Close" ng-click="listPageCtrl.setIsAdding(false);"></paper-icon-button>
     </paper-toolbar>
 
-    <form id="addForm" is="iron-form" ng-keypress="keyPressed($event)">
-        <!-- Basics -->
-        <paper-input name="name" label="Resource name"
-                     error-message="Need a name!"
-                     required auto-validate autocapitalize></paper-input>
-        <paper-input name="email" label="Email" type="email"
-                     value=""
-                     error-message="Please enter a valid email."
-                     auto-validate></paper-input>
-        <gold-phone-input name="phone" label="Phone Number (XXX-XXX-XXXX)"
-                          phone-number-pattern="XXX-XXX-XXXX" auto-validate></gold-phone-input>
-        <paper-input name="website" label="Website" required="">
-            <div prefix>http://</div>
-        </paper-input>
+    <section id="formCont">
+	    <form id="addForm" is="iron-form" ng-keypress="keyPressed($event)">
+	        <!-- Basics -->
+	        <paper-input name="name" label="Resource name"
+	                     error-message="Need a name!"
+	                     required auto-validate autocapitalize></paper-input>
+	        <paper-input name="email" label="Email" type="email"
+	                     value=""
+	                     error-message="Please enter a valid email."
+	                     auto-validate></paper-input>
+	        <gold-phone-input name="phone" label="Phone Number (XXX-XXX-XXXX)"
+	                          phone-number-pattern="XXX-XXX-XXXX" auto-validate></gold-phone-input>
+	        <paper-input name="website" label="Website" required="">
+	            <div prefix>http://</div>
+	        </paper-input>
 
-        <!--<paper-input name="address" label="Address" required></paper-input>
-        <paper-input name="hqAddress" label="HQ Address"></paper-input>-->
+	        <!--<paper-input name="address" label="Address" required></paper-input>
+	        <paper-input name="hqAddress" label="HQ Address"></paper-input>-->
 
-        <!-- Deeper info -->
-        <paper-input name="locationType" label="Resource Type" required></paper-input>
-        <paper-input name="services" label="Services (separated by commas)" required></paper-input>
-        <paper-input name="tags" label="#tags (separated by commas)"></paper-input>
+	        <!-- Deeper info -->
+	        <paper-input name="locationType" label="Resource Type" required></paper-input>
+	        <paper-input name="services" label="Services (separated by commas)" required></paper-input>
+	        <paper-input name="tags" label="#tags (separated by commas)"></paper-input>
 
-        <p class="checkboxes">Coverage</p>
-        <section class="checkboxes">
-            <paper-checkbox name="coverages" value="Local" noink>Local</paper-checkbox>
-            <paper-checkbox name="coverages" value="State" noink>State</paper-checkbox>
-            <paper-checkbox name="coverages" value="Regional" noink>Regional</paper-checkbox>
-            <paper-checkbox name="coverages" value="National" noink>National</paper-checkbox>
-            <paper-checkbox name="coverages" value="International" noink>International</paper-checkbox>
-        </section>
+	        <p class="checkboxes">Coverage</p>
+	        <section class="checkboxes">
+	            <paper-checkbox name="coverages" value="Local" noink>Local</paper-checkbox>
+	            <paper-checkbox name="coverages" value="State" noink>State</paper-checkbox>
+	            <paper-checkbox name="coverages" value="Regional" noink>Regional</paper-checkbox>
+	            <paper-checkbox name="coverages" value="National" noink>National</paper-checkbox>
+	            <paper-checkbox name="coverages" value="International" noink>International</paper-checkbox>
+	        </section>
 
-        <!-- Extras -->
-        <paper-textarea name="comments" label="Comments" maxlength="500"
-                     auto-validate char-counter prevent-invalid-input></paper-textarea>
-        <paper-input name="addedBy" label="Your name" error-message="Need to provide your name!"
-                     required auto-validate></paper-input>
-    </form>
+	        <!-- Extras -->
+	        <paper-textarea name="comments" label="Comments" maxlength="500"
+	                     auto-validate char-counter prevent-invalid-input></paper-textarea>
+	        <paper-input name="addedBy" label="Your name" error-message="Need to provide your name!"
+	                     required auto-validate></paper-input>
+	    </form>
 
-    <!-- Addresses -->
-    <!-- Can't have a form inside of a form :( -->
-    <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr"
-                       map="mapContainer"></map-address-input>
-    <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr"
-                       map="mapContainer"></map-address-input>
+	    <!-- Addresses -->
+	    <!-- Can't have a form inside of a form :( -->
+	    <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr"
+	                       map="mapContainer"></map-address-input>
+	    <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr"
+	                       map="mapContainer"></map-address-input>
 
-    <paper-button type="submit" ng-click="submitAddForm();">Add to database</paper-button>
-    <paper-button type="reset" ng-click="resetForm();">Reset</paper-button>
+	    <paper-button type="submit" ng-click="submitAddForm();">Add to database</paper-button>
+	    <paper-button type="reset" ng-click="resetForm();">Reset</paper-button>
+    </section>
 
 </paper-material>
 
