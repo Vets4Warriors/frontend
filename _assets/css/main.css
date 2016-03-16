@@ -121,10 +121,10 @@ div#right {
 
 #clocks {
     background: #B7A287;
-    width: 300px;
+    width: 400px;
     height: auto;
     position: absolute;
-    bottom: 100px;
+    top: 30%;
     right: 0;
     box-shadow: 1px 3px 6px 3px rgba(0,0,0,.7);
 }
@@ -132,13 +132,15 @@ div#right {
 #clocks table {
     border: none;
     text-align: center;
+    margin: 20px;
 }
 
 #clocks table td, #clocks table th {
     vertical-align: middle;
     padding:5px;
+    height: 20px;
 }
 
-#clocks table #h {
+#clocks table th {
     font-weight: bold;
 }
