@@ -193,6 +193,7 @@
                 var locAddCtrl = this;
                 var successToast = document.getElementById('successToast');
                 var errorToast = document.getElementById('failureToast');
+                var addressInputs = document.getElementsByTagName('map-address-input');
                 $scope.addr = locationService.LocationAddress.makeEmptyAddr();
                 $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
 
@@ -253,6 +254,8 @@
 
                 $scope.resetForm = function() {
                     $scope.form.reset();
+                    $scope.addr = {};
+                    $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
                 }
 
             }],
@@ -421,6 +424,16 @@
 
                         addrInput.setHasValidated(true);
                     }
+
+
+                    $scope.reset = function() {
+                        addrInput.isPristine = true;
+                        addrInput.hasValidated = false;
+                        addrInput.isConfirmed = false;
+                        addrInput.formattedAddress = '';
+
+                        $scope.target = {};
+                    };
                 };
             }],
             controllerAs: 'mapAddrCtrl',
