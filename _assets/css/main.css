@@ -39,16 +39,6 @@ header h1 {
 
 }
 
-fieldset input {
-    /*padding:0 20px;*/
-}
-
-fieldset label {}
-
-legend {
-    font-weight: bold;
-}
-
 /*Classes*/
 
 .clearBoth {
@@ -127,4 +117,30 @@ div#right {
 
 #formMain {
     margin:50px;
+}
+
+#clocks {
+    background: #B7A287;
+    width: 400px;
+    height: auto;
+    position: absolute;
+    top: 30%;
+    right: 0;
+    box-shadow: 1px 3px 6px 3px rgba(0,0,0,.7);
+}
+
+#clocks table {
+    border: none;
+    text-align: center;
+    margin: 20px;
+}
+
+#clocks table td, #clocks table th {
+    vertical-align: middle;
+    padding:5px;
+    height: 20px;
+}
+
+#clocks table th {
+    font-weight: bold;
 }
