@@ -1,0 +1,8 @@
+@media screen and (max-width: 1300px) {
+	#clocks {
+		position: static;
+		top: initial;
+		right: 50%;
+		bottom: 0;
+	}
+}
