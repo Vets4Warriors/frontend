@@ -132,7 +132,7 @@ div#right {
 #clocks table {
     border: none;
     text-align: center;
-    margin: 20px;
+    margin: 0px 20px;
 }
 
 #clocks table td, #clocks table th {
