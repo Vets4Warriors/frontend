@@ -44,8 +44,6 @@
 
             var Location = locationService.Location;
             $scope.locations = [];
-            var locationService = locationService;
-
             $scope.connectionErrorToast = document.getElementById('connectionErrorToast');
 
             if (mapContainer) {
@@ -53,23 +51,21 @@
                 mapContainer.addEventListener('google-map-ready', function(e) {
                     console.log("Map loaded! From list-page");
                     mapsApi = document.querySelector('google-maps-api').api;
+                    
                     // Start by getting all locations
                     listCtrl.getLocations({});
+
+                    mapsApi.event.trigger(mapContainer.map, 'resize');
+                    mapContainer.resize();
                 });
             } else {
                 // Initialize with an empty query
                 // Will potentially later initialize as an empty list
-                this.getLocations({});
+                listCtrl.getLocations({});
             }
 
-
-            /*
-            Todo: This is turning into spaghetti code with the mapContainer. Need to centralize mapContainer functions.
-             */
-            this.getLocations = function(queries) {
-                locationService.query(queries)
-                    .success(function(data) {
-                        // Remove all the previous markers from the mapContainer
+            listCtrl.updateLocations = function(newLocs) {
+                // Remove all the previous markers from the mapContainer
                         var numPrevLocs = $scope.locations.length;
                         for (var i = 0; i < numPrevLocs; i++) {
                             // Null the first marker and pop
@@ -80,7 +76,6 @@
                         }
 
                         // Add all the new ones and make bounds
-                        var newLocs = Location.fromJsonArray(angular.fromJson(data));
                         var bounds = new mapsApi.LatLngBounds();
                         for (var i = 0; i < newLocs.length; i++) {
                             var locationToAdd = newLocs[i];
@@ -113,6 +108,20 @@
                         // Todo: account for the search / list area
                         mapContainer.map.fitBounds(bounds);
                         mapRecenter(mapContainer.map, mapsApi, 500, 0);
+            };
+
+
+            /*
+            Todo: This is turning into spaghetti code with the mapContainer. Need to centralize mapContainer functions.
+             */
+            listCtrl.getLocations = function(queries) {
+                locationService.query(queries)
+                    .success(function(data) {
+                        var newLocs = Location.fromJsonArray(angular.fromJson(data));
+                        listCtrl.updateLocations(newLocs);
+                        //var x = $scope.$apply(listCtrl.updateLocations);
+                        //x(newLocs);
+                        //$scope.$apply();
                     })
                     .error(function() {
                         $scope.connectionErrorToast.show(
@@ -193,7 +202,7 @@
                 var locAddCtrl = this;
                 var successToast = document.getElementById('successToast');
                 var errorToast = document.getElementById('failureToast');
-                var addressInputs = document.getElementsByTagName('map-address-input');
+                $scope.addressInputs = document.getElementsByTagName('map-address-input');
                 $scope.addr = locationService.LocationAddress.makeEmptyAddr();
                 $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
 
@@ -255,12 +264,57 @@
                 $scope.resetForm = function() {
                     $scope.form.reset();
                     $scope.addr = {};
-                    $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
+                    $scope.hqAddr = {};
                 }
 
             }],
             controllerAs: 'locAddCtrl',
             link: function ($scope, $elem, $attrs) {
+                // Fired second after created
+                // Create a link in the scope so it can be referenced as a container for the dialogs
+                $scope.$parentElem = $elem[0].parentElement;
+                $scope.form = $elem[0].querySelector('form');
+                $scope.mapContainer = document.querySelector('google-map');
+            }
+        }
+    });
+
+    /**
+     * Want this to eventually be the same as locAddCtrl, 
+     *  just with different field names/preloaded data
+     */
+    app.directive('locationEdit', function() {
+        return {
+            restrict: 'E',
+            templateUrl: '/app/shared/location/location-edit.html',
+            scope: {
+                id: '@'
+            },
+            controller: ['$scope', '$http', 'locationService', 
+                function($scope, $http, locationService) {
+                    locEditCtrl = this;
+                    $scope.location = {};
+
+                    $scope.addr = locationService.LocationAddress.makeEmptyAddr();
+                    $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
+                    
+                    // First load the data
+                    locationService.get($scope.id)
+                        .success(function(data) {
+                            $scope.location = new locationService.Location(angular.fromJson(data), false);
+                            
+                            $scope.addr = $scope.location.address;
+                            
+                            if ($scope.location.hqAddress !== undefined) {
+                                $scope.hqAddr = $scope.location.hqAddress;
+                            }
+                        })
+                        .error( function() {
+                            console.log("Error loading location with id " + $scope.id );
+                        });
+            }],
+            controllerAs: 'locEditCtrl',
+            link: function($scope, $elem) {
                 // Fired second after created
                 // Create a link in the scope so it can be referenced as a container for the dialogs
                 $scope.$parentElem = $elem[0].parentElement;
@@ -302,7 +356,7 @@
 
                 
                 this.setInputHidden = function (isHidden){
-                    this.inputIsHidden = isHidden;
+                    addrInput.inputIsHidden = isHidden;
 
                     // Remove the marker if there is one
                     if (isHidden) {
@@ -316,7 +370,7 @@
                     }
                 };
                 this.setHasValidated = function (hasValidated) {
-                    this.hasValidated = hasValidated;
+                    addrInput.hasValidated = hasValidated;
                     $scope.target.isValid = hasValidated;
                 };
                 /**
@@ -324,7 +378,7 @@
                  * @param isConfirmed
                  */
                 this.setConfirmed = function(isConfirmed) {
-                    this.isConfirmed = isConfirmed;
+                    addrInput.isConfirmed = isConfirmed;
                     $scope.target.isConfirmed = isConfirmed;
 
                     if (isConfirmed) {

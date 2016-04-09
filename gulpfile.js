@@ -54,6 +54,17 @@ gulp.task('cleanBuild', function(callback) {
     return del([compileDir], callback);
 });
 
+gulp.task('buildIndex', function() {
+   return gulp.src('index.html')
+       .pipe(vulcanize({
+            exculdes: [],
+            stripExcludes: false,
+            stripComments: true,
+            inlineCss: true,
+            inlineScripts: true
+    })).pipe(gulp.dest('dist_index.html'));
+});
+
 gulp.task('build', function() {
     var htmlBuildStream = new merge();
     for (var i = 0; i < htmlBuildPaths.length; i++) {
@@ -78,7 +89,6 @@ gulp.task('build', function() {
                 //.pipe(print())
                 .pipe(vulcanize({
                     abspath: __dirname,
-                    inputUrl: '/' + filename,
                     exculdes: [],
                     stripExcludes: false,
                     stripComments: true,

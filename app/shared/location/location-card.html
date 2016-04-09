@@ -42,12 +42,13 @@
         @apply(--layout-self-end);
     }
 
-    .locationCard .cardItemContainer {
-        padding: 8px;
+    .locationCard .contentContainer {
+        height: auto;
     }
 
-    .locationCard #contentCollapse>div {
-        height: auto;
+    .locationCard .cardItemContainer {
+        padding: 8px;
+        width: 100%;
     }
 </style>
 
@@ -69,8 +70,8 @@
         </paper-tabs>
     </paper-toolbar>
 
-    <iron-collapse id="contentCollapse">
-        <div>
+<iron-collapse class="contentCollapse">
+        <div class="contentContainer">
             <location-info ng-show="cardCtrl.tabIsShowing(0)"></location-info>
             <location-contact ng-show="cardCtrl.tabIsShowing(1)"></location-contact>
             <location-rating ng-show="cardCtrl.tabIsShowing(2)"></location-rating>

@@ -13,15 +13,21 @@
  -->
 
 <style is="custom-style">
+    .addressInputContainer .displayContainer {
+        margin: 8px;
+    }
+
     .addressInputContainer paper-toolbar {
-        --paper-toolbar-background: #7986CB;
+        /*--paper-toolbar-background: #7986CB;*/
         --paper-toolbar-title: {
             text-align: center;
         };
+        margin: 0;
     }
 
     .addressInputContainer paper-dialog {
         padding: 0;
+        margin: 0;
     }
     .addressInputContainer paper-material {
         background-color: white;
@@ -30,14 +36,14 @@
 </style>
 
 <article class="addressInputContainer">
-    <section>
+    <section class="displayContainer">
         <paper-button ng-click="mapAddrCtrl.setInputHidden(false);">{{title}}</paper-button>
         <p>{{mapAddrCtrl.formattedAddress}}</p>
     </section>
 
     <!-- Should pop up and take focus -->
     <paper-dialog no-cancel-on-outside-click no-cancel-on-esc-key auto-fit-on-attach>
-        <paper-toolbar>
+        <paper-toolbar class="small">
             <h1 class="title">Add {{title}}</h1>
             <paper-icon-button icon="close" title="Close" ng-click="mapAddrCtrl.setInputHidden(true);"></paper-icon-button>
         </paper-toolbar>

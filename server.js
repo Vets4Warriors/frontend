@@ -44,6 +44,10 @@ require('del');
         app.get('/list', function(req, res) {
             res.sendFile(__dirname + '/app/list-page/list-page.html');
         });
+
+        app.get('/_config', function(req, res) {
+            res.status(200).send(config);
+        });
     } else {    // Default
         /* PROD ROUTES
          * Should be the same as dev routes but from the dist directory
@@ -53,14 +57,10 @@ require('del');
         });
 
         app.get('/list', function(req, res) {
-            //res.sendFile(__dirname + '/dist/list-page/list-page.html');
-            res.sendFile(__dirname + '/app/list-page/list-page.html');
+            res.sendFile(__dirname + '/dist/list-page/list-page.html');
+            //res.sendFile(__dirname + '/app/list-page/list-page.html');
         });
     }
-
-    app.get('/_config', function(req, res) {
-        res.send(200, config);
-    });
 
     console.log("Vet's frontend listening on port: " + config['port'],
         "in " + env + " mode.");

@@ -11,7 +11,7 @@
         return {
             restrict: 'E',
             templateUrl: '/app/shared/location/location-card.html',
-            controller: ['$element', function($element) {
+            controller: ['$element', '$scope', '$location', function($element, $scope, $location) {
                 this.isExpanded = false;
                 this.tab = 0;
 
@@ -28,6 +28,10 @@
                 this.toggleContent = function() {
                     this.isExpanded = !this.isExpanded;
                     this.contentCollapse.toggle();
+                };
+
+                this.edit = function() {
+                    $location.path('/' + $scope.location.id + '/edit');
                 };
             }],
             controllerAs: 'cardCtrl'

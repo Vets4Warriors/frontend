@@ -133,6 +133,16 @@
                 height: auto;
 			}
 
+            /* Edit styles */
+            #edit {
+                position: absolute;
+                top: 24px;
+                left: 16px;
+                width: 500px;
+                height: auto;
+            }
+
+
             /* Header styles*/
             #header {
                 width:300px;
@@ -174,7 +184,7 @@
 		</style>
 	</head>
 
-	<body ng-controller="ListPageController as listPageCtrl">
+	<body ng-controller="ListPageCtrl as listPageCtrl">
 
         <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
             <div id="header">
@@ -186,13 +196,19 @@
                 </div>
             </div>
 
-            <section id="locations" ng-show="!listPageCtrl.isAdding" ng-controller="LocationsController as locCtrl">
+            <section id="locations" ng-show="listPageCtrl.listIsShowing()" ng-controller="LocationsController as locCtrl">
                 <!-- Search box -->
                 <location-search-box id="search" ng-focus></location-search-box>
                 <!-- Results -->
                 <article class="listContainer" id="list" >
                     <location-card ng-repeat="location in locations track by location.id"></location-card>
-
+                    <!--
+                    Todo:
+                    Search will not work because the location-card loads scripts and modifies the dom.
+                    Must build the polymer components
+                    OR just switch over to Polymer as a component toolset and angular just for routing and such
+                    -->
+                    <!--<p ng-repeat="location in locations track by location.id">Test</p>-->
                     <!-- Won't center :( -->
                     <paper-toast id="connectionErrorToast" duration="0">
                         <paper-button onclick="connectionErrorToast.close()" class="yellow-button">Yes!</paper-button>
@@ -202,6 +218,10 @@
 
             <section id="add" ng-show="listPageCtrl.isAdding">
                 <location-add></location-add>
+            </section>
+
+            <section id="edit" ng-show="listPageCtrl.isEditing">
+                <location-edit id="{{editLocationId}}"></location-edit>
             </section>
 
             <section id="actions">

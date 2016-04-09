@@ -13,15 +13,9 @@
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
             "use strict";
-            var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
+            // var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
             //var baseApiUrl = 'http://localhost/api/1.0/locations';
-            //var baseApiUrl = 'http://localhost:8000/1.0/locations';
-
-            /*$http.get('/_config').success(function(config){
-                baseApiUrl = config['base-vets-api-server'] + '/locations';
-            }).error(function() {
-                console.log("Failed to get the config");
-            });*/
+            var baseApiUrl = 'http://localhost:8000/1.0/locations';
             const service = this;
 
             /**
@@ -43,8 +37,6 @@
                     this.city = jsonData['city'];
                     this.state = jsonData['state'];
                     this.country = jsonData['country'];
-
-
                     this.zipcode = jsonData['zipcode'];
                 }
 
@@ -213,7 +205,7 @@
                  * @returns {string}
                  */
                 getFormattedTags() {
-                    return Location.formatArrayToStr(this.tags);
+                    return Location.formatArrayToStr(this.tags, ',', '#');
                 }
 
                 getFormattedDateAdded() {
@@ -233,15 +225,23 @@
                 /**
                  *
                  * @param arr
+                 * @param delimiter
+                 * @param prefix
                  * @returns {string}
                  */
-                static formatArrayToStr(arr) {
+                static formatArrayToStr(arr, delimiter, prefix) {
+                    if (!delimiter) {
+                        delimiter = ','
+                    }
+                    if (!prefix) {
+                        prefix = '';
+                    }
                     var arrStr = '';
                     for (var i = 0; i < arr.length; i++) {
                         if (i == 0)
-                            arrStr += arr[i];
+                            arrStr += prefix + arr[i];
                         else
-                            arrStr += ', ' + arr[i];
+                            arrStr += delimiter + ' ' + prefix + arr[i];
                     }
                     return arrStr;
                 }
