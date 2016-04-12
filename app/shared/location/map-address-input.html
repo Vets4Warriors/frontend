@@ -1,12 +1,13 @@
 <link rel="import" href="/bower_components/gold-zip-input/gold-zip-input.html"/>
 <link rel="import" href="/bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html"/>
 <link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html"/>
-<link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
-<link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
-<link rel="import" href="/bower_components/iron-form/iron-form.html"/>
 <link rel="import" href="/bower_components/paper-dialog/paper-dialog.html"/>
 <link rel="import" href="/bower_components/paper-material/paper-material.html"/>
-
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html"/>
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="/bower_components/iron-form/iron-form.html"/>
 
 <!-- This should be linked to the form and will be used to populate the tough data
         Could potentially be built with Polymer as a custom element in the future. Right now just sticking to angular.
@@ -28,6 +29,7 @@
     .addressInputContainer paper-dialog {
         padding: 0;
         margin: 0;
+        background-color: white;
     }
     .addressInputContainer paper-material {
         background-color: white;
@@ -38,7 +40,7 @@
 <article class="addressInputContainer">
     <section class="displayContainer">
         <paper-button ng-click="mapAddrCtrl.setInputHidden(false);">{{title}}</paper-button>
-        <p>{{mapAddrCtrl.formattedAddress}}</p>
+        <p>{{formattedAddress}}</p>
     </section>
 
     <!-- Should pop up and take focus -->
@@ -49,28 +51,11 @@
         </paper-toolbar>
 
         <form id="{{'addressForm_' + title }}" is="iron-form" method="post" action="">
-            <paper-input name="address1" label="Address"
-                         prevent-invalid-input auto-validate autocapitalize></paper-input>
-            <paper-input name="address2" label="Address (cont.)"
-                         prevent-invalid-input auto-validate></paper-input>
+            <paper-textarea name="autoComplete" id="{{'autoComplete_' + title}}"></paper-textarea>
+            <paper-input name="address2" type="text" label="Address (cont.)"></paper-input>
 
-            <paper-input  name="city" label="City"
-                          prevent-invalid-input auto-validate></paper-input>
-            <paper-input class="half" name="state" label="State"
-                         maxlength="2" auto-validate
-                         error-message="Please enter a two-letter state code."></paper-input>
-
-            <gold-zip-input name="zipcode" label="Zip code"
-                            prevent-invalid-input auto-validate
-                            error-message="Please enter a valid zip code."
-                            auto-validate></gold-zip-input>
-
-            <paper-button type="submit" ng-click="validate();">Check</paper-button>
-
-            <div ng-show="mapAddrCtrl.hasValidated">
-                <p>{{mapAddrCtrl.formattedAddress}}</p>
-                <paper-button ng-click="mapAddrCtrl.setConfirmed(true);">Correct?</paper-button>
-            </div>
+            <p>{{formattedAddress}}</p>
+            <paper-button type="submit" ng-click="validate();">Confirm</paper-button>
         </form>
     </paper-dialog>
 </article>

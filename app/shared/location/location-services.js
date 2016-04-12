@@ -160,7 +160,15 @@
                  * @returns {string}
                  */
                 getFormattedAddr() {
-                    return this.address.getFormatted();
+                    return this.address ? this.address.getFormatted() : '';
+                }
+
+                /**
+                 *
+                 * @returns {string}
+                 */
+                getFormattedHqAddr() {
+                    return this.hqAddress ? this.hqAddress.getFormatted() : '';
                 }
 
                 /**
@@ -184,13 +192,6 @@
                     return this.address.latLng;
                 }
 
-                /**
-                 *
-                 * @returns {string}
-                 */
-                getFormattedHqAddr() {
-                    return this.hqAddress.getFormatted();
-                }
 
                 getFormattedServices() {
                     return Location.formatArrayToStr(this.services);

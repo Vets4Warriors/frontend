@@ -203,8 +203,8 @@
                  * @param key pressed. The $event var in angular
                  */
                 var locAddCtrl = this;
-                var successToast = $('successToast')[0];
-                var errorToast = document.getElementById('failureToast');
+                var successToast = $('.successToast')[0];
+                var errorToast = $('.failureToast')[0];
                 $scope.addressInputs = document.getElementsByTagName('map-address-input');
                 $scope.addr = locationService.LocationAddress.makeEmptyAddr();
                 $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
@@ -292,7 +292,7 @@
             templateUrl: '/app/shared/location/location-edit.html',
             scope: {
                 id: '@', // Required
-                onClose: '&'
+                onClose: '&'    // Function
             },
             controller: ['$scope', '$http', 'locationService', 
                 function($scope, $http, locationService) {
@@ -300,19 +300,26 @@
                     var successToast = $('.successToast')[0];
                     var errorToast = $('.failureToast')[0];
                     var coverages = $('[name="coverages"]');
-                    // For watching
-                    locEditCtrl.location = {};
-
+                    
+                    locEditCtrl.isHidden = false;
+                    
+                    locEditCtrl.setIsHidden = function(isHidden) {
+                      locEditCtrl.isHidden = isHidden;  
+                    };
+                    
                     $scope.addr = locationService.LocationAddress.makeEmptyAddr();
                     $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
-
+            
                     /*
                     * locEditCtrl is purely for watching
                     * Wouldn't work on $scope.location
                     * But that's our real target
                     * Need to find a way to update the coverages
                     * */
-                    /*$scope.$watch("locEditCtrl.location",
+                    /*
+                     // For watching
+                     locEditCtrl.location = {};
+                    $scope.$watch("locEditCtrl.location",
                         function locationChanged(newVal, oldVal) {
                             // Need some real data
                             if ($.isEmptyObject(newVal)) {
@@ -320,21 +327,19 @@
                             }
                            updateFormWithData();
                         });
-*/
+                    */
                     // First load the data
                     locationService.get($scope.id)
                         .success(function(data) {
                             $scope.location = new locationService.Location(angular.fromJson(data), false);
-                            locEditCtrl.location = $scope.location;
+                            //locEditCtrl.location = $scope.location;
                             updateFormWithData();
                         })
                         .error( function() {
                             console.log("Error loading location with id " + $scope.id );
                         });
 
-
-                     /* Private functions */
-                   function updateFormWithData() {
+                    function updateFormWithData() {
                         $scope.addr = $scope.location.address;
 
                             if ($scope.location.hqAddress !== undefined) {
@@ -350,7 +355,7 @@
                                     coverages[i].checked = true;
                                 }
                             }
-                   }
+                    }
 
                     $scope.submitEditForm = function() {
                         // validate all address input. Have got to make them extend the iron-input / build with polymer
@@ -403,13 +408,12 @@
                         locationService.delete($scope.location.id)
                             .success(function(data){
                                 successToast.show({
-                                    text: "Deleted " + location.name + "!",
+                                    text: "Deleted!",
                                     duration: 3000
                                 });
-                                $scope.listPageCtrl.setIsEditing(false);
+                                $scope.onClose();
                             })
                             .error(function(data){
-                                // Todo: animate the paper-fab upwards as well
                                 errorToast.show({
                                     text: "Failed to edit the location!",
                                     duration: 3000
@@ -447,56 +451,44 @@
                 title: '@',   // Required, readOnly
                 mapContainer: '=map',
                 required: '=required',
-                container: '=container'
+                container: '=container',
+                formattedAddress: '=formattedAddress',
+                onClose: '&'
             },
             controller: ['$scope', '$attrs', '$http', function($scope, $attrs, $http) {
                 var addrInput = this;
-                var marker = null;
-                this.inputIsHidden = true;
-                this.hasValidated = false;
-                this.isConfirmed = false;
-                this.formattedAddress = '';
-                this.required = $scope.$eval($attrs.required);
-                this.isPristine = true;
+                addrInput.marker = null;
+                addrInput.inputIsHidden = true;
+                addrInput.hasValidated = false;
+                addrInput.isConfirmed = false;
+                addrInput.required = $scope.$eval($attrs.required);
+                addrInput.isPristine = true;
 
-                this.setInputHidden = function (isHidden){
+                addrInput.setInputHidden = function (isHidden){
                     addrInput.inputIsHidden = isHidden;
 
                     // Remove the marker if there is one
                     if (isHidden) {
                         $scope.inputDialog.close();
-                        if (marker) {
-                            marker.setMap(null);
+                        if (addrInput.marker) {
+                            addrInput.marker.setMap(null);
+                        }
+                        // If an onClose function was provided, call it
+                        if ($scope.onClose) {
+                            $scope.onClose();
                         }
                     } else {
                         $scope.inputDialog.refit();
                         $scope.inputDialog.open();
+
+                        // Bind the geocomplete to the form now that it is created
+                        $scope.form = $('#addressForm_' + $scope.title)[0];
+                        $scope.geocompleteInput = $('#autoComplete_' + $scope.title).geocomplete();
                     }
                 };
-                this.setHasValidated = function (hasValidated) {
+                addrInput.setHasValidated = function (hasValidated) {
                     addrInput.hasValidated = hasValidated;
                     $scope.target.isValid = hasValidated;
-                };
-                /**
-                 * Take use response if the geocoded address is correct
-                 * @param isConfirmed
-                 */
-                this.setConfirmed = function(isConfirmed) {
-                    addrInput.isConfirmed = isConfirmed;
-                    $scope.target.isConfirmed = isConfirmed;
-
-                    if (isConfirmed) {
-                        // Close the input
-                        addrInput.setInputHidden(true);
-                    }
-                };
-
-                /**
-                 * Check if the address has been validated. Probably should check if it has been confirmed as well
-                 * @returns {boolean|*}
-                 */
-                this.isValidated = function() {
-                    return addrInput.hasValidated;
                 };
 
                 /**
@@ -511,99 +503,86 @@
                  */
                 $scope.validate = function() {
                     addrInput.isPristine = false;
-                    var form = document.getElementById('addressForm_' + $scope.title);
+                    var mapsApi = document.querySelector('google-maps-api').api;
+                    var geocoder = new mapsApi.Geocoder();
+                    
+                    geocoder.geocode({'address': $scope.geocompleteInput.val()}, function(result, status) {
+                       console.log(status);
+                        // Status should always be OK and we should always get the right result in index 0
+                        if (status == mapsApi.GeocoderStatus.OK) {
+                            result = result[0];
+                            var formData = $scope.form.serialize();
+                            var latLng = result.geometry.location;
 
-                    if (form.validate()) {
-                        var formData = form.serialize();
-                        // Should probably do this with a googleMapsApi obj or at least an apiKey
-                        var geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-                            formData['address1'] + ' ' + formData['address2'] + ' ' + formData['city'] +
-                            ' ' + formData['state'] + ' ' + formData['zipcode'];
-
-                        $http.get(geoUrl)
-                            .success(function(data) {
-                                // Make a address object with the data
-                                console.log(data);
-                                var possibleResults = data['results'];
-                                // For now let's just take the first result, as it's the most likely
-                                // In future we can present a list
-                                var result = possibleResults[0];
-
-                                // Steal all the nice formatted data from response 
-
-
-                                var latLng = result['geometry']['location'];
-                                // Put the address into the target object
-                                var components = {};
-
-                                // Parse the geocoded response
-                                for (var i = 0; i < result['address_components'].length; i++) {
-                                    components[result['address_components'][i]['types'][0]] = {
-                                        long: result['address_components'][i]['long_name'],
-                                        short: result['address_components'][i]['short_name']
-                                    };
-                                }
-                                
-                                if (components['street_number']) {
-                                    $scope.target['address1'] = components['street_number'].short + ' '
-                                        + components['route'].short;
+                            // Steal all the nice formatted data from response
+                            var components = {};
+                            // Parse the geocoded response
+                            for (var i = 0; i < result['address_components'].length; i++) {
+                                // Take long names for city, short for everything else
+                                if (result['address_components'][i]['types'][0] == 'locality') {
+                                    components[result['address_components'][i]['types'][0]] =
+                                        result['address_components'][i]['long_name'];
                                 } else {
-                                    $scope.target['address1'] = components['route'].short;
+                                    components[result['address_components'][i]['types'][0]] =
+                                        result['address_components'][i]['short_name'];
                                 }
-                                /* Probably want to switch to something like: 
-                                    https://github.com/ubilabs/geocomplete
-                                */
-                                
-                                $scope.target['address2'] = formData['address2'];   // If they specify it, take it
-                                $scope.target['city'] = components['locality'].long;
-                                $scope.target['state'] = components['administrative_area_level_1'].short;
-                                $scope.target['country'] = components['country'].short;
-                                $scope.target['zipcode'] = components['postal_code'].short;
-                                $scope.target['latLng'] = latLng;
-                                addrInput.formattedAddress = result['formatted_address'];
+                            }
 
-                                // If there's a map, do some fancy stuff with markers
-                                if ($scope.mapContainer.map) {
-                                    console.log("Start doing cool mapContainer.map stuff");
-                                    // Get a copy of the maps api
-                                    var mapsApi = document.querySelector('google-maps-api').api;
+                            // Put the address into the target object
+                            if (components['street_number']) {
+                                $scope.target['address1'] = components['street_number'] + ' '
+                                    + components['route'];
+                            } else {
+                                $scope.target['address1'] = components['route'];
+                            }
+                            // Need to figure out a way for address 2
+                            $scope.target['address2'] = formData['address2'];    // If they provide it, take it
+                            $scope.target['city'] = components['locality'];
+                            $scope.target['state'] = components['administrative_area_level_1'];
+                            $scope.target['country'] = components['country'];
+                            $scope.target['zipcode'] = components['postal_code'];
+                            $scope.target['latLng'] = latLng;
+                            addrInput.formattedAddress = result['formatted_address'];
 
-                                    // If there was already a marker from a previous search, clear it!
-                                    if (marker) {
-                                        marker.setMap(null);
-                                    }
+                            // If there was already a marker from a previous search, clear it!
+                            if (addrInput.marker) {
+                                addrInput.marker.setMap(null);
+                            }
 
-                                    // Add a marker to the map
-                                    marker = new mapsApi.Marker({
-                                        map: $scope.mapContainer.map,
-                                        position: new mapsApi.LatLng(latLng),
-                                        title: addrInput.formattedAddress
-                                    });
+                            // Add a marker to the map
+                            addrInput.marker = new mapsApi.Marker({
+                                map: $scope.mapContainer.map,
+                                position: latLng,
+                                title: addrInput.formattedAddress
+                            });
 
-                                    // Zoom to it
-                                    $scope.mapContainer.map.latitude = latLng.lat;
-                                    $scope.mapContainer.map.longitude = latLng.lng;
-                                }
-                            }).error(function() {
-                            // Show a toast saying we couldn't find the address
-                        });
+                            // Zoom to it
+                            $scope.mapContainer.map.latitude = latLng.lat;
+                            $scope.mapContainer.map.longitude = latLng.lng;
 
-                        addrInput.setHasValidated(true);
-                    }
 
-                    $scope.reset = function() {
-                        addrInput.isPristine = true;
-                        addrInput.hasValidated = false;
-                        addrInput.isConfirmed = false;
-                        addrInput.formattedAddress = '';
-                        $scope.target = {};
-                    };
+                        } else {
+
+                        }
+                    });
+                    addrInput.setHasValidated(true);
                 };
+
+
+                $scope.reset = function() {
+                    addrInput.isPristine = true;
+                    addrInput.hasValidated = false;
+                    addrInput.isConfirmed = false;
+                    addrInput.formattedAddress = '';
+                    $scope.target = {};
+                };
+
             }],
             controllerAs: 'mapAddrCtrl',
             link: function ($scope, $elem, $attrs) {
                 $scope.inputDialog = $elem[0].querySelector('paper-dialog');
                 $scope.inputDialog.fitInto = $scope.container;
+
             }
         }
     });

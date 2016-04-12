@@ -68,14 +68,14 @@
     }
 </style>
 
-<paper-material class="locationEdit">
+<paper-material class="locationEdit" ng-show="!locEditCtrl.isHidden">
     <paper-toolbar class="small">
         <h1 class="title">Edit</h1>
         <paper-icon-button icon="close" title="Close" ng-click="onClose();"></paper-icon-button>
     </paper-toolbar>
 
     <section id="formCont">
-        <form id="addForm" is="iron-form" ng-keypress="keyPressed($event)">
+        <form id="editForm" is="iron-form" ng-keypress="keyPressed($event)">
             <!-- Basics -->
             <paper-input name="name" label="Resource name" value="{{location.name}}"
                          error-message="Need a name!"
@@ -123,9 +123,13 @@
         <!-- Addresses -->
         <!-- Can't have a form inside of a form :( -->
         <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr"
-                           map="mapContainer"></map-address-input>
+                           map="mapContainer" formatted-address="location.getFormattedAddr()"
+                           <!--ng-click="locEditCtrl.setIsHidden(true);"-->
+                           on-close="locEditCtrl.setIsHidden(false)"></map-address-input>
         <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr"
-                           map="mapContainer"></map-address-input>
+                           map="mapContainer" formatted-address="location.getFormattedHqAddr()"
+                            <!--ng-click="locEditCtrl.setIsHidden(true);"-->
+                            on-close="locEditCtrl.setIsHidden(false)"></map-address-input>
 
         <paper-button type="submit" ng-click="submitEditForm();">Save</paper-button>
         <!-- Put the delete button down here -->

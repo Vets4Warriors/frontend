@@ -5,16 +5,7 @@
 
 (function() {
     var app = angular.module('listPage', ['ngRoute', 'ui.router', 'location-directives']);
-
-    /* Will get fancier with this in the future. Potentially for individual location views. */
-    /*app.config(function($routeProvider) {
-        $routeProvider.when('/call', {controller: 'ListPageCtrl'});   // Will use this for call handling
-        $routeProvider.when('/:id', {controller: 'ListPageCtrl'});    // will use to show specific locations
-        $routeProvider.when('/:id/edit', {controller: 'TestCtrl'});    // will use to edit specific locations
-        $routeProvider.when('/', {controller: 'ListPageCtrl'});    // will use to edit specific locations
-        //$routeProvider.otherwise({ controller: 'ListPageCtrl'});
-    });*/
-
+    
     app.config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/list");
 

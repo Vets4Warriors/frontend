@@ -12,6 +12,7 @@
         <link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
         <link rel="import" href="/bower_components/paper-button/paper-button.html"/>
         <link rel="import" href="/bower_components/google-map/google-map.html"/>
+        <link rel="import" href="/bower_components/google-map/google-map-search.html"/>
 
         <!-- Basic Google Analytics -->
         <script>
@@ -29,6 +30,9 @@
         <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script src="/bower_components/angular-route/angular-route.min.js"></script>
         <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+
+        <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <script src="/bower_components/geocomplete/jquery.geocomplete.min.js"></script>
 
         <script src="/app/shared/location/location-services.js"></script>
         <script src="/app/shared/location/location-card-directives.js"></script>
@@ -172,7 +176,6 @@
 	</head>
 
 	<body ng-controller="ListPageCtrl as listPageCtrl">
-
         <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
             <div id="header">
                 <div id="headHome">
