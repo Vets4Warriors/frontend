@@ -31,7 +31,7 @@
                 };
 
                 this.edit = function() {
-                    $location.path('/' + $scope.location.id + '/edit');
+                    $location.url('/' + $scope.location.id + '/edit');
                 };
             }],
             controllerAs: 'cardCtrl'

@@ -1,0 +1,19 @@
+<section class="locationList" ng-controller="LocationsController as locCtrl">
+    <!-- Search box -->
+    <location-search-box id="search" ng-focus></location-search-box>
+    <!-- Results -->
+    <article class="listContainer" id="list" >
+        <location-card ng-repeat="location in locations track by location.id"></location-card>
+        <!--
+        Todo:
+        Search will not work because the location-card loads scripts and modifies the dom.
+        Must build the polymer components
+        OR just switch over to Polymer as a component toolset and angular just for routing and such
+        -->
+        <!--<p ng-repeat="location in locations track by location.id">Test</p>-->
+        <!-- Won't center :( -->
+        <paper-toast id="connectionErrorToast" duration="0">
+            <paper-button onclick="connectionErrorToast.close()" class="yellow-button">Yes!</paper-button>
+        </paper-toast>
+    </article>
+</section>

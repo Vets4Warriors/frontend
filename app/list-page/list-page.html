@@ -22,12 +22,11 @@
 
             ga('create', 'UA-70358349-3', 'auto');
             ga('send', 'pageview');
-
         </script>
-
 
         <script src="/bower_components/arg.js/dist/arg-1.3.min.js"></script>
         <script src="/bower_components/angular/angular.min.js"></script>
+        <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script src="/bower_components/angular-route/angular-route.min.js"></script>
         <script src="/bower_components/angular-click-outside/clickoutside.directive.js"></script>
 
@@ -46,104 +45,6 @@
 			}
 
 			/* Header */
-
-			/* List styles */
-			::-webkit-scrollbar {
-			    width: 5px;
-			}
-			::-webkit-scrollbar-thumb {
-                background: rgba(96, 125, 139,0.7);
-                border-radius: 25px;
-                box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
-			}
-			::-webkit-scrollbar-thumb:hover {
-			    background: rgba(96, 125, 139,0.9);
-			}
-			::-webkit-scrollbar-thumb:active {
-			    background: rgba(38, 50, 56,0.9);
-			}
-			::-webkit-scrollbar-track {
-                background: rgba(176, 190, 197,0.5);
-                border-radius: 25px;
-			}
-			::-webkit-scrollbar-track:hover {
-			    background: rgba(176, 190, 197,0.9);
-			}
-
-			#locations {
-                position: absolute;
-                left: 2%;
-                top: 24px;
-                width: calc(350px + 15%);
-                overflow: hidden;
-			}
-			#locations #list {
-                margin-top: 16px;
-                padding-right:10px;
-                float: right;
-                height:800px;
-                overflow-y: auto;
-                overflow-x: hidden;
-			}
-			#location .listContainer {
-                max-height: 100%;
-                box-sizing: border-box;
-			}
-			#locations .listContainer > * {
-                display: block;
-			}
-
-			#search {
-                width: 100%;
-                margin-bottom: 16px;
-			}
-			#search .locationFilter {
-                margin-top: 16px;
-                width: calc(100% - 350px - 16px);
-                height: auto;
-                background: white;
-                float: left;
-			}
-
-			.locationCard {
-                width: 350px;
-                margin-bottom: 16px;
-			}
-
-			/* Action styles */
-			#actions {
-                width: 64px;
-                height: 64px;
-                position: absolute;
-                right: 24px;
-                bottom: 24px;
-			}
-			#actions paper-fab {
-                height: 100%;
-                width: 100%;
-                margin: 0 auto;
-			}
-
-			/* Add styles */
-			#add {
-                position: absolute;
-                top: 24px;
-                left: 16px;
-                width: 500px;
-                height: auto;
-			}
-
-            /* Edit styles */
-            #edit {
-                position: absolute;
-                top: 24px;
-                left: 16px;
-                width: 500px;
-                height: auto;
-            }
-
-
-            /* Header styles*/
             #header {
                 width:300px;
                 height: 92px;
@@ -175,6 +76,92 @@
                 opacity: .7;
             }
 
+			/* List styles */
+			::-webkit-scrollbar {
+			    width: 5px;
+			}
+			::-webkit-scrollbar-thumb {
+                background: rgba(96, 125, 139,0.7);
+                border-radius: 25px;
+                box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
+			}
+			::-webkit-scrollbar-thumb:hover {
+			    background: rgba(96, 125, 139,0.9);
+			}
+			::-webkit-scrollbar-thumb:active {
+			    background: rgba(38, 50, 56,0.9);
+			}
+			::-webkit-scrollbar-track {
+                background: rgba(176, 190, 197,0.5);
+                border-radius: 25px;
+			}
+			::-webkit-scrollbar-track:hover {
+			    background: rgba(176, 190, 197,0.9);
+			}
+
+			.locationList {
+                position: absolute;
+                left: 2%;
+                top: 24px;
+                width: calc(350px + 15%);
+                overflow: hidden;
+			}
+            .locationList #list {
+                margin-top: 16px;
+                padding-right:10px;
+                float: right;
+                height:800px;
+                overflow-y: auto;
+                overflow-x: hidden;
+			}
+            .locationList .listContainer {
+                max-height: 100%;
+                box-sizing: border-box;
+			}
+            .locationList .listContainer > * {
+                display: block;
+			}
+
+			#search {
+                width: 100%;
+                margin-bottom: 16px;
+			}
+			#search .locationFilter {
+                margin-top: 16px;
+                width: calc(100% - 350px - 16px);
+                height: auto;
+                background: white;
+                float: left;
+			}
+
+            .locationList .locationCard {
+                width: 350px;
+                margin-bottom: 16px;
+			}
+
+            /* Add styles */
+            location-add, location-edit {
+                position: absolute;
+                top: 24px;
+                left: 16px;
+                width: 500px;
+                height: auto;
+            }
+
+			/* Action styles */
+			#actions {
+                width: 64px;
+                height: 64px;
+                position: absolute;
+                right: 24px;
+                bottom: 24px;
+			}
+			#actions paper-fab {
+                height: 100%;
+                width: 100%;
+                margin: 0 auto;
+			}
+
             /* Error toasts */
             .yellow-button {
                 text-transform: none;
@@ -196,36 +183,12 @@
                 </div>
             </div>
 
-            <section id="locations" ng-show="listPageCtrl.listIsShowing()" ng-controller="LocationsController as locCtrl">
-                <!-- Search box -->
-                <location-search-box id="search" ng-focus></location-search-box>
-                <!-- Results -->
-                <article class="listContainer" id="list" >
-                    <location-card ng-repeat="location in locations track by location.id"></location-card>
-                    <!--
-                    Todo:
-                    Search will not work because the location-card loads scripts and modifies the dom.
-                    Must build the polymer components
-                    OR just switch over to Polymer as a component toolset and angular just for routing and such
-                    -->
-                    <!--<p ng-repeat="location in locations track by location.id">Test</p>-->
-                    <!-- Won't center :( -->
-                    <paper-toast id="connectionErrorToast" duration="0">
-                        <paper-button onclick="connectionErrorToast.close()" class="yellow-button">Yes!</paper-button>
-                    </paper-toast>
-                </article>
-            </section>
-
-            <section id="add" ng-show="listPageCtrl.isAdding">
-                <location-add></location-add>
-            </section>
-
-            <section id="edit" ng-show="listPageCtrl.isEditing">
-                <location-edit id="{{editLocationId}}"></location-edit>
-            </section>
+            <!-- The meat of the one page app -->
+            <div ui-view></div>
 
             <section id="actions">
-                <paper-fab icon="add" ng-click="listPageCtrl.setIsAdding(true);"></paper-fab>
+                <!--<paper-fab icon="add" ng-click="listPageCtrl.setIsAdding(true);"></paper-fab>-->
+                <paper-fab icon="add" ui-sref="addView"></paper-fab>
             </section>
 
 		</google-map>

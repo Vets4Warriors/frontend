@@ -265,7 +265,7 @@
                     $scope.form.reset();
                     $scope.addr = {};
                     $scope.hqAddr = {};
-                }
+                };
 
             }],
             controllerAs: 'locAddCtrl',
@@ -288,11 +288,12 @@
             restrict: 'E',
             templateUrl: '/app/shared/location/location-edit.html',
             scope: {
-                id: '@'
+                id: '@', // Required
+                onClose: '&'
             },
             controller: ['$scope', '$http', 'locationService', 
                 function($scope, $http, locationService) {
-                    locEditCtrl = this;
+                    var locEditCtrl = this;
                     $scope.location = {};
 
                     $scope.addr = locationService.LocationAddress.makeEmptyAddr();
@@ -312,6 +313,75 @@
                         .error( function() {
                             console.log("Error loading location with id " + $scope.id );
                         });
+
+
+
+                    $scope.submitEditForm = function() {
+                        // validate all address input. Have got to make them extend the iron-input / build with polymer
+                        if ($scope.form.validate()) {
+                            // Send request to database api
+                            // Format the form data to fit our models
+                            var locationData = $scope.form.serialize();
+                            locationData.services = locationData.services.split(',');
+
+                            if (typeof locationData.coverages === 'string') {
+                                // Need it to be an array
+                                locationData.coverages = [locationData.coverages];
+                            }
+
+                            //Todo: regex. This almost works buuut ((#(\S?!,)*)(\s*)(,))*((\s*)(#\S*)())
+                            locationData.tags = locationData.tags.split(',');
+                            locationData.website = 'http://' + locationData.website;
+                            // Only add the addresses if valid!
+                            if ($scope.addr.isValid) {
+                                locationData.address = $scope.addr;
+                            }
+                            if ($scope.hqAddr.isValid) {
+                                locationData.hqAddress = $scope.hqAddr;
+                            }
+
+                            var location = new locationService.Location(locationData, true);
+
+                            // Preserve the id to update
+                            location.id = $scope.location.id;
+
+                            locationService.update(location)
+                                .success(function(data) {
+                                    successToast.show({
+                                        text: "Updated " + location.name + "!",
+                                        duration: 3000
+                                    });
+                                })
+                                .error(function(data){
+                                    // Todo: animate the paper-fab upwards as well
+                                    errorToast.show({
+                                        text: "Failed to edit the location!",
+                                        duration: 3000
+                                    });
+                                    console.log("Failure!");
+                                });
+                        }
+                        return false;
+                    };
+
+                    $scope.deleteLocation = function() {
+                        locationService.delete($scope.location.id)
+                            .success(function(data){
+                                successToast.show({
+                                    text: "Deleted " + location.name + "!",
+                                    duration: 3000
+                                });
+                                $scope.listPageCtrl.setIsEditing(false);
+                            })
+                            .error(function(data){
+                                // Todo: animate the paper-fab upwards as well
+                                errorToast.show({
+                                    text: "Failed to edit the location!",
+                                    duration: 3000
+                                });
+                                console.log("Failure!");
+                            });
+                    };
             }],
             controllerAs: 'locEditCtrl',
             link: function($scope, $elem) {
@@ -439,9 +509,17 @@
                                         short: result['address_components'][i]['short_name']
                                     };
                                 }
-
-                                $scope.target['address1'] = components['street_number'].short + ' '
-                                    + components['route'].short;
+                                
+                                if (components['street_number']) {
+                                    $scope.target['address1'] = components['street_number'].short + ' '
+                                        + components['route'].short;
+                                } else {
+                                    $scope.target['address1'] = components['route'].short;
+                                }
+                                /* Probably want to switch to something like: 
+                                    https://github.com/ubilabs/geocomplete
+                                */
+                                
                                 $scope.target['address2'] = formData['address2'];   // If they specify it, take it
                                 $scope.target['city'] = components['locality'].long;
                                 $scope.target['state'] = components['administrative_area_level_1'].short;

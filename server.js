@@ -41,7 +41,7 @@ require('del');
             res.sendFile(__dirname + '/index.html');
         });
 
-        app.get('/list', function(req, res) {
+        app.get('/resources', function(req, res) {
             res.sendFile(__dirname + '/app/list-page/list-page.html');
         });
 
@@ -56,7 +56,7 @@ require('del');
             res.sendFile(__dirname + '/dist_index.html');
         });
 
-        app.get('/list', function(req, res) {
+        app.get('/resources', function(req, res) {
             res.sendFile(__dirname + '/dist/list-page/list-page.html');
             //res.sendFile(__dirname + '/app/list-page/list-page.html');
         });

@@ -241,7 +241,7 @@
                         if (i == 0)
                             arrStr += prefix + arr[i];
                         else
-                            arrStr += delimiter + ' ' + prefix + arr[i];
+                            arrStr += delimiter + prefix + arr[i];
                     }
                     return arrStr;
                 }
@@ -302,8 +302,8 @@
              * @param location
              * @returns {HttpPromise}
              */
-            this.update = function(id, location) {
-                return $http.put(baseApiUrl + '/' + id, location);
+            this.update = function(location) {
+                return $http.put(baseApiUrl + '/' + location.id, location);
             };
 
             /**

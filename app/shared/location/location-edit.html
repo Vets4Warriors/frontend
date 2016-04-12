@@ -9,6 +9,7 @@
 <link rel="import" href="/bower_components/paper-item/paper-item.html"/>
 <link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html"/>
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html"/>
 
 <style is="custom-style">
@@ -28,37 +29,40 @@
         margin-top: 4px;
         margin-bottom: 4px;
     }
+    .locationEdit .deleteButton {
+        right: 0;
+    }
 
     /* Scrollbar */
-    ::-webkit-scrollbar {
+    .locationEdit ::-webkit-scrollbar {
         width: 5px;
     }
-    ::-webkit-scrollbar-thumb {
+    .locationEdit ::-webkit-scrollbar-thumb {
         background: rgba(96, 125, 139,0.7);
         border-radius: 25px;
         box-shadow: inset 0 1px 1px 1px rgba(38, 50, 56, 0.1);
     }
-    ::-webkit-scrollbar-thumb:hover {
+    .locationEdit ::-webkit-scrollbar-thumb:hover {
         background: rgba(96, 125, 139,0.9);
     }
-    ::-webkit-scrollbar-thumb:active {
+    .locationEdit ::-webkit-scrollbar-thumb:active {
         background: rgba(38, 50, 56,0.9);
     }
-    ::-webkit-scrollbar-track {
+    .locationEdit ::-webkit-scrollbar-track {
         background: rgba(176, 190, 197,0.5);
         border-radius: 25px;
     }
-    ::-webkit-scrollbar-track:hover {
+    .locationEdit ::-webkit-scrollbar-track:hover {
         background: rgba(176, 190, 197,0.9);
     }
 
-    #formCont {
+    .locationEdit #formCont {
         height: 802px;
         overflow-y: auto;
         overflow-x: hidden;
     }
 
-    #failureToast {
+    .failureToast {
         --paper-toast-background-color: red;
         --paper-toast-color: white;
     }
@@ -66,8 +70,8 @@
 
 <paper-material class="locationEdit">
     <paper-toolbar class="small">
-        <h1 class="title">Add a location</h1>
-        <paper-icon-button icon="close" title="Close" ng-click="listPageCtrl.setIsAdding(false);"></paper-icon-button>
+        <h1 class="title">Edit</h1>
+        <paper-icon-button icon="close" title="Close" ng-click="onClose();"></paper-icon-button>
     </paper-toolbar>
 
     <section id="formCont">
@@ -86,11 +90,7 @@
             <paper-input name="website" label="Website"
                          value="{{location.website}}"
                          required="">
-                <div prefix>http://</div>
             </paper-input>
-
-            <!--<paper-input name="address" label="Address" required></paper-input>
-            <paper-input name="hqAddress" label="HQ Address"></paper-input>-->
 
             <!-- Deeper info -->
             <paper-input name="locationType" label="Resource Type"
@@ -127,11 +127,12 @@
         <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr"
                            map="mapContainer"></map-address-input>
 
-        <paper-button type="submit" ng-click="submitAddForm();">Update</paper-button>
+        <paper-button type="submit" ng-click="submitEditForm();">Save</paper-button>
         <!-- Put the delete button down here -->
+        <paper-icon-button class="deleteButton" icon="delete" ng-click="deleteLocation();"></paper-icon-button>
     </section>
 
 </paper-material>
 
-<paper-toast id="failureToast" text="Failed to add the location!"></paper-toast>
-<paper-toast id="successToast" text="Added location to the database!"></paper-toast>
+<paper-toast class="failureToast" text="Failed to add the location!"></paper-toast>
+<paper-toast class="successToast" text="Added location to the database!"></paper-toast>
