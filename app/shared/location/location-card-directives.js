@@ -55,10 +55,14 @@
                 };
 
                 $scope.submitRatingForm = function() {
-                    var form = document.getElementById($scope.location.id + '_ratingForm');
+                    var form = $('#' + $scope.location.id + '_ratingForm')[0];
+                    var rating = form.getElementsByTagName('star-ratings')[0];
                     if (form.validate()) {
                         // Send request to database api
-                        var rating = new locationService.LocationRating(form.serialize(), true);
+                        var formData = form.serialize();
+                        formData.value = rating.value;
+
+                        var rating = new locationService.LocationRating(formData, true);
 
                         locationService.rate($scope.location.id, rating)
                             .success(function(data) {

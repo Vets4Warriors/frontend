@@ -13,6 +13,9 @@
     }]);
 
 
+    /* This (and all map functions) should probably be moved to the listPageController as it
+    *   contains the map element directly.
+    *   Todo? */
     var mapRecenter = function(map, mapsApi, latLng, offsetX, offsetY) {
         var projection = map.getProjection();
         if (projection) {
@@ -200,7 +203,7 @@
                  * @param key pressed. The $event var in angular
                  */
                 var locAddCtrl = this;
-                var successToast = document.getElementById('successToast');
+                var successToast = $('successToast')[0];
                 var errorToast = document.getElementById('failureToast');
                 $scope.addressInputs = document.getElementsByTagName('map-address-input');
                 $scope.addr = locationService.LocationAddress.makeEmptyAddr();
@@ -294,27 +297,60 @@
             controller: ['$scope', '$http', 'locationService', 
                 function($scope, $http, locationService) {
                     var locEditCtrl = this;
-                    $scope.location = {};
+                    var successToast = $('.successToast')[0];
+                    var errorToast = $('.failureToast')[0];
+                    var coverages = $('[name="coverages"]');
+                    // For watching
+                    locEditCtrl.location = {};
 
                     $scope.addr = locationService.LocationAddress.makeEmptyAddr();
                     $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
-                    
+
+                    /*
+                    * locEditCtrl is purely for watching
+                    * Wouldn't work on $scope.location
+                    * But that's our real target
+                    * Need to find a way to update the coverages
+                    * */
+                    /*$scope.$watch("locEditCtrl.location",
+                        function locationChanged(newVal, oldVal) {
+                            // Need some real data
+                            if ($.isEmptyObject(newVal)) {
+                                return;
+                            }
+                           updateFormWithData();
+                        });
+*/
                     // First load the data
                     locationService.get($scope.id)
                         .success(function(data) {
                             $scope.location = new locationService.Location(angular.fromJson(data), false);
-                            
-                            $scope.addr = $scope.location.address;
-                            
-                            if ($scope.location.hqAddress !== undefined) {
-                                $scope.hqAddr = $scope.location.hqAddress;
-                            }
+                            locEditCtrl.location = $scope.location;
+                            updateFormWithData();
                         })
                         .error( function() {
                             console.log("Error loading location with id " + $scope.id );
                         });
 
 
+                     /* Private functions */
+                   function updateFormWithData() {
+                        $scope.addr = $scope.location.address;
+
+                            if ($scope.location.hqAddress !== undefined) {
+                                $scope.hqAddr = $scope.location.hqAddress;
+                            }
+
+                            // We also need to initialize the checkboxes
+                            // Will do that here in javascript, could get bulky in the html
+                            var coverages = document.getElementsByName('coverages');
+
+                            for (var i = 0; i < coverages.length; i++) {
+                                if ($.inArray($scope.location.coverages, coverages[i].value) != -1) {
+                                    coverages[i].checked = true;
+                                }
+                            }
+                   }
 
                     $scope.submitEditForm = function() {
                         // validate all address input. Have got to make them extend the iron-input / build with polymer
@@ -331,12 +367,11 @@
 
                             //Todo: regex. This almost works buuut ((#(\S?!,)*)(\s*)(,))*((\s*)(#\S*)())
                             locationData.tags = locationData.tags.split(',');
-                            locationData.website = 'http://' + locationData.website;
                             // Only add the addresses if valid!
-                            if ($scope.addr.isValid) {
+                            if (!$.isEmptyObject($scope.addr) && $scope.addr.isValid) {
                                 locationData.address = $scope.addr;
                             }
-                            if ($scope.hqAddr.isValid) {
+                            if (!$.isEmptyObject($scope.addr) && $scope.hqAddr.isValid) {
                                 locationData.hqAddress = $scope.hqAddr;
                             }
 
@@ -424,7 +459,6 @@
                 this.required = $scope.$eval($attrs.required);
                 this.isPristine = true;
 
-                
                 this.setInputHidden = function (isHidden){
                     addrInput.inputIsHidden = isHidden;
 
@@ -557,13 +591,11 @@
                         addrInput.setHasValidated(true);
                     }
 
-
                     $scope.reset = function() {
                         addrInput.isPristine = true;
                         addrInput.hasValidated = false;
                         addrInput.isConfirmed = false;
                         addrInput.formattedAddress = '';
-
                         $scope.target = {};
                     };
                 };

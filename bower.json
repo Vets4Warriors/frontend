@@ -42,6 +42,7 @@
     "gold-zip-input": "PolymerElements/gold-zip-input#^1.0.5",
     "paper-toast": "PolymerElements/paper-toast#^1.2.0",
     "paper-input": "PolymerElements/paper-input#^1.1.10",
-    "angular-ui-router": "^0.2.18"
+    "angular-ui-router": "^0.2.18",
+    "star-ratings": "https://github.com/PolymerLabs/star-ratings.git"
   }
 }

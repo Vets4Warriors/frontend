@@ -2,40 +2,45 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html"/>
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html"/>
 <link rel="import" href="/bower_components/paper-button/paper-button.html"/>
+<link rel="import" href="/bower_components/star-ratings/star-ratings.html"/>
 
 <style is="custom-style">
     .cardItemContainer h1 {
         font-size: large;
     }
-    .cardItemContainer .addRatingForm {
-        height: auto;
-    }
-    .cardItemContainer .addRatingForm paper-input {
-        margin: 2px;
+
+    .cardItemContainer .separator {
+        height: 1px;
+        background: grey;
     }
 
-    ::-webkit-scrollbar {
+    .cardItemContainer .addRatingForm {
+        height: auto;
+        margin-top: 8px;
+    }
+
+    .cardItemContainer ::-webkit-scrollbar {
         width: 5px;
     }
-    ::-webkit-scrollbar-thumb {
+    .cardItemContainer ::-webkit-scrollbar-thumb {
         background: rgba(96, 125, 139,0.7);
         border-radius: 25px;
         box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
     }
-    ::-webkit-scrollbar-thumb:hover {
+    .cardItemContainer ::-webkit-scrollbar-thumb:hover {
         background: rgba(96, 125, 139,0.9);
     }
-    ::-webkit-scrollbar-thumb:active {
+    .cardItemContainer ::-webkit-scrollbar-thumb:active {
         background: rgba(38, 50, 56,0.9);
     }
-    ::-webkit-scrollbar-track {
+    .cardItemContainer ::-webkit-scrollbar-track {
         background: rgba(176, 190, 197,0.5);
         border-radius: 25px;
     }
-    ::-webkit-scrollbar-track:hover {
+    .cardItemContainer ::-webkit-scrollbar-track:hover {
         background: rgba(176, 190, 197,0.9);
     }
-    .scroll {
+    .cardItemContainer .scroll {
         max-height: 300px;
         overflow-y: auto;
     }
@@ -46,16 +51,17 @@
     <h1>Average rating: {{averageRating(location.ratings)}}</h1>
     <div class="scroll">
         <article ng-repeat="rating in location.ratings track by $index">
-            <blockquote> Stars: {{rating.value}} </blockquote>
-            <p> - {{rating.user}} </p>
+            <p> {{rating.value}}/5 -- {{rating.user}} </p>
             <p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>
+            <div class="separator"></div>
         </article>
     </div>
 
     <form id="{{location.id + '_ratingForm'}}" class="addRatingForm"
           is="iron-form" ng-keypress="keyPressed($event)">
-        <paper-input name="value" label="Rating" error-message="Need to provide a rating 1-5!" type="number" min="1" max="5"
-                     placeholder="1-5" required auto-validate prevent-invalid-input></paper-input>
+        <h4>Rate it</h4>
+        <star-ratings name="rating" class="starInput" value="1" count="5" required></star-ratings>
+
         <paper-input name="user" label="User" error-message="Need to provide your name!"
                      required auto-validate></paper-input>
         <paper-textarea name="comment" label="Comment" maxlength="500" error-message="500 characters or less please!"
