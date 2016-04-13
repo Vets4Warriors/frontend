@@ -61,7 +61,9 @@ gulp.task('buildIndex', function() {
             stripExcludes: false,
             stripComments: true,
             inlineCss: true,
-            inlineScripts: true
+            inlineScripts: true,
+           //abspath: __dirname,
+           inputUrl: '/home/austin/Workspace/web/VetsFrontend/index.html'
     })).pipe(gulp.dest('dist_index.html'));
 });
 

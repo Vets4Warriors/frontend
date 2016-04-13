@@ -51,8 +51,10 @@
     <h1>Average rating: {{averageRating(location.ratings)}}</h1>
     <div class="scroll">
         <article ng-repeat="rating in location.ratings track by $index">
-            <p> {{rating.value}}/5 -- {{rating.user}} </p>
-            <p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>
+            <div class="separator"></div>
+            <p> <b>{{rating.value}}/5</b> -- {{rating.comment}} </p>
+            <!--<p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>-->
+            <p><em>{{rating.user}}</em></p>
             <div class="separator"></div>
         </article>
     </div>

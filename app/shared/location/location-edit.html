@@ -40,6 +40,9 @@
     .locationEdit .deleteButton {
         right: 0;
     }
+    .locationEdit #deleteDialog {
+        padding: 8px;
+    }
 
     /* Scrollbar */
     .locationEdit ::-webkit-scrollbar {
@@ -139,9 +142,11 @@
         <paper-icon-button class="deleteButton" icon="delete" ng-click="deleteLocation(false);"></paper-icon-button>
 
         <paper-dialog id="deleteDialog">
-            Are you sure you want to delete {{location.name}}?
-            <paper-button dialog-dismiss>No..</paper-button>
-            <paper-button dialog-confirm autofocus ng-click="deleteLocation(true)">Delete</paper-button>
+            <p>Are you sure you want to delete {{location.name}}?</p>
+            <div class="buttons">
+                <paper-button dialog-dismiss>No..</paper-button>
+                <paper-button dialog-confirm autofocus ng-click="deleteLocation(true)">Delete</paper-button>
+            </div>
         </paper-dialog>
 
     </section>

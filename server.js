@@ -32,11 +32,12 @@ require('del');
     // Todo: compile _assets and app into one static directory
     app.use('/_assets', express.static(__dirname + '/_assets'));
     app.use('/bower_components', express.static(__dirname + '/bower_components'));
-    app.use('/app', express.static(__dirname + '/app'));
 
     /* Routes */
     if (env === 'dev' || env === 'local') {
         /* DEV ROUTES */
+        app.use('/app', express.static(__dirname + '/app'));
+
         app.get('/', function(req, res) {
             res.sendFile(__dirname + '/index.html');
         });
@@ -52,13 +53,14 @@ require('del');
         /* PROD ROUTES
          * Should be the same as dev routes but from the dist directory
          * -> where our app is compiled */
+        app.use('/app', express.static(__dirname + '/dist'));
+
         app.get('/', function(req, res) {
             res.sendFile(__dirname + '/dist_index.html');
         });
 
         app.get('/resources', function(req, res) {
             res.sendFile(__dirname + '/dist/list-page/list-page.html');
-            //res.sendFile(__dirname + '/app/list-page/list-page.html');
         });
     }
 
