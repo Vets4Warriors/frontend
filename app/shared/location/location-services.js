@@ -192,11 +192,11 @@
 
 
                 getFormattedServices() {
-                    return Location.formatArrayToStr(this.services);
+                    return Location.formatArrayToStr(this.services, ', ', '');
                 }
 
                 getFormattedCoverage() {
-                    return Location.formatArrayToStr(this.coverages);
+                    return Location.formatArrayToStr(this.coverages, ', ', '');
                 }
 
                 /**
@@ -204,7 +204,7 @@
                  * @returns {string}
                  */
                 getFormattedTags() {
-                    return Location.formatArrayToStr(this.tags, ',', '#');
+                    return Location.formatArrayToStr(this.tags, ', ', '');
                 }
 
                 getFormattedDateAdded() {
