@@ -230,7 +230,11 @@
                         }
 
                         //Todo: regex. This almost works buuut ((#(\S?!,)*)(\s*)(,))*((\s*)(#\S*)())
-                        locationData.tags = locationData.tags.split(',');
+                        if (locationData.tags != "") {
+                            locationData.tags = locationData.tags.split(',');
+                        } else {
+                            locationData.tags = [];
+                        }
                         locationData.website = 'http://' + locationData.website;
                         // Only add the addresses if valid!
                         if ($scope.addr.isValid) {
