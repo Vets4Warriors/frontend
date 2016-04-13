@@ -58,7 +58,7 @@
 	    overflow-x: hidden;
     }
 
-    #failureToast {
+    .failureToast {
         --paper-toast-background-color: red;
         --paper-toast-color: white;
     }
@@ -113,9 +113,11 @@
 
 	    <!-- Addresses -->
 	    <!-- Can't have a form inside of a form :( -->
-	    <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr"
+	    <map-address-input container="$parentElem" name='addressInput' title="Address"
+						   target="addr" formatted-address="location.getFormattedAddr()"
 	                       map="mapContainer"></map-address-input>
-	    <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr"
+	    <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address"
+						   target="hqAddr" formatted-address="location.getFormattedHqAddr()"
 	                       map="mapContainer"></map-address-input>
 
 	    <paper-button type="submit" ng-click="submitAddForm();">Add to database</paper-button>
@@ -124,5 +126,5 @@
 
 </paper-material>
 
-<paper-toast id="failureToast" text="Failed to add the location!"></paper-toast>
-<paper-toast id="successToast" text="Added location to the database!"></paper-toast>
+<paper-toast class="failureToast" text="Failed to add the location!"></paper-toast>
+<paper-toast class="successToast" text="Added location to the database!"></paper-toast>

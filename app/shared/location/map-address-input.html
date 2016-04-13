@@ -30,11 +30,16 @@
         padding: 0;
         margin: 0;
         background-color: white;
+        --paper-dialog-background-color: red;
     }
     .addressInputContainer paper-material {
         background-color: white;
     }
 
+    .failureToast {
+        --paper-toast-background-color: red;
+        --paper-toast-color: white;
+    }
 </style>
 
 <article class="addressInputContainer">
@@ -50,12 +55,13 @@
             <paper-icon-button icon="close" title="Close" ng-click="mapAddrCtrl.setInputHidden(true);"></paper-icon-button>
         </paper-toolbar>
 
-        <form id="{{'addressForm_' + title }}" is="iron-form" method="post" action="">
-            <paper-textarea name="autoComplete" id="{{'autoComplete_' + title}}"></paper-textarea>
+        <form id="addressForm" is="iron-form" method="post" action="">
+            <paper-textarea name="autoComplete" id="autoComplete"></paper-textarea>
             <paper-input name="address2" type="text" label="Address (cont.)"></paper-input>
 
             <p>{{formattedAddress}}</p>
             <paper-button type="submit" ng-click="validate();">Confirm</paper-button>
         </form>
     </paper-dialog>
+    <paper-toast class="failureToast"></paper-toast>
 </article>

@@ -29,6 +29,14 @@
         margin-top: 4px;
         margin-bottom: 4px;
     }
+
+    .locationEdit #formCont {
+        height: 802px;
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
     .locationEdit .deleteButton {
         right: 0;
     }
@@ -54,12 +62,6 @@
     }
     .locationEdit ::-webkit-scrollbar-track:hover {
         background: rgba(176, 190, 197,0.9);
-    }
-
-    .locationEdit #formCont {
-        height: 802px;
-        overflow-y: auto;
-        overflow-x: hidden;
     }
 
     .failureToast {
@@ -123,20 +125,26 @@
         <!-- Addresses -->
         <!-- Can't have a form inside of a form :( -->
         <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr"
-                           map="mapContainer" formatted-address="location.getFormattedAddr()"
+                           map="mapContainer" i-formatted-address="location.getFormattedAddr()"
                            <!--ng-click="locEditCtrl.setIsHidden(true);"-->
                            on-close="locEditCtrl.setIsHidden(false)"></map-address-input>
         <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr"
-                           map="mapContainer" formatted-address="location.getFormattedHqAddr()"
+                           map="mapContainer" i-formatted-address="location.getFormattedHqAddr()"
                             <!--ng-click="locEditCtrl.setIsHidden(true);"-->
                             on-close="locEditCtrl.setIsHidden(false)"></map-address-input>
 
         <paper-button type="submit" ng-click="submitEditForm();">Save</paper-button>
-        <!-- Put the delete button down here -->
+        <!-- Put the delete button down here and on the right -->
         <!-- Todo: Add a double check measure! -->
-        <paper-icon-button class="deleteButton" icon="delete" ng-click="deleteLocation();"></paper-icon-button>
-    </section>
+        <paper-icon-button class="deleteButton" icon="delete" ng-click="deleteLocation(false);"></paper-icon-button>
 
+        <paper-dialog id="deleteDialog">
+            Are you sure you want to delete {{location.name}}?
+            <paper-button dialog-dismiss>No..</paper-button>
+            <paper-button dialog-confirm autofocus ng-click="deleteLocation(true)">Delete</paper-button>
+        </paper-dialog>
+
+    </section>
 </paper-material>
 
 <paper-toast class="failureToast" text="Failed to add the location!"></paper-toast>
