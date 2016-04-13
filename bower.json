@@ -44,6 +44,10 @@
     "paper-input": "PolymerElements/paper-input#^1.1.10",
     "angular-ui-router": "^0.2.18",
     "star-ratings": "https://github.com/PolymerLabs/star-ratings.git",
-    "geocomplete": "^1.6.5"
+    "geocomplete": "^1.6.5",
+    "angular-material": "^1.0.7"
+  },
+  "resolutions": {
+    "angular": "1.5.3"
   }
 }

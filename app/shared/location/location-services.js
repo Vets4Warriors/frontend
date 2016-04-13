@@ -11,9 +11,9 @@
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
             "use strict";
-            var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
+            // var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
             // var baseApiUrl = 'http://localhost/api/1.0/locations';
-            // var baseApiUrl = 'http://localhost:8000/1.0/locations';
+            var baseApiUrl = 'http://localhost:8000/1.0/locations';
             const service = this;
 
             /**
@@ -192,11 +192,11 @@
 
 
                 getFormattedServices() {
-                    return Location.formatArrayToStr(this.services);
+                    return Location.formatArrayToStr(this.services, ', ', '');
                 }
 
                 getFormattedCoverage() {
-                    return Location.formatArrayToStr(this.coverages);
+                    return Location.formatArrayToStr(this.coverages, ', ', '');
                 }
 
                 /**
@@ -204,7 +204,7 @@
                  * @returns {string}
                  */
                 getFormattedTags() {
-                    return Location.formatArrayToStr(this.tags, ',', '#');
+                    return Location.formatArrayToStr(this.tags, ', ', '');
                 }
 
                 getFormattedDateAdded() {
