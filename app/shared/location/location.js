@@ -249,6 +249,7 @@
                                     duration: 3000
                                 });
                                 $scope.resetForm();
+                                
                                 var newLocation = new locationService.Location(data, false);
                                 $scope.locations.push(newLocation);
                             })
@@ -264,6 +265,9 @@
                     return false;
                 };
 
+                /**
+                 * Must reset the target addresses as well as the whole form
+                 */
                 $scope.resetForm = function() {
                     $scope.form.reset();
                     $scope.addr = {};
@@ -339,22 +343,28 @@
                             console.log("Error loading location with id " + $scope.id );
                         });
 
+                    /**
+                     * Load the form with the data stored in $scope.location
+                     */
                     function updateFormWithData() {
-                        $scope.addr = $scope.location.address;
+                        if ($scope.location.hasAddr()) {
+                            $scope.addr = $scope.location.address;
+                        }
 
-                            if ($scope.location.hqAddress !== undefined) {
-                                $scope.hqAddr = $scope.location.hqAddress;
+                        if ($scope.location.hqAddress !== undefined) {
+                            $scope.hqAddr = $scope.location.hqAddress;
+                        }
+
+                        // We also need to initialize the checkboxes
+                        // Will do that here in javascript, could get bulky in the html
+                        // Todo!
+                        var coverages = document.getElementsByName('coverages');
+
+                        for (var i = 0; i < coverages.length; i++) {
+                            if ($.inArray($scope.location.coverages, coverages[i].value) != -1) {
+                                coverages[i].checked = true;
                             }
-
-                            // We also need to initialize the checkboxes
-                            // Will do that here in javascript, could get bulky in the html
-                            var coverages = document.getElementsByName('coverages');
-
-                            for (var i = 0; i < coverages.length; i++) {
-                                if ($.inArray($scope.location.coverages, coverages[i].value) != -1) {
-                                    coverages[i].checked = true;
-                                }
-                            }
+                        }
                     }
 
                     $scope.submitEditForm = function() {
@@ -376,7 +386,7 @@
                             if (!$.isEmptyObject($scope.addr) && $scope.addr.isValid) {
                                 locationData.address = $scope.addr;
                             }
-                            if (!$.isEmptyObject($scope.addr) && $scope.hqAddr.isValid) {
+                            if (!$.isEmptyObject($scope.hqAddr) && $scope.hqAddr.isValid) {
                                 locationData.hqAddress = $scope.hqAddr;
                             }
 
@@ -398,28 +408,32 @@
                                         text: "Failed to edit the location!",
                                         duration: 3000
                                     });
-                                    console.log("Failure!");
                                 });
                         }
                         return false;
                     };
 
-                    $scope.deleteLocation = function() {
-                        locationService.delete($scope.location.id)
-                            .success(function(data){
-                                successToast.show({
-                                    text: "Deleted!",
-                                    duration: 3000
+                    $scope.deleteLocation = function(confirmed) {
+                        if (!confirmed) {
+                            // Open the confirmation dialog
+                            var dialog = $('#deleteDialog')[0];
+                            dialog.open();
+                        } else {
+                            locationService.delete($scope.location.id)
+                                .success(function(data){
+                                    successToast.show({
+                                        text: "Deleted!",
+                                        duration: 3000
+                                    });
+                                    $scope.onClose();
+                                })
+                                .error(function(data){
+                                    errorToast.show({
+                                        text: "Failed to edit the location!",
+                                        duration: 3000
+                                    });
                                 });
-                                $scope.onClose();
-                            })
-                            .error(function(data){
-                                errorToast.show({
-                                    text: "Failed to edit the location!",
-                                    duration: 3000
-                                });
-                                console.log("Failure!");
-                            });
+                        }
                     };
             }],
             controllerAs: 'locEditCtrl',
@@ -439,7 +453,7 @@
      * given a LocationAddress in the target, fills with valid address info
      * Can be given map for marker selection / draggable (?)
      *
-     * Target will be given a hasValidated and isConfirmed field. Will do better when know more angular
+     * Target will be given a hasValidated field. Will do better when know more angular
      *
      */
     app.directive('mapAddressInput', function() {
@@ -452,7 +466,7 @@
                 mapContainer: '=map',
                 required: '=required',
                 container: '=container',
-                formattedAddress: '=formattedAddress',
+                iFormattedAddress: '=iFormattedAddress',    //initial formatted address
                 onClose: '&'
             },
             controller: ['$scope', '$attrs', '$http', function($scope, $attrs, $http) {
@@ -460,9 +474,7 @@
                 addrInput.marker = null;
                 addrInput.inputIsHidden = true;
                 addrInput.hasValidated = false;
-                addrInput.isConfirmed = false;
                 addrInput.required = $scope.$eval($attrs.required);
-                addrInput.isPristine = true;
 
                 addrInput.setInputHidden = function (isHidden){
                     addrInput.inputIsHidden = isHidden;
@@ -480,16 +492,25 @@
                     } else {
                         $scope.inputDialog.refit();
                         $scope.inputDialog.open();
-
-                        // Bind the geocomplete to the form now that it is created
-                        $scope.form = $('#addressForm_' + $scope.title)[0];
-                        $scope.geocompleteInput = $('#autoComplete_' + $scope.title).geocomplete();
                     }
                 };
+
                 addrInput.setHasValidated = function (hasValidated) {
                     addrInput.hasValidated = hasValidated;
                     $scope.target.isValid = hasValidated;
                 };
+
+                /**
+                 * Uses the error toast in the scope to show a message
+                 * @param message
+                 */
+                addrInput.showError = function(message) {
+                    $scope.errorToast.show({
+                        text: message,
+                        duration: 3000
+                    });
+                };
+
 
                 /**
                  * Try to geocode the address given
@@ -502,12 +523,10 @@
                  *  Ask to check for errors
                  */
                 $scope.validate = function() {
-                    addrInput.isPristine = false;
                     var mapsApi = document.querySelector('google-maps-api').api;
                     var geocoder = new mapsApi.Geocoder();
                     
                     geocoder.geocode({'address': $scope.geocompleteInput.val()}, function(result, status) {
-                       console.log(status);
                         // Status should always be OK and we should always get the right result in index 0
                         if (status == mapsApi.GeocoderStatus.OK) {
                             result = result[0];
@@ -528,12 +547,16 @@
                                 }
                             }
 
+                            // Need at least an address with a street name, and a zip code
                             // Put the address into the target object
                             if (components['street_number']) {
                                 $scope.target['address1'] = components['street_number'] + ' '
                                     + components['route'];
-                            } else {
+                            } else if(components['route']){
                                 $scope.target['address1'] = components['route'];
+                            } else {
+                                addrInput.showError("Need an address with a street name!");
+                                return;
                             }
                             // Need to figure out a way for address 2
                             $scope.target['address2'] = formData['address2'];    // If they provide it, take it
@@ -542,7 +565,7 @@
                             $scope.target['country'] = components['country'];
                             $scope.target['zipcode'] = components['postal_code'];
                             $scope.target['latLng'] = latLng;
-                            addrInput.formattedAddress = result['formatted_address'];
+                            $scope.formattedAddress = result['formatted_address'];
 
                             // If there was already a marker from a previous search, clear it!
                             if (addrInput.marker) {
@@ -560,20 +583,21 @@
                             $scope.mapContainer.map.latitude = latLng.lat;
                             $scope.mapContainer.map.longitude = latLng.lng;
 
-
+                            addrInput.setHasValidated(true);
                         } else {
-
+                            console.log("Error geocoding address!");
+                            errorToast.show({
+                                text: "Failed to edit the location!",
+                                duration: 3000
+                            });
                         }
                     });
-                    addrInput.setHasValidated(true);
                 };
 
 
                 $scope.reset = function() {
-                    addrInput.isPristine = true;
                     addrInput.hasValidated = false;
-                    addrInput.isConfirmed = false;
-                    addrInput.formattedAddress = '';
+                    $scope.formattedAddress = '';
                     $scope.target = {};
                 };
 
@@ -581,8 +605,14 @@
             controllerAs: 'mapAddrCtrl',
             link: function ($scope, $elem, $attrs) {
                 $scope.inputDialog = $elem[0].querySelector('paper-dialog');
-                $scope.inputDialog.fitInto = $scope.container;
+                $scope.form = $elem[0].querySelector('#addressForm');
+                var geoInput = $elem[0].querySelector('#autoComplete');
+                $scope.geocompleteInput = $(geoInput).geocomplete();
+                $scope.errorToast = $elem[0].querySelector('.failureToast');
 
+                // Todo: The .chilren[0] is a quick fix for main content being within the div.ui-view
+                $scope.inputDialog.fitInto = $scope.container.children[0];
+                $scope.formattedAddress = $scope.iFormattedAddress;
             }
         }
     });
