@@ -23,7 +23,13 @@
                 url: '/:id/edit',
                 templateUrl: "/app/list-page/edit-partial.html",
                 controller: 'EditViewCtrl'
+            })
+            .state('callView', {
+                url: '/call',
+                templateUrl: "/app/list-page/call-partial.html",
+                controller: 'CallViewCtrl'
             });
+
     });
 
     app.controller('ListPageCtrl', ['$scope', '$routeParams', '$location',
@@ -62,6 +68,16 @@
 
 
     app.controller('AddViewCtrl', ['$scope', '$state', function($scope, $state) {
+        /**
+         * To be passed to the form
+         * Navigates back to the default view
+         */
+        $scope.onClose = function() {
+            $state.go("listView");
+        };
+    }]);
+
+    app.controller('CallViewCtrl', ['$scope', '$state', function($scope, $state) {
         /**
          * To be passed to the form
          * Navigates back to the default view
