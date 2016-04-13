@@ -78,13 +78,7 @@
     }]);
 
     app.controller('CallViewCtrl', ['$scope', '$state', function($scope, $state) {
-        /**
-         * To be passed to the form
-         * Navigates back to the default view
-         */
-        $scope.onClose = function() {
-            $state.go("listView");
-        };
+        
     }]);
 
 
