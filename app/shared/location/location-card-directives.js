@@ -2,7 +2,7 @@
  * Created by austin on 3/10/16.
  */
 (function() {
-    var app = angular.module('location-card-directives', ['location-services']);
+    var app = angular.module('location-card-directives', ['ngMaterial', 'location-services']);
 
     /**
      *  The main container for each location.
@@ -15,7 +15,7 @@
                 this.isExpanded = false;
                 this.tab = 0;
 
-                this.contentCollapse = $element.find('iron-collapse')[0];
+                //this.contentCollapse = $element.find('iron-collapse')[0];
 
                 this.tabIsShowing = function(tabIndex) {
                     return tabIndex === this.tab;
@@ -27,7 +27,7 @@
 
                 this.toggleContent = function() {
                     this.isExpanded = !this.isExpanded;
-                    this.contentCollapse.toggle();
+                    //this.contentCollapse.toggle();
                 };
 
                 this.edit = function() {

@@ -1,28 +1,16 @@
 <!--
     A template for each location
-
--->
-
-<!--
-<link rel="import" href="/bower_components/paper-card/paper-card.html"/>
-<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html"/>
-<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html"/>
-<link rel="import" href="/bower_components/paper-tabs/paper-tab.html"/>
-<link rel="import" href="/bower_components/iron-icons/maps-icons.html"/>
-<link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
-<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html"/>
-<link rel="import" href="/bower_components/google-map/google-map-marker.html"/>
--->
-
 <link rel="stylesheet" href="/_assets/css/bootstrap.min.css"/>
+-->
 
-<style is="custom-style">
-    .locationCard paper-card {
+
+<style>
+
+    .locationCard md-card {
         width: 30%;
     }
 
-    .locationCard paper-toolbar {
-        --paper-toolbar-background: var(--paper-blue-900);
+    .locationCard md-toolbar {
         text-align: left;
     }
 
@@ -30,18 +18,16 @@
         text-align: left;
     }
 
-    .locationCard paper-tabs {
+    .locationCard md-tab {
         width: 300px;
     }
 
-    .locationCard paper-icon-button {
+    .locationCard md-icon {
         color: white;
     }
 
     .locationCard .self-end {
-        /* This mixin (from iron-flex-layout) aligns the tabs to the
-           bottom of the toolbar. */
-        @apply(--layout-self-end);
+
     }
 
     .locationCard .contentContainer {
@@ -54,29 +40,32 @@
     }
 </style>
 
-<paper-card class="locationCard">
-    <paper-toolbar class="medium-tall">
-        <h1 class="title">{{location.name}}</h1>
-        <paper-icon-button icon="maps:my-location" title="Locate" ng-show="location.hasAddr();"
-                           ng-click="listPageCtrl.zoomToLocation(location.getAddrLatLng());"></paper-icon-button>
-        <paper-icon-button icon="expand-more" title="Expand" ng-click="cardCtrl.toggleContent();"></paper-icon-button>
-
-
+<md-card class="locationCard" layout="column" layout-fill>
+    <md-toolbar class="md-medium-tall">
+        <div class="md-toolbar-tools">
+            <h1 class="title">{{location.name}}</h1>
+            <!-- Fill the space between left and right sections-->
+            <span flex></span>
+            <md-button class="md-icon-button" aria-label="Locate" ng-show="location.hasAddr();"
+                       ng-click="listPageCtrl.zoomToLocation(location.getAddrLatLng());">
+                <md-icon md-svg-src="/_assets/icons/ic_my_location_black_48px.svg"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Expand" ng-click="cardCtrl.toggleContent();">
+                <md-icon md-svg-src="/_assets/icons/ic_expand_more_black_48px.svg"></md-icon>
+            </md-button>
+        </div>
         <!-- Show a brief description if the card is not expanded -->
         <p class="bottom" ng-show="!cardCtrl.isExpanded">{{location.locationType + ": " + location.getFormattedServices();}}</p>
         <!-- Only show the tabs if the card has been expanded -->
-        <paper-tabs selected="0" class="bottom self-end" ng-show="cardCtrl.isExpanded">
-            <paper-tab ng-click="cardCtrl.setTab(0)">Info</paper-tab>
-            <paper-tab ng-click="cardCtrl.setTab(1)">Contact</paper-tab>
-            <paper-tab ng-click="cardCtrl.setTab(2)">Ratings</paper-tab>
-        </paper-tabs>
-    </paper-toolbar>
-
-<iron-collapse class="contentCollapse">
-        <div class="contentContainer">
-            <location-info ng-show="cardCtrl.tabIsShowing(0)"></location-info>
-            <location-contact ng-show="cardCtrl.tabIsShowing(1)"></location-contact>
-            <location-rating ng-show="cardCtrl.tabIsShowing(2)"></location-rating>
-        </div>
-    </iron-collapse>
-</paper-card><br/>
+        <md-tabs md-selected="0" class="bottom self-end" ng-show="cardCtrl.isExpanded">
+            <md-tab label="Info" ng-click="cardCtrl.setTab(0)"></md-tab>
+            <md-tab label="Contact" ng-click="cardCtrl.setTab(1)"></md-tab>
+            <md-tab label="Ratings" ng-click="cardCtrl.setTab(2)"></md-tab>
+        </md-tabs>
+    </md-toolbar>
+    <md-content ng-show="cardCtrl.isExpanded">
+        <location-info class="contentContainer" ng-show="cardCtrl.tabIsShowing(0)"></location-info>
+        <location-contact class="contentContainer" ng-show="cardCtrl.tabIsShowing(1)"></location-contact>
+        <location-rating class="contentContainer" ng-show="cardCtrl.tabIsShowing(2)"></location-rating>
+    </md-content>
+</md-card><br/>
