@@ -5,42 +5,32 @@
 
 
 <style>
-
-    .locationCard md-card {
+    location-card md-card {
         width: 30%;
     }
 
-    .locationCard md-toolbar {
+    location-card md-toolbar {
         text-align: left;
     }
 
-    .locationCard h1 {
+    location-card h1 {
         text-align: left;
     }
 
-    .locationCard md-tab {
+    location-card md-tab {
         width: 300px;
     }
 
-    .locationCard md-icon {
+    location-card md-icon {
         color: white;
     }
 
-    .locationCard .self-end {
-
-    }
-
-    .locationCard .contentContainer {
+    location-card .contentContainer {
         height: auto;
-    }
-
-    .locationCard .cardItemContainer {
-        padding: 8px;
-        width: 100%;
     }
 </style>
 
-<md-card class="locationCard" layout="column" layout-fill>
+<md-card layout="column" layout-fill>
     <md-toolbar class="md-medium-tall">
         <div class="md-toolbar-tools">
             <h1 class="title">{{location.name}}</h1>
