@@ -1,13 +1,5 @@
-<link rel="import" href="/bower_components/gold-zip-input/gold-zip-input.html"/>
-<link rel="import" href="/bower_components/paper-input/paper-input.html"/>
-<link rel="import" href="/bower_components/paper-input/paper-textarea.html"/>
-<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html"/>
-<link rel="import" href="/bower_components/paper-dialog/paper-dialog.html"/>
-<link rel="import" href="/bower_components/paper-material/paper-material.html"/>
-<link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html"/>
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
-<link rel="import" href="/bower_components/iron-form/iron-form.html"/>
 
 <!-- This should be linked to the form and will be used to populate the tough data
         Could potentially be built with Polymer as a custom element in the future. Right now just sticking to angular.
@@ -44,24 +36,36 @@
 
 <article class="addressInputContainer">
     <section class="displayContainer">
-        <paper-button ng-click="mapAddrCtrl.setInputHidden(false);">{{title}}</paper-button>
+        <md-button ng-click="mapAddrCtrl.setInputHidden(false);">{{title}}</md-button>
         <p>{{formattedAddress}}</p>
     </section>
 
     <!-- Should pop up and take focus -->
-    <paper-dialog no-cancel-on-outside-click no-cancel-on-esc-key auto-fit-on-attach>
-        <paper-toolbar class="small">
-            <h1 class="title">Add {{title}}</h1>
-            <paper-icon-button icon="close" title="Close" ng-click="mapAddrCtrl.setInputHidden(true);"></paper-icon-button>
-        </paper-toolbar>
+    <md-dialog>
+        <md-dialog-content>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h1 class="title">Add {{title}}</h1>
+                    <span flex></span>
+                    <paper-icon-button icon="close" title="Close" ng-click="mapAddrCtrl.setInputHidden(true);"></paper-icon-button>
+                </div>
+            </md-toolbar>
 
-        <form id="addressForm" is="iron-form" method="post" action="">
-            <paper-textarea name="autoComplete" id="autoComplete"></paper-textarea>
-            <paper-input name="address2" type="text" label="Address (cont.)"></paper-input>
+            <ng-form id="addressForm">
+                <md-input-container>
+                    <input id="autoComplete" name="autoComplete" aria-label="Address">
+                </md-input-container>
 
-            <p>{{formattedAddress}}</p>
-            <paper-button type="submit" ng-click="validate();">Confirm</paper-button>
-        </form>
-    </paper-dialog>
-    <paper-toast class="failureToast"></paper-toast>
+                <md-input-container>
+                    <label for="address2">Address (cont.)</label>
+                    <input id="address2" name="address2" type="text">
+                </md-input-container>
+
+                <p>{{formattedAddress}}</p>
+                <md-button type="submit" ng-click="validate();">Confirm</md-button>
+            </ng-form>
+        </md-dialog-content>
+    </md-dialog>
+
+    <!--<paper-toast class="failureToast"></paper-toast>-->
 </article>

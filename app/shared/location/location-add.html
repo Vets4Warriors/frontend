@@ -64,114 +64,110 @@
 							   ui-sref="listView"></paper-icon-button>
 		</div>
     </md-toolbar>
+	<form id="addForm" name="addForm" ng-submit="" ng-keypress="keyPressed($event)">
+		<!-- Basics -->
+		<md-input-container>
+			<label for="name">Resource name</label>
+			<input id="name" name="name" type="text" ng-model="location.name"
+				   required
+				   md-autofocus>
+			<div ng-messages="addForm.name.$error">
+				<div ng-message="required">Need a name!</div>
+			</div>
+		</md-input-container>
 
-    <section id="formCont">
-	    <form id="addForm" name="addForm" ng-submit="" ng-keypress="keyPressed($event)">
-	        <!-- Basics -->
-			<md-input-container>
-				<label for="name">Resource name</label>
-				<input id="name" type="text" ng-model="location.name"
-					   required
-					   md-autofocus>
-				<div ng-messages="addForm.name.$error">
-					<div ng-message="required">Need a name!</div>
-				</div>
-			</md-input-container>
+		<md-input-container>
+			<label for="email">Email</label>
+			<input id="email" name="email" type="email" ng-model="location.email">
+			<div ng-messages="addForm.email.$error">
+				<div ng-message="email">Please enter a valid email.</div>
+			</div>
+		</md-input-container>
 
-			<md-input-container>
-				<label for="email">Email</label>
-				<input id="email" type="email" ng-model="location.email">
-				<div ng-messages="addForm.email.$error">
-					<div ng-message="email">Please enter a valid email.</div>
-				</div>
-			</md-input-container>
+		<md-input-container>
+			<label for="phone">Phone Number <br>(XXX-XXX-XXXX)</label>
+			<!-- Todo: change to ngPattern -->
+			<input id="phone" name="phone" type="tel" ng-model="location.phone"
+				   pattern="/^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/">
+			<div ng-messages="addForm.phone.$error">
+				<div ng-message="tel">Please enter a valid phone number.</div>
+			</div>
+		</md-input-container>
 
-			<md-input-container>
-				<label for="phone">Phone Number <br>(XXX-XXX-XXXX)</label>
-				<!-- Todo: change to ngPattern -->
-				<input id="phone" type="tel" ng-model="location.phone"
-					   pattern="/^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/">
-				<div ng-messages="addForm.phone.$error">
-					<div ng-message="tel">Please enter a valid phone number.</div>
-				</div>
-			</md-input-container>
+		<md-input-container>
+			<label for="website">Website</label>
+			<input id="website" name="website" type="url" required ng-model="location.website">
+			<div ng-messages="addForm.website.$error">
+				<div ng-message="required">Need a webiste!</div>
+				<div ng-message="url">Please enter a valid website.</div>
+			</div>
+		</md-input-container>
 
-			<md-input-container>
-				<label for="website">Website</label>
-				<input id="website" type="url" required ng-model="location.website">
-				<div ng-messages="addForm.website.$error">
-					<div ng-message="url">Please enter a valid website.</div>
-				</div>
-			</md-input-container>
+		<!-- Deeper info -->
+		<md-input-container>
+			<label for="locationType">Resource Type</label>
+			<input id="locationType" type="text" required ng-model="location.locationType">
+			<div ng-messages="addForm.locationType.$error">
+				<div ng-message="required">Need a resource type!</div>
+			</div>
+		</md-input-container>
 
-	        <!-- Deeper info -->
-			<md-input-container>
-				<label for="locationType">Resource Type</label>
-				<input id="locationType" type="text" required ng-model="location.locationType">
-				<div ng-messages="addForm.locationType.$error">
-					<div ng-message="required">Need a resource type!</div>
-				</div>
-			</md-input-container>
+		<!-- Todo: add tagging input -->
+		<md-input-container>
+			<label for="services">Services</label>
+			<input id="services" type="text" ng-model="location.services" required>
+			<div ng-messages="addForm.services.$error">
+				<div ng-message="required">Resources need services!</div>
+			</div>
+		</md-input-container>
 
-			<!-- Todo: add tagging input -->
-			<md-input-container>
-				<label for="services">Services</label>
-				<input id="services" type="text" ng-model="location.services" required>
-				<div ng-messages="addForm.services.$error">
-					<div ng-message="required">Resources need services!</div>
-				</div>
-			</md-input-container>
+		<md-input-container>
+			<label for="tags">#tags</label>
+			<input id="tags" type="text" ng-model="location.tags">
+			<!--<div ng-messages="addForm.tags.$error">
+				<div ng-message="required">Resources need tags!</div>
+			</div>-->
+		</md-input-container>
 
-			<md-input-container>
-				<label for="tags">#tags</label>
-				<input id="tags" type="text" ng-model="location.tags">
-				<!--<div ng-messages="addForm.tags.$error">
-					<div ng-message="required">Resources need tags!</div>
-				</div>-->
-			</md-input-container>
+		<p class="checkboxes">Coverage</p>
+		<section class="checkboxes">
+			<md-checkbox name="coverages" aria-label="Local" md-no-ink>Local</md-checkbox>
+			<md-checkbox name="coverages" aria-label="State" md-no-ink>State</md-checkbox>
+			<md-checkbox name="coverages" aria-label="Regional" md-no-ink>Regional</md-checkbox>
+			<md-checkbox name="coverages" aria-label="National" md-no-ink>National</md-checkbox>
+			<md-checkbox name="coverages" aria-label="International" md-no-ink>International</md-checkbox>
+		</section>
 
-	        <p class="checkboxes">Coverage</p>
-	        <section class="checkboxes">
-				<md-checkbox name="coverages" aria-label="Local" md-no-ink>Local</md-checkbox>
-				<md-checkbox name="coverages" aria-label="State" md-no-ink>State</md-checkbox>
-				<md-checkbox name="coverages" aria-label="Regional" md-no-ink>Regional</md-checkbox>
-				<md-checkbox name="coverages" aria-label="National" md-no-ink>National</md-checkbox>
-				<md-checkbox name="coverages" aria-label="International" md-no-ink>International</md-checkbox>
-	        </section>
+		<!-- Extras -->
+		<md-input-container>
+			<label for="comments">Comments</label>
+			<textarea id="comments" md-maxlength="500" ng-model="location.comments"></textarea>
+			<div ng-messages="addForm.comments.$error">
+				<div ng-message="md-maxlength">Too long!</div>
+			</div>
+		</md-input-container>
 
-	        <!-- Extras -->
-			<md-input-container>
-				<label for="comments">Comments</label>
-				<textarea id="comments" md-maxlength="500" ng-model="location.comments"></textarea>
-				<div ng-messages="addForm.comments.$error">
-					<div ng-message="md-maxlength">Too long!</div>
-				</div>
-			</md-input-container>
+		<md-input-container>
+			<label for="addedBy">Your name</label>
+			<input id="addedBy" type="text" ng-model="location.addedBy" required>
+			<div ng-messages="addForm.addedBy.$error">
+				<div ng-message="required">Need to provide your name!</div>
+			</div>
+		</md-input-container>
 
-			<md-input-container>
-				<label for="addedBy">Your name</label>
-				<input id="addedBy" type="text" ng-model="location.addedBy" required>
-				<div ng-messages="addForm.addedBy.$error">
-					<div ng-message="required">Need to provide your name!</div>
-				</div>
-			</md-input-container>
-
-			<md-button type="submit" ng-click="submitAddForm()">Add to database</md-button>
-			<md-button type="reset" ng-click="resetForm();">Reset</md-button>
-	    </form>
-
-	    <!-- Addresses -->
-	    <!-- Can't have a form inside of a form :( -->
+		<!-- Addresses -->
+		<!-- Can't have a form inside of a form :( -->
 		<!-- Todo: Move these inside the form using ngForm -->
-	    <map-address-input container="$parentElem" name='addressInput' title="Address"
+		<map-address-input container="$parentElem" name='addressInput' title="Address"
 						   target="addr" formatted-address="location.getFormattedAddr()"
-	                       map="mapContainer"></map-address-input>
-	    <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address"
+						   map="mapContainer"></map-address-input>
+		<map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address"
 						   target="hqAddr" formatted-address="location.getFormattedHqAddr()"
-	                       map="mapContainer"></map-address-input>
-    </section>
+						   map="mapContainer"></map-address-input>
 
+		<md-button type="submit" ng-click="submitAddForm()">Add to database</md-button>
+		<md-button type="reset" ng-click="resetForm();">Reset</md-button>
+	</form>
 </section>
-
-<paper-toast class="failureToast" text="Failed to add the location!"></paper-toast>
-<paper-toast class="successToast" text="Added location to the database!"></paper-toast>
+<!--<paper-toast class="failureToast" text="Failed to add the location!"></paper-toast>-->
+<!--<paper-toast class="successToast" text="Added location to the database!"></paper-toast>-->
