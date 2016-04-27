@@ -158,17 +158,17 @@
                     return queryTerm;
                 };
 
-                searchBox.addEventListener('keypress', function(key) {
-                    if (key.keyCode == 13) {
-                        // hit the enter key
-                        searchCtrl.search();
-                    }
-                });
+//                 searchBox.addEventListener('keypress', function(key) {
+//                     if (key.keyCode == 13) {
+//                         // hit the enter key
+//                         searchCtrl.search();
+//                     }
+//                 });
 
-                filtersBox.addEventListener('iron-select', function(e) {
-                    // If changes from the default or is selected
-                    //searchCtrl.search();
-                });
+//                 filtersBox.addEventListener('iron-select', function(e) {
+//                     // If changes from the default or is selected
+//                     //searchCtrl.search();
+//                 });
 
                 this.search = function() {
                     // Grab the input from the search box and the filters

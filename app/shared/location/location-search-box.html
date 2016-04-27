@@ -1,16 +1,6 @@
-<link rel="import" href="/bower_components/iron-form/iron-form.html"/>
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html"/>
-<link rel="import" href="/bower_components/paper-input/paper-input.html"/>
-<link rel="import" href="/bower_components/paper-material/paper-material.html"/>
-<link rel="import" href="/bower_components/paper-listbox/paper-listbox.html"/>
-<link rel="import" href="/bower_components/paper-item/paper-item.html"/>
-
-<style is="custom-style">
+<style>
     .locationSearchBox {
         background: white;
-    }
-    .locationSearchBox paper-input {
-        padding: 8px;
     }
 
     .locationFilter {
@@ -21,27 +11,52 @@
     }
 </style>
 
-<paper-material class="locationSearchBox">
-    <paper-input label="Search" type="search">
-        <paper-icon-button suffix icon="search" ng-click="locSearchCtrl.search()"></paper-icon-button>
-    </paper-input>
-</paper-material>
+<section class="locationSearchBox" md-whiteframe="3">
+    <md-input-container class="md-icon-float md-icon-right md-block">
+        <label>Search</label>
+        <input type="search" ng-model="search">
+        <md-icon ng-click="locSearchCtrl.search()"
+                 md-svg-src="/_assets/icons/36/ic_search_black.svg"></md-icon>
+    </md-input-container>
+</section>
 
 <!-- Will eventually add this to the search box as a drop down -->
-<paper-material class="locationFilter">
+<section class="locationFilter" md-whiteframe="3">
     <!-- Setup similar to amazon/google/all other search pages -->
-    <h1>Search by</h1>
+    <md-subheader>Search by</md-subheader>
     
-    <paper-listbox class="filters" selected="0">
-        <!--<paper-item>Location</paper-item>
-        <paper-item>Range</paper-item>-->
-        <paper-item value="name">Name</paper-item>
-        <paper-item value="website">Website</paper-item>
-        <paper-item value="phone">Phone</paper-item>
-        <paper-item value="email">Email</paper-item>
-        <paper-item value="locationType">Resource type</paper-item>
-        <paper-item value="coverages">Coverage</paper-item>
-        <paper-item value="services">Services</paper-item>
-        <paper-item value="tags">Tags</paper-item>
-    </paper-listbox>
-</paper-material>
+    <md-list class="filters" flex>
+        <md-list-item>
+            <p>Name</p>
+            <md-checkbox class="md-secondary"></md-checkbox>
+        </md-list-item>
+        <md-list-item>
+            <p>Website</p>
+            <md-checkbox class="md-secondary"></md-checkbox>
+        </md-list-item>
+        <md-list-item>
+            <p>Phone</p>
+            <md-checkbox class="md-secondary"></md-checkbox>
+        </md-list-item>
+        <md-list-item>
+            <p>Email</p>
+            <md-checkbox class="md-secondary"></md-checkbox>
+        </md-list-item>
+        <md-list-item>
+            <p>Resource Type</p>
+            <md-checkbox class="md-secondary"></md-checkbox>
+        </md-list-item>
+        <md-list-item>
+            <p>Coverage</p>
+            <md-checkbox class="md-secondary"></md-checkbox>
+        </md-list-item>
+        <md-list-item>
+            <p>Services</p>
+            <md-checkbox class="md-secondary"></md-checkbox>
+        </md-list-item>
+        <md-list-item>
+            <p>Tags</p>
+            <md-checkbox class="md-secondary"></md-checkbox>
+        </md-list-item>
+    </md-list>
+</section>

@@ -8,11 +8,7 @@
 
         <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css"/>
         <!-- List Page -->
-        <link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
-        <link rel="import" href="/bower_components/paper-fab/paper-fab.html"/>
-        <link rel="import" href="/bower_components/paper-material/paper-material.html"/>
-        <link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
-        <link rel="import" href="/bower_components/paper-button/paper-button.html"/>
+
         <link rel="import" href="/bower_components/google-map/google-map.html"/>
         <link rel="import" href="/bower_components/google-map/google-map-search.html"/>
 
@@ -47,7 +43,7 @@
         <script src="/app/shared/location/location.js"></script>
         <script src="/app/list-page/list-page.js"></script>
 
-		<style is="custom-style">
+		<style>
 			html, body {
                 width: 100%;
                 height: 100%;
@@ -57,7 +53,7 @@
 			}
 
 			/* Header */
-            #header {
+            header .iconLinks {
                 width:300px;
                 height: 92px;
                 position: absolute;
@@ -133,20 +129,17 @@
 
 	<body ng-controller="ListPageCtrl as listPageCtrl">
         <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
-            <div id="header">
+            <header id="iconLinks">
                 <div id="headHome">
                     <a href="/"><img src="/_assets/gfx/home.png"></a>
                 </div>
                 <div id="headImg">
                     <a href="http://www.vets4warriors.com" target="_blank"><img src="/_assets/gfx/logo.png"></a>
                 </div>
-            </div>
+            </header>
 
             <!-- The meat of the one page app -->
             <div ui-view></div>
-
 		</google-map>
-
-
 	</body>
 </html>

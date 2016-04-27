@@ -1,36 +1,17 @@
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html"/>
-<link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
-
 <!-- This should be linked to the form and will be used to populate the tough data
         Could potentially be built with Polymer as a custom element in the future. Right now just sticking to angular.
  -->
 
-<style is="custom-style">
+<style>
     .addressInputContainer .displayContainer {
         margin: 8px;
     }
 
-    .addressInputContainer paper-toolbar {
-        /*--paper-toolbar-background: #7986CB;*/
-        --paper-toolbar-title: {
-            text-align: center;
-        };
-        margin: 0;
-    }
-
-    .addressInputContainer paper-dialog {
+    .addressInputContainer md-dialog {
         padding: 0;
         margin: 0;
         background-color: white;
         --paper-dialog-background-color: red;
-    }
-    .addressInputContainer paper-material {
-        background-color: white;
-    }
-
-    .failureToast {
-        --paper-toast-background-color: red;
-        --paper-toast-color: white;
     }
 </style>
 
@@ -47,7 +28,9 @@
                 <div class="md-toolbar-tools">
                     <h1 class="title">Add {{title}}</h1>
                     <span flex></span>
-                    <paper-icon-button icon="close" title="Close" ng-click="mapAddrCtrl.setInputHidden(true);"></paper-icon-button>
+                    <md-button class="md-icon-button" aria-label="Close" ng-click="mapAddrCtrl.setInputHidden(true);">
+                        <md-icon md-svg-src="/_assets/icons/48/ic_close_white.svg"></md-icon>
+                    </md-button>
                 </div>
             </md-toolbar>
 

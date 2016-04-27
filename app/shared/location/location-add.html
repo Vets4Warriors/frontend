@@ -1,8 +1,5 @@
 <!-- The add form template for locations -->
-<link rel="import" href="/bower_components/paper-toast/paper-toast.html"/>
-<link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
-
-<style is="custom-style">
+<style>
     .locationAdd {
         background: white;
         width: 100%;
@@ -15,7 +12,7 @@
         margin-left: 8px;
         margin-top: 8px;
     }
-    .locationAdd paper-button {
+    .locationAdd md-button {
         margin-top: 4px;
         margin-bottom: 4px;
     }
@@ -43,15 +40,10 @@
 	    background: rgba(176, 190, 197,0.9);
     }
 
-    #formCont {
+    #addForm {
 	    height: 802px;
 	    overflow-y: auto;
 	    overflow-x: hidden;
-    }
-
-    .failureToast {
-        --paper-toast-background-color: red;
-        --paper-toast-color: white;
     }
 </style>
 
@@ -60,11 +52,16 @@
 		<div class="md-toolbar-tools">
 			<h1>Add a location</h1>
 			<span flex></span>
-			<paper-icon-button icon="close" title="Close"
-							   ui-sref="listView"></paper-icon-button>
+			<md-button class="md-icon-button"
+					   aria-label="Close"
+					   ui-sref="listView">
+				<md-icon md-svg-src="/_assets/icons/48/ic_close_white.svg"></md-icon>
+			</md-button>
 		</div>
     </md-toolbar>
-	<form id="addForm" name="addForm" ng-submit="" ng-keypress="keyPressed($event)">
+	<form id="addForm" name="addForm" ng-submit=""
+		  ng-keypress="keyPressed($event)"
+		  layout="column">
 		<!-- Basics -->
 		<md-input-container>
 			<label for="name">Resource name</label>
@@ -157,7 +154,6 @@
 
 		<!-- Addresses -->
 		<!-- Can't have a form inside of a form :( -->
-		<!-- Todo: Move these inside the form using ngForm -->
 		<map-address-input container="$parentElem" name='addressInput' title="Address"
 						   target="addr" formatted-address="location.getFormattedAddr()"
 						   map="mapContainer"></map-address-input>
@@ -165,8 +161,10 @@
 						   target="hqAddr" formatted-address="location.getFormattedHqAddr()"
 						   map="mapContainer"></map-address-input>
 
-		<md-button type="submit" ng-click="submitAddForm()">Add to database</md-button>
-		<md-button type="reset" ng-click="resetForm();">Reset</md-button>
+		<div class="buttonContainer" layout="row">
+			<md-button type="submit" ng-click="submitAddForm()">Add to database</md-button>
+			<md-button type="reset" ng-click="resetForm();">Reset</md-button>
+		</div>
 	</form>
 </section>
 <!--<paper-toast class="failureToast" text="Failed to add the location!"></paper-toast>-->
