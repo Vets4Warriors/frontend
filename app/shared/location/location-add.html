@@ -6,7 +6,8 @@
         height: 100%;
     }
     .locationAdd form {
-        padding: 8px;
+        padding-left: 8px;
+        padding-right: 8px;
     }
     .locationAdd .checkboxes {
         margin-left: 8px;
@@ -39,7 +40,6 @@
     ::-webkit-scrollbar-track:hover {
 	    background: rgba(176, 190, 197,0.9);
     }
-
     #addForm {
 	    height: 802px;
 	    overflow-y: auto;
@@ -154,12 +154,10 @@
 
 		<!-- Addresses -->
 		<!-- Can't have a form inside of a form :( -->
-		<map-address-input container="$parentElem" name='addressInput' title="Address"
-						   target="addr" formatted-address="location.getFormattedAddr()"
-						   map="mapContainer"></map-address-input>
-		<map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address"
-						   target="hqAddr" formatted-address="location.getFormattedHqAddr()"
-						   map="mapContainer"></map-address-input>
+		<map-address-input  name='addressInput' title="Address" target="addr"
+							map="mapContainer"></map-address-input>
+		<map-address-input  name='hqAddressInput' title="HQ Address"
+						   target="hqAddr" map="mapContainer"></map-address-input>
 
 		<div class="buttonContainer" layout="row">
 			<md-button type="submit" ng-click="submitAddForm()">Add to database</md-button>

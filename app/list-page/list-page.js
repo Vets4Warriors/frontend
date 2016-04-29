@@ -4,7 +4,7 @@
 
 
 (function() {
-    var app = angular.module('listPage', ['ngMaterial', 'ngRoute', 'ui.router', 'location-directives']);
+    var app = angular.module('listPage', ['ngMaterial', 'ngRoute', 'ui.router', 'locationDirectives']);
     
     app.config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/list");

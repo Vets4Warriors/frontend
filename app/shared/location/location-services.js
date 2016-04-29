@@ -4,7 +4,7 @@
 
 (function() {
     "use strict";
-    var locationService = angular.module('location-services', []);
+    var locationService = angular.module('locationServices', []);
 
     locationService.service('locationService', [/*'$resource',*/ '$http',
         // Not currently using the resource. Want to be explicit. When I get better at angular.
@@ -42,7 +42,7 @@
                  * Todo: refactor this to be opposite. Aka constructor makes empty
                  * @returns {LocationAddress}
                  */
-                static makeEmptyAddr() {
+                static makeEmpty() {
                     return new this({
                             address1: '',
                             address2: '',

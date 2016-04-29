@@ -1,0 +1,29 @@
+<!-- Should pop up and take focus -->
+<md-dialog>
+    <md-dialog-content>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h1 class="title">Add {{title}}</h1>
+                <span flex></span>
+                <md-button class="md-icon-button" aria-label="Close" ng-click="close()">
+                    <md-icon md-svg-src="/_assets/icons/48/ic_close_white.svg"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <ng-form id="addressForm" layout="column" layout-padding>
+            <md-input-container>
+                <label for="autoComplete">Address</label>
+                <input id="autoComplete" name="autoComplete" aria-label="Address">
+            </md-input-container>
+
+            <md-input-container>
+                <label for="address2">Address (cont.)</label>
+                <input id="address2" name="address2" type="text" ng-model="address.address2">
+            </md-input-container>
+
+            <p>{{formattedAddress}}</p>
+            <md-button type="submit" ng-click="confirm()">Confirm</md-button>
+        </ng-form>
+    </md-dialog-content>
+</md-dialog>

@@ -11,44 +11,12 @@
         padding: 0;
         margin: 0;
         background-color: white;
-        --paper-dialog-background-color: red;
     }
 </style>
 
 <article class="addressInputContainer">
     <section class="displayContainer">
-        <md-button ng-click="mapAddrCtrl.setInputHidden(false);">{{title}}</md-button>
+        <md-button ng-click="open($event)">{{title}}</md-button>
         <p>{{formattedAddress}}</p>
     </section>
-
-    <!-- Should pop up and take focus -->
-    <md-dialog>
-        <md-dialog-content>
-            <md-toolbar>
-                <div class="md-toolbar-tools">
-                    <h1 class="title">Add {{title}}</h1>
-                    <span flex></span>
-                    <md-button class="md-icon-button" aria-label="Close" ng-click="mapAddrCtrl.setInputHidden(true);">
-                        <md-icon md-svg-src="/_assets/icons/48/ic_close_white.svg"></md-icon>
-                    </md-button>
-                </div>
-            </md-toolbar>
-
-            <ng-form id="addressForm">
-                <md-input-container>
-                    <input id="autoComplete" name="autoComplete" aria-label="Address">
-                </md-input-container>
-
-                <md-input-container>
-                    <label for="address2">Address (cont.)</label>
-                    <input id="address2" name="address2" type="text">
-                </md-input-container>
-
-                <p>{{formattedAddress}}</p>
-                <md-button type="submit" ng-click="validate();">Confirm</md-button>
-            </ng-form>
-        </md-dialog-content>
-    </md-dialog>
-
-    <!--<paper-toast class="failureToast"></paper-toast>-->
 </article>

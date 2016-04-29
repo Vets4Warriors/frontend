@@ -2,7 +2,7 @@
  * Created by austin on 3/10/16.
  */
 (function() {
-    var app = angular.module('location-card-directives', ['ngMaterial', 'location-services']);
+    var app = angular.module('locationCard', ['ngMaterial', 'locationServices']);
 
     /**
      *  The main container for each location.
