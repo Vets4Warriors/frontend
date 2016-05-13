@@ -12,60 +12,18 @@
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }]);
 
-
-    /* This (and all map functions) should probably be moved to the listPageController as it
-    *   contains the map element directly.
-    *   Todo? */
-    var mapRecenter = function(map, mapsApi, latLng, offsetX, offsetY) {
-        var projection = map.getProjection();
-        if (projection) {
-            var point1 = projection.fromLatLngToPoint(
-                (latLng instanceof mapsApi.LatLng) ? latlng : map.getCenter()
-            );
-            var point2 = new mapsApi.Point(
-                ( (typeof(offsetX) == 'number' ? offsetX : 0) / Math.pow(2, map.getZoom()) ) || 0,
-                ( (typeof(offsetY) == 'number' ? offsetY : 0) / Math.pow(2, map.getZoom()) ) || 0
-            );
-            map.setCenter(projection.fromPointToLatLng(new mapsApi.Point(
-                point1.x - point2.x,
-                point1.y + point2.y
-            )));
-        } else {
-            console.log("Couldn't get the projection map :(");
-        }
-    };
-
     /**
      *  This controls the list as a whole
      */
     app.controller('LocationsController', ['$scope', '$log', 'locationService',
         function($scope, $log, locationService) {
             var listCtrl = this;
-
-            var mapContainer = document.querySelector('google-map');
-            var mapsApi = null;
-
+            var map = $scope.listPageCtrl.map;
             var Location = locationService.Location;
             $scope.locations = [];
-            $scope.connectionErrorToast = document.getElementById('connectionErrorToast');
-
-            if (mapContainer) {
-                // Wait for the mapContainer to load before initializing list
-                mapContainer.addEventListener('google-map-ready', function(e) {
-                    console.log("Map loaded! From list-page");
-                    mapsApi = document.querySelector('google-maps-api').api;
-                    
-                    // Start by getting all locations
-                    listCtrl.getLocations({});
-
-                    mapsApi.event.trigger(mapContainer.map, 'resize');
-                    mapContainer.resize();
-                });
-            } else {
-                // Initialize with an empty query
-                // Will potentially later initialize as an empty list
-                listCtrl.getLocations({});
-            }
+            
+             // Start by getting all locations
+            getLocations({});
 
             listCtrl.updateLocations = function(newLocs) {
                 // Remove all the previous markers from the mapContainer
@@ -79,7 +37,7 @@
                         }
 
                         // Add all the new ones and make bounds
-                        var bounds = new mapsApi.LatLngBounds();
+                        var bounds = new google.maps.LatLngBounds();
                         for (var i = 0; i < newLocs.length; i++) {
                             var locationToAdd = newLocs[i];
 
@@ -87,15 +45,9 @@
                             // Only add markers for those that do
                             var addr = locationToAdd.getLatLngAddr();
                             if (addr) {
-                                var marker = new mapsApi.Marker({
-                                    map: mapContainer.map,
-                                    position: new mapsApi.LatLng(locationToAdd.getAddrLatLng()),
-                                    title: locationToAdd.name
-                                });
-
-                                var marker = new mapsApi.Marker({
-                                    map: mapContainer.map,
-                                    position: new mapsApi.LatLng(locationToAdd.getAddrLatLng()),
+                                var marker = new google.maps.Marker({
+                                    map: map,
+                                    position: new google.maps.LatLng(locationToAdd.getAddrLatLng()),
                                     title: locationToAdd.name
                                 });
 
@@ -109,32 +61,26 @@
 
                         // Fit the map around the bounds
                         // Todo: account for the search / list area
-                        mapContainer.map.fitBounds(bounds);
-                        mapRecenter(mapContainer.map, mapsApi, 500, 0);
+                        map.fitBounds(bounds);
             };
 
 
             /*
             Todo: This is turning into spaghetti code with the mapContainer. Need to centralize mapContainer functions.
              */
-            listCtrl.getLocations = function(queries) {
+            function getLocations(queries) {
                 locationService.query(queries)
                     .success(function(data) {
                         var newLocs = Location.fromJsonArray(angular.fromJson(data));
                         listCtrl.updateLocations(newLocs);
-                        //var x = $scope.$apply(listCtrl.updateLocations);
-                        //x(newLocs);
-                        //$scope.$apply();
                     })
                     .error(function() {
-                        $scope.connectionErrorToast.show(
+                        /*
                             {
                                 text: "Sorry, we couldn't connect to the server. " +
                                 "Have you checked your internet connection?",
                                 duration: 0
-                            }
-                        );
-                        $scope.connectionErrorToast.resetFit();
+                            }*/
                     });
             };
     }]);
@@ -191,8 +137,6 @@
                  * @param key pressed. The $event var in angular
                  */
                 var locAddCtrl = this;
-                var successToast = $('.successToast')[0];
-                var errorToast = $('.failureToast')[0];
                 $scope.addressInputs = document.getElementsByTagName('map-address-input');
                 $scope.addr = locationService.LocationAddress.makeEmpty();
                 $scope.hqAddr = locationService.LocationAddress.makeEmpty();
@@ -293,8 +237,6 @@
             controller: ['$scope', '$http', 'locationService', 
                 function($scope, $http, locationService) {
                     var locEditCtrl = this;
-                    var successToast = $('.successToast')[0];
-                    var errorToast = $('.failureToast')[0];
                     var coverages = $('[name="coverages"]');
                     
                     locEditCtrl.isHidden = false;
@@ -389,17 +331,17 @@
 
                             locationService.update(location)
                                 .success(function(data) {
-                                    successToast.show({
+                                   /* successToast.show({
                                         text: "Updated " + location.name + "!",
                                         duration: 3000
-                                    });
+                                    });*/
                                 })
                                 .error(function(data){
                                     // Todo: animate the paper-fab upwards as well
-                                    errorToast.show({
+                                    /*errorToast.show({
                                         text: "Failed to edit the location!",
                                         duration: 3000
-                                    });
+                                    });*/
                                 });
                         }
                         return false;
@@ -413,17 +355,17 @@
                         } else {
                             locationService.delete($scope.location.id)
                                 .success(function(data){
-                                    successToast.show({
+                                   /* successToast.show({
                                         text: "Deleted!",
                                         duration: 3000
-                                    });
+                                    });*/
                                     $scope.onClose();
                                 })
                                 .error(function(data){
-                                    errorToast.show({
+                                    /*errorToast.show({
                                         text: "Failed to edit the location!",
                                         duration: 3000
-                                    });
+                                    });*/
                                 });
                         }
                     };

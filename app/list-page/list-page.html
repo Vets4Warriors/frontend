@@ -7,10 +7,6 @@
         <link rel="icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
 
         <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css"/>
-        <!-- List Page -->
-
-        <link rel="import" href="/bower_components/google-map/google-map.html"/>
-        <link rel="import" href="/bower_components/google-map/google-map-search.html"/>
 
         <!-- Basic Google Analytics -->
         <script>
@@ -30,12 +26,10 @@
         <script src="/bower_components/angular-animate/angular-animate.min.js"></script>
         <script src="/bower_components/angular-aria/angular-aria.min.js"></script>
         <script src="/bower_components/angular-messages/angular-messages.min.js"></script>
-
         <script src="/bower_components/angular-material/angular-material.min.js"></script>
-
         <script src="/bower_components/jquery/dist/jquery.min.js"></script>
 
-        <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE&callback=initMap"></script>
         <script src="/bower_components/geocomplete/jquery.geocomplete.min.js"></script>
 
         <script src="/app/shared/location/location-services.js"></script>
@@ -51,10 +45,14 @@
                 margin: 0;
                 overflow: hidden;
                 font-family: 'Roboto', 'Noto', sans-serif;
+                position: relative;
 			}
 
+            #map {
+                height: 100%;
+            }
 			/* Header */
-            header .iconLinks {
+            #iconLinks {
                 width:300px;
                 height: 92px;
                 position: absolute;
@@ -108,8 +106,6 @@
 			    background: rgba(176, 190, 197,0.9);
 			}
 
-
-
             /* Add styles */
             location-add, location-edit {
                 position: absolute;
@@ -119,17 +115,12 @@
                 height: auto;
             }
 
-            /* Error toasts */
-            .yellow-button {
-                text-transform: none;
-                color: #eeff41;
-            }
-
 		</style>
 	</head>
 
 	<body ng-controller="ListPageCtrl as listPageCtrl">
-        <google-map disable-default-ui api-key="AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE">
+        <div id="map"></div>
+        <section id="content">
             <header id="iconLinks">
                 <div id="headHome">
                     <a href="/"><img src="/_assets/gfx/home.png"></a>
@@ -141,6 +132,6 @@
 
             <!-- The meat of the one page app -->
             <div ui-view></div>
-		</google-map>
+        </section>
 	</body>
 </html>
