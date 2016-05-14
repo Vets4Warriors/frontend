@@ -2,7 +2,7 @@
  * Created by austin on 3/10/16.
  */
 (function() {
-    var app = angular.module('locationCard', ['ngMaterial', 'locationServices']);
+    var app = angular.module('locationCard', ['ngMaterial', 'locationServices', 'angular-input-stars']);
 
     /**
      *  The main container for each location.
@@ -14,8 +14,6 @@
             controller: ['$element', '$scope', '$location', function($element, $scope, $location) {
                 this.isExpanded = false;
                 this.tab = 0;
-
-                //this.contentCollapse = $element.find('iron-collapse')[0];
 
                 this.tabIsShowing = function(tabIndex) {
                     return tabIndex === this.tab;
@@ -45,8 +43,9 @@
         return {
             restrict: 'E',
             templateUrl: '/app/shared/location/location-rating.html',
-            controller: ['$scope', '$log', 'locationService', function($scope, $log, locationService) {
-
+            controller: ['$scope', 'locationService', function($scope,locationService) {
+                var locRatingCtrl = this;
+                
                 $scope.keyPressed = function(key) {
                     if (key.keyCode == 13) {
                         // hit the enter key
@@ -55,25 +54,27 @@
                 };
 
                 $scope.submitRatingForm = function() {
-                    var form = $('#' + $scope.location.id + '_ratingForm')[0];
-                    var rating = form.getElementsByTagName('star-ratings')[0];
-                    if (form.validate()) {
+                    if ($scope.ratingForm.$valid) {
                         // Send request to database api
-                        var formData = form.serialize();
-                        formData.value = rating.value;
-
-                        var rating = new locationService.LocationRating(formData, true);
+                        $scope.rating.value = $scope.locRatingCtrl.value;
+                        var rating = new locationService.LocationRating($scope.rating, true);
 
                         locationService.rate($scope.location.id, rating)
                             .success(function(data) {
-                                $log.debug(data);
-                                form.reset();
+                                // Reset the form
+                                $scope.ratingForm.$setPristine();
+                                $scope.ratingForm.$setUntouched();
+                                $scope.rating = {};
+                                $scope.locRatingCtrl.value = null;
                                 // push the rating into the locations ratings hehe
                                 $scope.location.ratings.push(rating);
                             })
                             .error(function(data) {
-                                $log.error(data);
+                                console.log(data);
                             });
+                    } else {
+                        // For some reason it will not show validations
+                        $scope.ratingForm.$setSubmitted();
                     }
                     return false;
                 };
@@ -86,7 +87,7 @@
                     return ratings.length != 0 ? (sum/ratings.length).toFixed(1) : 0;
                 };
             }],
-            controllerAs: 'locRatingController'
+            controllerAs: 'locRatingCtrl'
         };
     });
 

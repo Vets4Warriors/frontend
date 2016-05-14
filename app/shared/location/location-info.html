@@ -1,11 +1,5 @@
-
-
-<!--
-<link rel="import" href="/bower_components/iron-icons/iron-icons.html"/>
--->
-
-<style is="custom-style">
-    [location-card] .editButton {
+<style>
+    [location-card] .edit-button {
         --iron-icon-fill-color: black;
         position: absolute;
         margin: 8px;
@@ -20,6 +14,8 @@
     <p>{{location.getFormattedServices()}}</p>
     <p>{{location.getFormattedTags()}}</p>
     <p><em>Added by {{location.addedBy}} on {{location.getFormattedDateAdded()}}</em></p>
-    <paper-icon-button class="editButton" ng-click="cardCtrl.edit()"
-                       icon="icons:create" title="Edit"></paper-icon-button>
+
+    <md-button class="md-icon-button edit-button" aria-label="Edit" ng-click="cardCtrl.edit()">
+        <md-icon md-svg-src="/_assets/icons/36/ic_edit_black.svg"></md-icon>
+    </md-button>
 </article>

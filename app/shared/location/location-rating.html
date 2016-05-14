@@ -1,12 +1,4 @@
-<!--
-<link rel="import" href="/bower_components/iron-form/iron-form.html"/>
-<link rel="import" href="/bower_components/paper-input/paper-input.html"/>
-<link rel="import" href="/bower_components/paper-input/paper-textarea.html"/>
-<link rel="import" href="/bower_components/paper-button/paper-button.html"/>
-<link rel="import" href="/bower_components/star-ratings/star-ratings.html"/>
--->
-
-<style is="custom-style">
+<style>
     .cardItemContainer h1 {
         font-size: large;
     }
@@ -21,7 +13,7 @@
         margin-top: 8px;
     }
 
-    .cardItemContainer ::-webkit-scrollbar {
+    /*.cardItemContainer ::-webkit-scrollbar {
         width: 5px;
     }
     .cardItemContainer ::-webkit-scrollbar-thumb {
@@ -41,7 +33,7 @@
     }
     .cardItemContainer ::-webkit-scrollbar-track:hover {
         background: rgba(176, 190, 197,0.9);
-    }
+    }*/
     .cardItemContainer .scroll {
         max-height: 300px;
         overflow-y: auto;
@@ -61,15 +53,29 @@
         </article>
     </div>
 
-    <form id="{{location.id + '_ratingForm'}}" class="addRatingForm"
-          is="iron-form" ng-keypress="keyPressed($event)">
-        <h4>Rate it</h4>
-        <star-ratings name="rating" class="starInput" value="1" count="5" required></star-ratings>
+    <h4>Rate it</h4>
+    <ng-form id="ratingForm" class="addRatingForm" name="ratingForm"
+             ng-submit="submitRatingForm()"
+             ng-keypress="keyPressed($event)" layout="column">
 
-        <paper-input name="user" label="User" error-message="Need to provide your name!"
-                     required auto-validate></paper-input>
-        <paper-textarea name="comment" label="Comment" maxlength="500" error-message="500 characters or less please!"
-                     auto-validate></paper-textarea>
-        <paper-button type="submit" ng-click="submitRatingForm();">Rate!</paper-button>
-    </form>
+        <input-stars max="5" ng-model="locRatingCtrl.value"></input-stars>
+
+        <md-input-container>
+            <label for="user">Your name</label>
+            <input id="user" name="user" type="text" required ng-model="rating.user">
+            <div ng-messages="ratingForm.user.$error">
+                <div ng-message="required">Need to provide your name!</div>
+            </div>
+        </md-input-container>
+
+        <md-input-container>
+            <label for="comment">Comments</label>
+            <textarea id="comment" md-maxlength="500" ng-model="rating.comment"></textarea>
+            <div ng-messages="ratingForm.comment.$error">
+                <div ng-message="md-maxlength">Too long!</div>
+            </div>
+        </md-input-container>
+
+        <md-button type="submit" ng-click="submitRatingForm()">Rate!</md-button>
+    </ng-form>
 </article>

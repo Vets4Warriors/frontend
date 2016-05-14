@@ -1,14 +1,9 @@
 <style>
     .locationSearchBox {
         background: white;
+        padding-top: 16px;
     }
 
-    .locationFilter {
-        padding: 8px;
-    }
-    .locationFilter h1 {
-        font-size: large;
-    }
 </style>
 
 <section class="locationSearchBox" md-whiteframe="3">
@@ -18,45 +13,4 @@
         <md-icon ng-click="locSearchCtrl.search()"
                  md-svg-src="/_assets/icons/36/ic_search_black.svg"></md-icon>
     </md-input-container>
-</section>
-
-<!-- Will eventually add this to the search box as a drop down -->
-<section class="locationFilter" md-whiteframe="3">
-    <!-- Setup similar to amazon/google/all other search pages -->
-    <md-subheader>Search by</md-subheader>
-    
-    <md-list class="filters" flex>
-        <md-list-item>
-            <p>Name</p>
-            <md-checkbox class="md-secondary"></md-checkbox>
-        </md-list-item>
-        <md-list-item>
-            <p>Website</p>
-            <md-checkbox class="md-secondary"></md-checkbox>
-        </md-list-item>
-        <md-list-item>
-            <p>Phone</p>
-            <md-checkbox class="md-secondary"></md-checkbox>
-        </md-list-item>
-        <md-list-item>
-            <p>Email</p>
-            <md-checkbox class="md-secondary"></md-checkbox>
-        </md-list-item>
-        <md-list-item>
-            <p>Resource Type</p>
-            <md-checkbox class="md-secondary"></md-checkbox>
-        </md-list-item>
-        <md-list-item>
-            <p>Coverage</p>
-            <md-checkbox class="md-secondary"></md-checkbox>
-        </md-list-item>
-        <md-list-item>
-            <p>Services</p>
-            <md-checkbox class="md-secondary"></md-checkbox>
-        </md-list-item>
-        <md-list-item>
-            <p>Tags</p>
-            <md-checkbox class="md-secondary"></md-checkbox>
-        </md-list-item>
-    </md-list>
 </section>

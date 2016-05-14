@@ -70,8 +70,8 @@
              * @param latLng, {{lat: float, lng: float}}
              */
             listPageCtrl.zoomToLocation = function(latLng) {
-                listPageCtrl.currentLatLng = latLng;
-                listPageCtrl.map.setCenter(latLng);
+                listPageCtrl.currentLatLng = new google.maps.LatLng(latLng);
+                listPageCtrl.map.panTo(listPageCtrl.currentLatLng);
             }
     }]);
 

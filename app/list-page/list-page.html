@@ -2,12 +2,13 @@
 <html lang="en" data-ng-app="listPage">
 	<head>
         <meta charset="UTF-8">
-        <title>Locations</title>
+        <title>Vets 4 Warriors Resources</title>
         <link rel="shortcut icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/_assets/gfx/favicon.ico" type="image/x-icon">
 
         <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css"/>
-
+        <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="/bower_components/angular-input-stars-directive/angular-input-stars.css">
         <!-- Basic Google Analytics -->
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -27,6 +28,7 @@
         <script src="/bower_components/angular-aria/angular-aria.min.js"></script>
         <script src="/bower_components/angular-messages/angular-messages.min.js"></script>
         <script src="/bower_components/angular-material/angular-material.min.js"></script>
+        <script src="/bower_components/angular-input-stars-directive/angular-input-stars.js"></script>
         <script src="/bower_components/jquery/dist/jquery.min.js"></script>
 
         <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE&callback=initMap"></script>
@@ -60,7 +62,16 @@
                 right: 2%;
                 background: none;
             }
-            #header > div {
+            #iconLinks img {
+                margin: 0 auto;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            #iconLinks a:hover {
+                opacity: .7;
+            }
+            #iconLinks > div {
                 height:100%;
                 display: inline-block;
                 text-align: center;
@@ -72,15 +83,6 @@
             #headHome {
                 width: 80px;
                 float: left;
-            }
-            #header img {
-                margin: 0 auto;
-                position: relative;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            #header a:hover {
-                opacity: .7;
             }
 
 			/* List styles */

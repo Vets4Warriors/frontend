@@ -61,7 +61,7 @@
 
                         // Fit the map around the bounds
                         // Todo: account for the search / list area
-                        map.fitBounds(bounds);
+                        //map.fitBounds(bounds);
             };
 
 
