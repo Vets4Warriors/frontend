@@ -1,66 +1,24 @@
-<style>
-    .cardItemContainer h1 {
-        font-size: large;
-    }
-
-    .cardItemContainer .separator {
-        height: 1px;
-        background: grey;
-    }
-
-    .cardItemContainer .addRatingForm {
-        height: auto;
-        margin-top: 8px;
-    }
-
-    /*.cardItemContainer ::-webkit-scrollbar {
-        width: 5px;
-    }
-    .cardItemContainer ::-webkit-scrollbar-thumb {
-        background: rgba(96, 125, 139,0.7);
-        border-radius: 25px;
-        box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
-    }
-    .cardItemContainer ::-webkit-scrollbar-thumb:hover {
-        background: rgba(96, 125, 139,0.9);
-    }
-    .cardItemContainer ::-webkit-scrollbar-thumb:active {
-        background: rgba(38, 50, 56,0.9);
-    }
-    .cardItemContainer ::-webkit-scrollbar-track {
-        background: rgba(176, 190, 197,0.5);
-        border-radius: 25px;
-    }
-    .cardItemContainer ::-webkit-scrollbar-track:hover {
-        background: rgba(176, 190, 197,0.9);
-    }*/
-    .cardItemContainer .scroll {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-</style>
-
 <article class="cardItemContainer">
-    <h1>Average rating: {{averageRating(location.ratings)}}</h1>
+    <h1 class="md-subhead">Average rating: {{averageRating(location.ratings)}}</h1>
     <div class="scroll">
-        <article ng-repeat="rating in location.ratings track by $index">
-            <div class="separator"></div>
-            <p> <b>{{rating.value}}/5</b> -- {{rating.comment}} </p>
-            <!--<p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>-->
-            <p><em>{{rating.user}}</em></p>
-            <div class="separator"></div>
-        </article>
+        <md-list-item ng-repeat="rating in location.ratings track by $index">
+            <div class="md-list-item-text  md-body-1">
+                <p> <b>{{rating.value}}/5</b> -- {{rating.comment}} </p>
+                <!--<p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>-->
+                <p><em>{{rating.user}}</em></p>
+            </div>
+            <md-divider ng-if="!$last"></md-divider>
+        </md-list-item>
     </div>
 
-    <h4>Rate it</h4>
     <ng-form id="ratingForm" class="addRatingForm" name="ratingForm"
              ng-submit="submitRatingForm()"
              ng-keypress="keyPressed($event)" layout="column">
 
+        <h4 class="md-subhead" layout-align="center">Rate it</h4>
         <input-stars max="5" ng-model="locRatingCtrl.value"></input-stars>
 
-        <md-input-container>
+        <md-input-container class="md-body-1">
             <label for="user">Your name</label>
             <input id="user" name="user" type="text" required ng-model="rating.user">
             <div ng-messages="ratingForm.user.$error">
@@ -68,7 +26,7 @@
             </div>
         </md-input-container>
 
-        <md-input-container>
+        <md-input-container class="md-body-1">
             <label for="comment">Comments</label>
             <textarea id="comment" md-maxlength="500" ng-model="rating.comment"></textarea>
             <div ng-messages="ratingForm.comment.$error">
@@ -76,6 +34,6 @@
             </div>
         </md-input-container>
 
-        <md-button type="submit" ng-click="submitRatingForm()">Rate!</md-button>
+        <md-button class="" type="submit" ng-click="submitRatingForm()">Rate!</md-button>
     </ng-form>
 </article>

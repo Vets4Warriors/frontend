@@ -1,4 +1,8 @@
 <style>
+    #search .locationSearchBox {
+        margin-bottom: 24px;
+    }
+
     .locationList {
         position: absolute;
         left: 2%;
@@ -7,8 +11,6 @@
         overflow: hidden;
     }
     .locationList #list {
-       /* padding-right:10px;
-        float: right;*/
         height:800px;
         overflow-y: auto;
         overflow-x: hidden;
@@ -16,6 +18,7 @@
     .locationList .listContainer {
         max-height: 100%;
         box-sizing: border-box;
+        pointer-events: visiblePainted;
     }
     .locationList .listContainer > * {
         display: block;

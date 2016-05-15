@@ -25,7 +25,6 @@
 
                 this.toggleContent = function() {
                     this.isExpanded = !this.isExpanded;
-                    //this.contentCollapse.toggle();
                 };
 
                 this.edit = function() {

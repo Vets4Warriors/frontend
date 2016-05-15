@@ -1,24 +1,6 @@
 <!--
     A template for each location
-<link rel="stylesheet" href="/_assets/css/bootstrap.min.css"/>
 -->
-
-
-<style>
-    location-card md-toolbar {
-        text-align: left;
-    }
-
-    location-card h1 {
-        text-align: left;
-    }
-
-    location-card .contentContainer {
-        height: auto;
-        padding: 8px;
-    }
-</style>
-
 <md-card layout="column" layout-fill>
     <md-toolbar class="md-medium-tall">
         <div class="md-toolbar-tools">
@@ -34,17 +16,25 @@
             </md-button>
         </div>
         <!-- Show a brief description if the card is not expanded -->
-        <p class="bottom md-subhead" ng-show="!cardCtrl.isExpanded">{{location.locationType + ": " + location.getFormattedServices();}}</p>
+        <p class="layout-margin md-subhead" ng-show="!cardCtrl.isExpanded">{{location.locationType + ": " + location.getFormattedServices();}}</p>
+        </md-toolbar>
+
         <!-- Only show the tabs if the card has been expanded -->
-        <md-tabs md-selected="0" class="bottom self-end" ng-show="cardCtrl.isExpanded">
-            <md-tab label="Info" ng-click="cardCtrl.setTab(0)"></md-tab>
-            <md-tab label="Contact" ng-click="cardCtrl.setTab(1)"></md-tab>
-            <md-tab label="Ratings" ng-click="cardCtrl.setTab(2)"></md-tab>
+        <md-tabs md-selected="0" class="md-dynamic-height md-border-bottom" ng-show="cardCtrl.isExpanded">
+            <md-tab label="Info">
+                <md-content>
+                    <location-info class="contentContainer"></location-info>
+                </md-content>
+            </md-tab>
+            <md-tab label="Contact">
+                <md-content>
+                    <location-contact class="contentContainer"></location-contact>
+                </md-content>
+            </md-tab>
+            <md-tab label="Ratings">
+                <md-content>
+                    <location-rating class="contentContainer"></location-rating>
+                </md-content>
+            </md-tab>
         </md-tabs>
-    </md-toolbar>
-    <md-content ng-show="cardCtrl.isExpanded">
-        <location-info class="contentContainer" ng-show="cardCtrl.tabIsShowing(0)"></location-info>
-        <location-contact class="contentContainer" ng-show="cardCtrl.tabIsShowing(1)"></location-contact>
-        <location-rating class="contentContainer" ng-show="cardCtrl.tabIsShowing(2)"></location-rating>
-    </md-content>
 </md-card><br/>

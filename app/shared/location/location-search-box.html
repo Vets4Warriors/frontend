@@ -1,16 +1,6 @@
-<style>
-    .locationSearchBox {
-        background: white;
-        padding-top: 16px;
-    }
-
-</style>
-
 <section class="locationSearchBox" md-whiteframe="3">
-    <md-input-container class="md-icon-float md-icon-right md-block">
-        <label>Search</label>
-        <input type="search" ng-model="search">
-        <md-icon ng-click="locSearchCtrl.search()"
-                 md-svg-src="/_assets/icons/36/ic_search_black.svg"></md-icon>
+    <md-input-container md-no-float class="md-icon-float md-icon-right md-block">
+        <input type="search" ng-model="search" placeholder="Search">
+        <md-icon md-svg-src="/_assets/icons/36/ic_search_black.svg"></md-icon>
     </md-input-container>
 </section>

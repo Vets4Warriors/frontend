@@ -1,0 +1,13 @@
+.locationSearchBox {
+    background: white;
+    margin-bottom: 16px;
+    padding: 2px 16px 2px 16px;
+}
+
+.locationSearchBox md-input-container .md-errors-spacer {
+    min-height: 0;
+}
+
+.locationSearchBox md-input-container {
+    padding-left: 16px !important;
+}

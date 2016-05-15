@@ -1,15 +1,5 @@
-<style>
-    [location-card] .edit-button {
-        --iron-icon-fill-color: black;
-        position: absolute;
-        margin: 8px;
-        bottom: 0;
-        right: 0;
-    }
-</style>
-
-<article class="cardItemContainer">
-    <blockquote>{{location.locationType}}</blockquote>
+<article class="cardItemContainer md-body-1">
+    <blockquote class="md-body-2">{{location.locationType}}</blockquote>
     <p>{{location.getFormattedCoverage()}}</p>
     <p>{{location.getFormattedServices()}}</p>
     <p>{{location.getFormattedTags()}}</p>
