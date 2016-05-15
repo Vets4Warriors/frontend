@@ -1,7 +1,7 @@
 .locationSearchBox {
     background: white;
     margin-bottom: 16px;
-    padding: 2px 16px 2px 16px;
+    padding: 4px 4px 4px 4px;
 }
 
 .locationSearchBox md-input-container .md-errors-spacer {
@@ -9,5 +9,7 @@
 }
 
 .locationSearchBox md-input-container {
-    padding-left: 16px !important;
+    padding-left: 4px !important;
+    margin-bottom: 4px !important;
+    margin-top: 4px !important;
 }

@@ -33,7 +33,7 @@
         margin-bottom: 16px;
     }
 
-    .locationFilter {
+    #locationFilter {
         height: auto;
         padding: 8px;
         background: white;
@@ -56,45 +56,47 @@
 
     <div layout="row">
         <!-- Will eventually add this to the search box as a drop down -->
-        <section class="locationFilter" md-whiteframe="3" flex="33">
+        <div id="locationFilterWrapper" flex="33">
             <!-- Setup similar to amazon/google/all other search pages -->
-            <md-subheader>Search by</md-subheader>
+            <section id="locationFilter" md-whiteframe="3" >
+                <md-subheader>Search by</md-subheader>
 
-            <md-list class="filters">
-                <md-list-item>
-                    <p>Name</p>
-                    <md-checkbox class="md-secondary"></md-checkbox>
-                </md-list-item>
-                <md-list-item>
-                    <p>Website</p>
-                    <md-checkbox class="md-secondary"></md-checkbox>
-                </md-list-item>
-                <md-list-item>
-                    <p>Phone</p>
-                    <md-checkbox class="md-secondary"></md-checkbox>
-                </md-list-item>
-                <md-list-item>
-                    <p>Email</p>
-                    <md-checkbox class="md-secondary"></md-checkbox>
-                </md-list-item>
-                <md-list-item>
-                    <p>Resource Type</p>
-                    <md-checkbox class="md-secondary"></md-checkbox>
-                </md-list-item>
-                <md-list-item>
-                    <p>Coverage</p>
-                    <md-checkbox class="md-secondary"></md-checkbox>
-                </md-list-item>
-                <md-list-item>
-                    <p>Services</p>
-                    <md-checkbox class="md-secondary"></md-checkbox>
-                </md-list-item>
-                <md-list-item>
-                    <p>Tags</p>
-                    <md-checkbox class="md-secondary"></md-checkbox>
-                </md-list-item>
-            </md-list>
-        </section>
+                <md-list class="filters">
+                    <md-list-item>
+                        <p>Name</p>
+                        <md-checkbox class="md-secondary"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Website</p>
+                        <md-checkbox class="md-secondary"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Phone</p>
+                        <md-checkbox class="md-secondary"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Email</p>
+                        <md-checkbox class="md-secondary"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Resource Type</p>
+                        <md-checkbox class="md-secondary"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Coverage</p>
+                        <md-checkbox class="md-secondary"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Services</p>
+                        <md-checkbox class="md-secondary"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Tags</p>
+                        <md-checkbox class="md-secondary"></md-checkbox>
+                    </md-list-item>
+                </md-list>
+            </section>
+        </div>
         <!-- Results -->
         <article class="listContainer" id="list" flex="66">
             <location-card ng-repeat="location in locations track by location.id"></location-card>
