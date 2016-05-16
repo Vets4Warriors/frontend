@@ -24,6 +24,7 @@
             //$scope.searchText = '';
             $scope.locations = [];
             
+            // Todo: Only do this when the map is loaded, from the broadcast
             // Start by getting all locations if the we don't already have a list
             getLocations({});
 

@@ -9,7 +9,8 @@
 }
 
 .locationSearchBox md-input-container {
-    padding-left: 4px !important;
-    margin-bottom: 4px !important;
-    margin-top: 4px !important;
+    padding-left: 8px !important;
+    margin-bottom: 10px !important;
+    margin-top: 12px !important;
+    margin-right: 8px !important;
 }
