@@ -70,7 +70,6 @@
             link: function ($scope, $elem, $attrs) {
                 $scope.container = $elem[0];
                 $scope.parent = $elem.parent();
-                $scope.formattedAddress = $scope.iFormattedAddress;
             }
         }
     });

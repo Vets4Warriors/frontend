@@ -16,8 +16,8 @@
     /**
      *  This controls the list as a whole
      */
-    app.controller('LocationsController', ['$scope', '$log', 'locationService',
-        function($scope, $log, locationService) {
+    app.controller('LocationsController', ['$scope', '$log', 'locationService', '$mdToast',
+        function($scope, $log, locationService, $mdToast) {
             var listCtrl = this;
             var map = $scope.$root.map;
             var Location = locationService.Location;
@@ -148,22 +148,14 @@
 
                         locationService.add(location)
                             .success(function(data) {
-                               /* successToast.show({
-                                    text: "Added " + location.name + " to the database!",
-                                    duration: 3000
-                                });*/
+                                $mdToast.showSimple("Added " + location.name + " to the database!");
                                 $scope.resetForm();
                                 
-                                var newLocation = new locationService.Location(data, false);
+                                var newLocation = new locationService.Location(angular.fromJson(data), false);
                                 $scope.locations.push(newLocation);
                             })
                             .error(function(data) {
-                                // Todo: animate the paper-fab upwards as well
-                               /* errorToast.show({
-                                    text: "Failed to add the location!",
-                                    duration: 3000
-                                });*/
-                                console.log("Failure!");
+                                $mdToast.showSimple("Failed to add the location!");
                             });
                     }
                     return false;
@@ -182,7 +174,7 @@
             link: function ($scope, $elem, $attrs) {
                 // Fired second after created
                 // Create a link in the scope so it can be referenced as a container for the dialogs
-                $scope.$parentElem = $elem[0].parentElement;
+                $scope.$parentElem = $elem.parent();
             }
         }
     });
@@ -199,8 +191,8 @@
                 id: '@', // Required
                 onClose: '&'    // Function
             },
-            controller: ['$scope', '$http', 'locationService', 
-                function($scope, $http, locationService) {
+            controller: ['$scope', '$http', 'locationService', '$mdToast', '$mdDialog',
+                function($scope, $http, locationService, $mdToast, $mdDialog) {
                     var locEditCtrl = this;
                     $scope.locationCopy = locationService.Location.makeEmpty();
 
@@ -226,59 +218,55 @@
                             && $scope.locationCopy.address.validate()
                             && $scope.locationCopy.hqAddress.validate()*/) {
                             // Send request to database api
-                            
-                            //var location = new locationService.Location($scope.locationCopy, true);
-
-                            // Copy the id to update
-                            //$scope.locationCopy.id = $scope.location.id;
 
                             locationService.update($scope.locationCopy)
                                 .success(function(data) {
-                                   /* successToast.show({
-                                        text: "Updated " + location.name + "!",
-                                        duration: 3000
-                                    });*/
                                     angular.copy($scope.locationCopy, $scope.location);
-                                    console.log("Success updating");
+                                    $mdToast.showSimple("Updated " + $scope.location.name + "!");
                                 })
                                 .error(function(data){
-                                    // Todo: animate the paper-fab upwards as well
-                                    /*errorToast.show({
-                                        text: "Failed to edit the location!",
-                                        duration: 3000
-                                    });*/
-                                    console.log("Error updating");
+                                    $mdToast.showSimple("Failed to edit the location!");
                                 });
                         }
                         return false;
                     };
 
-                    $scope.deleteLocation = function(confirmed) {
-                        if (!confirmed) {
-                            // Open the confirmation dialog
-
-                        } else {
+                    $scope.deleteLocation = function(event) {
+                        $mdDialog.show({
+                            controller: DeleteDialogController,
+                            templateUrl: '/app/shared/location/location-delete-dialog.html',
+                            scope: $scope,
+                            parent: $scope.$elem,
+                            targetEvent: event,
+                            clickOutsideToClose: true
+                        }).then(function() {
+                            // Delete upon confirmation
                             locationService.delete($scope.location.id)
                                 .success(function(data){
-                                   /* successToast.show({
-                                        text: "Deleted!",
-                                        duration: 3000
-                                    });*/
+                                    $mdToast.showSimple("Deleted " + $scope.location.name + "!");
                                     $scope.onClose();
                                 })
                                 .error(function(data){
-                                    /*errorToast.show({
-                                        text: "Failed to edit the location!",
-                                        duration: 3000
-                                    });*/
+                                    $mdToast.showSimple("Failed to delete the location!");
                                 });
-                        }
+                        });
                     };
+                    
+                    function DeleteDialogController($scope, $mdDialog) {
+                        $scope.close = function() {
+                            $mdDialog.cancel();
+                        };
+
+                        $scope.confirm = function() {
+                            $mdDialog.hide();
+                        };
+                    }
             }],
             controllerAs: 'locEditCtrl',
             link: function($scope, $elem) {
                 // Fired second after created
                 // Create a link in the scope so it can be referenced as a container for the dialogs
+                $scope.$elem = $elem[0];
                 $scope.$parentElem = $elem[0].parentElement;
             }
         }
