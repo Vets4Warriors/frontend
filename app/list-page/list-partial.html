@@ -105,10 +105,8 @@
         </div>
         <!-- Results -->
         <article class="listContainer" id="list" flex="66">
-            <!--<location-card ng-repeat="location in locations track by location.id"></location-card>-->
-            <!--<location-card ng-repeat="location in locations | filter: {name: searchText} track by location.id"></location-card>-->
             <location-card ng-repeat="location in locations | locationFilter:search.text:search.filters
-                | orderBy:'+name' track by location.id"></location-card>
+                | orderBy:'+name' as filteredList track by location.id"></location-card>
         </article>
     </div>
 </section>

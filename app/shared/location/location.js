@@ -27,6 +27,14 @@
             // Start by getting all locations if the we don't already have a list
             getLocations({});
 
+            /**
+             * Called when newLocations are pulled from the server
+             * Todo: implement for the filteredList
+             * Also create a way to search the entire database through the filter
+             *  as opposed to just filtering. Will be more important when we have hundreds of items
+             *  in the database
+             * @param newLocs {Location} pulled from the server
+             */
             listCtrl.updateLocations = function(newLocs) {
                 // Remove all the previous markers from the mapContainer
                         var numPrevLocs = $scope.locations.length;
