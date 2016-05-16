@@ -19,6 +19,7 @@
             templateUrl: '/app/shared/location/map-address-input.html',
             scope: {
                 address: '=addressModel', //Required
+                formattedAddress: '=formattedModel',
                 title: '@',   // Required, readOnly
                 required: '=required',
                 onClose: '&'
@@ -28,7 +29,10 @@
                 addrInput.required = $scope.$eval($attrs.required);
                 addrInput.$valid = true;
                 addrInput.$pristine = true;
-
+                
+                if (!$scope.formattedAddress)
+                    $scope.formattedAddress = $scope.address ? $scope.address.getFormatted() : '';
+                
                 /**
                  * Opens the dialog with the input
                  * @param event
@@ -44,7 +48,6 @@
                         clickOutsideToClose: true
                     }).then(function(newAddr, fr) {
                         // Update the addr
-                        console.log(newAddr);
                         addrInput.$pristine = false;
                        addrInput.$valid = true;
                         $scope.address = newAddr;

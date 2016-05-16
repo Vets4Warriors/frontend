@@ -144,14 +144,6 @@
 
                         //locationData.website = 'http://' + locationData.website;
 
-                        // Only add the addresses if valid!
-                        /*if ($scope.addr.isValid) {
-                            locationData.address = $scope.addr;
-                        }
-                        if ($scope.hqAddr.isValid) {
-                            locationData.hqAddress = $scope.hqAddr;
-                        }*/
-
                         var location = new locationService.Location($scope.location, true);
 
                         locationService.add(location)
@@ -210,104 +202,44 @@
             controller: ['$scope', '$http', 'locationService', 
                 function($scope, $http, locationService) {
                     var locEditCtrl = this;
-                    var coverages = $('[name="coverages"]');
-                    
-                    locEditCtrl.isHidden = false;
-                    
-                    locEditCtrl.setIsHidden = function(isHidden) {
-                      locEditCtrl.isHidden = isHidden;  
-                    };
-                    
-                    $scope.addr = locationService.LocationAddress.makeEmptyAddr();
-                    $scope.hqAddr = locationService.LocationAddress.makeEmptyAddr();
-            
-                    /*
-                    * locEditCtrl is purely for watching
-                    * Wouldn't work on $scope.location
-                    * But that's our real target
-                    * Need to find a way to update the coverages
-                    * */
-                    /*
-                     // For watching
-                     locEditCtrl.location = {};
-                    $scope.$watch("locEditCtrl.location",
-                        function locationChanged(newVal, oldVal) {
-                            // Need some real data
-                            if ($.isEmptyObject(newVal)) {
-                                return;
-                            }
-                           updateFormWithData();
-                        });
-                    */
+                    $scope.locationCopy = locationService.Location.makeEmpty();
+
                     // First load the data
                     locationService.get($scope.id)
                         .success(function(data) {
                             $scope.location = new locationService.Location(angular.fromJson(data), false);
-                            //locEditCtrl.location = $scope.location;
-                            updateFormWithData();
+                            // Make a deep copy to preserve the original,
+                            // though this doesn't really matter as we aren't pulling straight from the main list
+                            angular.copy($scope.location, $scope.locationCopy);
+                            $scope.locationCopy.formattedAddr = $scope.locationCopy.getFormattedAddr();
+                            $scope.locationCopy.formattedHqAddr = $scope.locationCopy.getFormattedHqAddr();
                         })
                         .error( function() {
                             console.log("Error loading location with id " + $scope.id );
                         });
 
-                    /**
-                     * Load the form with the data stored in $scope.location
-                     */
-                    function updateFormWithData() {
-                        if ($scope.location.hasAddr()) {
-                            $scope.addr = $scope.location.address;
-                        }
-
-                        if ($scope.location.hqAddress !== undefined) {
-                            $scope.hqAddr = $scope.location.hqAddress;
-                        }
-
-                        // We also need to initialize the checkboxes
-                        // Will do that here in javascript, could get bulky in the html
-                        // Todo!
-                        var coverages = document.getElementsByName('coverages');
-
-                        for (var i = 0; i < coverages.length; i++) {
-                            if ($.inArray($scope.location.coverages, coverages[i].value) != -1) {
-                                coverages[i].checked = true;
-                            }
-                        }
-                    }
-
                     $scope.submitEditForm = function() {
                         // validate all address input. Have got to make them extend the iron-input / build with polymer
-                        if ($scope.form.validate()) {
+                        if ($scope.editForm.$valid
+                            /* Will forget 'bout address validaiton for now. Hopefully the geoautocomplete does enough
+                            hehe todo!
+                            && $scope.locationCopy.address.validate()
+                            && $scope.locationCopy.hqAddress.validate()*/) {
                             // Send request to database api
-                            // Format the form data to fit our models
-                            var locationData = $scope.form.serialize();
-                            locationData.services = locationData.services.split(',');
+                            
+                            //var location = new locationService.Location($scope.locationCopy, true);
 
-                            if (typeof locationData.coverages === 'string') {
-                                // Need it to be an array
-                                locationData.coverages = [locationData.coverages];
-                            }
+                            // Copy the id to update
+                            //$scope.locationCopy.id = $scope.location.id;
 
-                            //Todo: regex. This almost works buuut ((#(\S?!,)*)(\s*)(,))*((\s*)(#\S*)())
-                            locationData.tags = locationData.tags.split(',');
-                            // Only add the addresses if valid!
-                            if (!$.isEmptyObject($scope.addr) && $scope.addr.isValid) {
-                                locationData.address = $scope.addr;
-                            }
-                            if (!$.isEmptyObject($scope.hqAddr) && $scope.hqAddr.isValid) {
-                                locationData.hqAddress = $scope.hqAddr;
-                            }
-
-                            var location = new locationService.Location(locationData, true);
-
-                            // Preserve the id to update
-                            location.id = $scope.location.id;
-
-                            locationService.update(location)
+                            locationService.update($scope.locationCopy)
                                 .success(function(data) {
                                    /* successToast.show({
                                         text: "Updated " + location.name + "!",
                                         duration: 3000
                                     });*/
+                                    angular.copy($scope.locationCopy, $scope.location);
+                                    console.log("Success updating");
                                 })
                                 .error(function(data){
                                     // Todo: animate the paper-fab upwards as well
@@ -315,6 +247,7 @@
                                         text: "Failed to edit the location!",
                                         duration: 3000
                                     });*/
+                                    console.log("Error updating");
                                 });
                         }
                         return false;
@@ -323,8 +256,7 @@
                     $scope.deleteLocation = function(confirmed) {
                         if (!confirmed) {
                             // Open the confirmation dialog
-                            var dialog = $('#deleteDialog')[0];
-                            dialog.open();
+
                         } else {
                             locationService.delete($scope.location.id)
                                 .success(function(data){
@@ -348,8 +280,6 @@
                 // Fired second after created
                 // Create a link in the scope so it can be referenced as a container for the dialogs
                 $scope.$parentElem = $elem[0].parentElement;
-                $scope.form = $elem[0].querySelector('form');
-                $scope.mapContainer = document.querySelector('google-map');
             }
         }
     });

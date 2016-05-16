@@ -128,10 +128,10 @@
                         this.name = jsonData['name'];
                         this.phone = jsonData['phone'];
                         this.email = jsonData['email'];
-                        this.address = jsonData['address'] === undefined ?
-                            jsonData['address'] : new service.LocationAddress(jsonData['address'], false);
-                        this.hqAddress = jsonData['hqAddress'] === undefined ?
-                            jsonData['hqAddress'] : new service.LocationAddress(jsonData['hqAddress'], false);
+                        this.address = jsonData['address'] === undefined ? service.LocationAddress.makeEmpty()
+                             : new service.LocationAddress(jsonData['address'], false);
+                        this.hqAddress = jsonData['hqAddress'] === undefined ? service.LocationAddress.makeEmpty()
+                             : new service.LocationAddress(jsonData['hqAddress'], false);
                         this.locationType = jsonData['locationType'];
                         this.coverages = jsonData['coverages'];
                         this.services = jsonData['services'];

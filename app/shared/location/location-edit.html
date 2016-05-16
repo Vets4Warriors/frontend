@@ -7,138 +7,163 @@
         height: 100%;
     }
     .locationEdit form {
-        padding: 8px;
+        padding-left: 8px;
+        padding-right: 8px;
     }
     .locationEdit .checkboxes {
         margin-left: 8px;
         margin-top: 8px;
     }
-    .locationEdit paper-button {
+    .locationEdit md-button {
         margin-top: 4px;
         margin-bottom: 4px;
     }
 
-    .locationEdit #formCont {
-        height: 802px;
-        width: 100%;
+    #editForm {
         overflow-y: auto;
         overflow-x: hidden;
+        height: 800px;
     }
-
-    .locationEdit .deleteButton {
-        right: 0;
-    }
-    .locationEdit #deleteDialog {
-        padding: 8px;
-    }
-
-    /* Scrollbar */
-    .locationEdit ::-webkit-scrollbar {
-        width: 5px;
-    }
-    .locationEdit ::-webkit-scrollbar-thumb {
-        background: rgba(96, 125, 139,0.7);
-        border-radius: 25px;
-        box-shadow: inset 0 1px 1px 1px rgba(38, 50, 56, 0.1);
-    }
-    .locationEdit ::-webkit-scrollbar-thumb:hover {
-        background: rgba(96, 125, 139,0.9);
-    }
-    .locationEdit ::-webkit-scrollbar-thumb:active {
-        background: rgba(38, 50, 56,0.9);
-    }
-    .locationEdit ::-webkit-scrollbar-track {
-        background: rgba(176, 190, 197,0.5);
-        border-radius: 25px;
-    }
-    .locationEdit ::-webkit-scrollbar-track:hover {
-        background: rgba(176, 190, 197,0.9);
-    }
-
-    .failureToast {
-        --paper-toast-background-color: red;
-        --paper-toast-color: white;
+    #editForm .errors {
+        font-size: 12px;
+        color: #dd2c00;
+        margin-top: 10px;
     }
 </style>
 
-<paper-material class="locationEdit" ng-show="!locEditCtrl.isHidden">
-    <paper-toolbar class="small">
-        <h1 class="title">Edit</h1>
-        <paper-icon-button icon="close" title="Close" ng-click="onClose();"></paper-icon-button>
-    </paper-toolbar>
+<section class="locationEdit" md-whiteframe="3">
+    <md-toolbar class="small">
+        <div class="md-toolbar-tools">
+            <h1 class="title">Edit</h1>
+            <span flex></span>
+            <md-button class="md-icon-button"
+                       aria-label="Close"
+                       ui-sref="listView">
+                <md-icon md-svg-src="/_assets/icons/48/ic_close_white.svg"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
 
-    <section id="formCont">
-        <form id="editForm" is="iron-form" ng-keypress="keyPressed($event)">
-            <!-- Basics -->
-            <paper-input name="name" label="Resource name" value="{{location.name}}"
-                         error-message="Need a name!"
-                         required auto-validate autocapitalize></paper-input>
-            <paper-input name="email" label="Email" type="email"
-                         value="{{location.email}}"
-                         error-message="Please enter a valid email."
-                         auto-validate></paper-input>
-            <gold-phone-input name="phone" label="Phone Number (XXX-XXX-XXXX)"
-                              value="{{location.getPhone()}}"
-                              phone-number-pattern="XXX-XXX-XXXX" auto-validate></gold-phone-input>
-            <paper-input name="website" label="Website"
-                         value="{{location.website}}"
-                         required="">
-            </paper-input>
+     <form id="editForm" name="editForm" ng-submit="submitEditForm()" layout="column">
+        <!-- Basics -->
+         <md-input-container>
+             <label for="name">Resource name</label>
+             <input id="name" name="name" type="text" ng-model="locationCopy.name"
+                    required
+                    md-autofocus>
+             <div ng-messages="editForm.name.$error">
+                 <div ng-message="required">Need a name!</div>
+             </div>
+         </md-input-container>
 
-            <!-- Deeper info -->
-            <paper-input name="locationType" label="Resource Type"
-                         value="{{location.locationType}}"
-                         required></paper-input>
-            <paper-input name="services" label="Services (separated by commas)"
-                         value="{{location.getFormattedServices()}}"
-                         required></paper-input>
-            <paper-input name="tags"
-                         value="{{location.getFormattedTags()}}"
-                         label="#tags (separated by commas)"></paper-input>
+         <md-input-container>
+             <label for="email">Email</label>
+             <input id="email" name="email" type="email" ng-model="locationCopy.email">
+             <div ng-messages="editForm.email.$error">
+                 <div ng-message="email">Please enter a valid email.</div>
+             </div>
+         </md-input-container>
 
-            <p class="checkboxes">Coverage</p>
-            <section class="checkboxes">
-                <paper-checkbox name="coverages" value="Local" noink>Local</paper-checkbox>
-                <paper-checkbox name="coverages" value="State" noink>State</paper-checkbox>
-                <paper-checkbox name="coverages" value="Regional" noink>Regional</paper-checkbox>
-                <paper-checkbox name="coverages" value="National" noink>National</paper-checkbox>
-                <paper-checkbox name="coverages" value="International" noink>International</paper-checkbox>
-            </section>
+         <md-input-container>
+             <label for="phone">Phone Number (XXX-XXX-XXXX)</label>
+             <input id="phone" name="phone" type="tel" ng-model="locationCopy.phone"
+                    ng-pattern="/^(\d{3})-(\d{3})-(\d{4})/">
+             <div ng-messages="editForm.phone.$error">
+                 <div ng-message="tel">Please enter a valid phone number.</div>
+             </div>
+         </md-input-container>
 
-            <!-- Extras -->
-            <paper-textarea name="comments" label="Comments" maxlength="500"
-                            value="{{location.comments}}"
-                            auto-validate char-counter prevent-invalid-input></paper-textarea>
-            <paper-input name="editBy" label="Your name" error-message="Need to provide your name!"
-                         required auto-validate></paper-input>
-        </form>
+         <md-input-container>
+             <label for="website">Website (http:// ... )</label>
+             <input id="website" name="website" type="url" required ng-model="locationCopy.website">
+             <div ng-messages="editForm.website.$error">
+                 <div ng-message="required">Need a webiste!</div>
+                 <div ng-message="url">Please enter a valid website.</div>
+             </div>
+         </md-input-container>
+
+         <!-- Deeper info -->
+         <md-input-container>
+             <label for="locationType">Resource Type</label>
+             <input id="locationType" type="text" required ng-model="locationCopy.locationType">
+             <div ng-messages="editForm.locationType.$error">
+                 <div ng-message="required">Need a resource type!</div>
+             </div>
+         </md-input-container>
+
+         <!-- Todo: add tagging input -->
+
+         <md-chips name="services"
+                   ng-model="locationCopy.services"
+                   placeholder="Services, Comma Separated"
+                   secondary-placeholder="Comma Separated"
+                   md-separator-keys="locAddCtrl.separatorKeys">
+         </md-chips>
+         <div class="errors" ng-show="editForm.services.$dirty && locationCopy.services.length < 1">
+             <div>Resources need services!</div>
+         </div>
+
+         <md-chips name="tags"
+                   ng-model="locationCopy.tags"
+                   placeholder="Tags, Comma Separated"
+                   secondary-placeholder="Comma Separated"
+                   md-separator-keys="locEditCtrl.separatorKeys">
+         </md-chips>
+
+         <br>
+         <p class="checkboxes md-subhead">Coverage</p>
+         <section class="checkboxes">
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="Local" aria-label="Local" md-no-ink>Local</md-checkbox>
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="State" aria-label="State" md-no-ink>State</md-checkbox>
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="Regional" aria-label="Regional" md-no-ink>Regional</md-checkbox>
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="National" aria-label="National" md-no-ink>National</md-checkbox>
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="International" aria-label="International" md-no-ink>International</md-checkbox>
+         </section>
+
+         <!-- Extras -->
+         <md-input-container>
+             <label for="comments">Comments</label>
+             <textarea id="comments" md-maxlength="500" ng-model="locationCopy.comments"></textarea>
+             <div ng-messages="editForm.comments.$error">
+                 <div ng-message="md-maxlength">Too long!</div>
+             </div>
+         </md-input-container>
+
+         <md-input-container>
+             <label for="editBy">Your name</label>
+             <input id="editBy" name="editBy" type="text" ng-model="locationCopy.addedBy" required>
+             <div ng-messages="editForm.editBy.$error">
+                 <div ng-message="required">Need to provide your name!</div>
+             </div>
+         </md-input-container>
 
         <!-- Addresses -->
-        <!-- Can't have a form inside of a form :( -->
-        <map-address-input container="$parentElem" name='addressInput' title="Address" target="addr"
-                           map="mapContainer" i-formatted-address="location.getFormattedAddr()"
-                           <!--ng-click="locEditCtrl.setIsHidden(true);"-->
-                           on-close="locEditCtrl.setIsHidden(false)"></map-address-input>
-        <map-address-input container="$parentElem" name='hqAddressInput' title="HQ Address" target="hqAddr"
-                           map="mapContainer" i-formatted-address="location.getFormattedHqAddr()"
-                            <!--ng-click="locEditCtrl.setIsHidden(true);"-->
-                            on-close="locEditCtrl.setIsHidden(false)"></map-address-input>
+        <!-- Right now expects a map in $rootScope.map -->
+        <map-address-input name='addressInput' title="Address"
+                           formatted-model="locationCopy.formattedAddr" address-model="locationCopy.address"></map-address-input>
+        <map-address-input name='hqAddressInput' title="HQ Address"
+                           formatted-model="locationCopy.formattedHqAddr" address-model="locationCopy.hqAddress"></map-address-input>
 
-        <paper-button type="submit" ng-click="submitEditForm();">Save</paper-button>
-        <!-- Put the delete button down here and on the right -->
-        <!-- Todo: Add a double check measure! -->
-        <paper-icon-button class="deleteButton" icon="delete" ng-click="deleteLocation(false);"></paper-icon-button>
+        <div class="buttonContainer" layout="row">
+            <md-button type="submit" aria-label="Save">Save to database</md-button>
+            <md-button class="md-icon-button deleteButton" aria-label="Delete" ng-click="deleteLocation(false);">
+                <md-icon md-svg-src="/_assets/icons/48/ic_delete_black.svg"></md-icon>
+            </md-button>
+        </div>
+    </form>
 
-        <paper-dialog id="deleteDialog">
+
+<!--        <paper-dialog id="deleteDialog">
             <p>Are you sure you want to delete {{location.name}}?</p>
             <div class="buttons">
                 <paper-button dialog-dismiss>No..</paper-button>
                 <paper-button dialog-confirm autofocus ng-click="deleteLocation(true)">Delete</paper-button>
             </div>
-        </paper-dialog>
+        </paper-dialog>-->
 
-    </section>
-</paper-material>
-
-<paper-toast class="failureToast" text="Failed to add the location!"></paper-toast>
-<paper-toast class="successToast" text="Added location to the database!"></paper-toast>
+</section>
