@@ -11,9 +11,9 @@
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
             "use strict";
-            // var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
+             var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
             // var baseApiUrl = 'http://localhost/api/1.0/locations';
-            var baseApiUrl = 'http://localhost:8000/1.0/locations';
+            //var baseApiUrl = 'http://localhost:8000/1.0/locations';
             const service = this;
 
             /**
@@ -62,6 +62,17 @@
                 getFormatted() {
                     var addrLine = this.address1 + ((this.address2 === '') ? '' : ", " + this.address2);
                     return addrLine + ", " + this.city + ", " + this.state + ", " + this.country + ", " + this.zipcode;
+                }
+
+                /**
+                 * For searching simplification
+                 * The ~ is the bitwise inverse, will turn -1 to false and errything else to true
+                 * @param search {string}
+                 */
+                contains(search) {
+                    return ~this.address1.indexOf(search) || ~this.address2.indexOf(search)
+                        || ~this.city.indexOf(search) || ~this.state.indexOf(search) || ~this.country.indexOf(search)
+                        || ~this.zipcode.indexOf(search);
                 }
             };
 

@@ -4,7 +4,9 @@
 <md-card layout="column" layout-fill>
     <md-toolbar class="md-medium-tall">
         <div class="md-toolbar-tools">
-            <h1 class="md-title">{{location.name}}</h1>
+            <!-- Max 20 characters including ... -->
+            <h1 class="md-title">{{location.name | limitTo: 17}}
+                <span ng-if="location.name.length > 17">...</span></h1>
             <!-- Fill the space between left and right sections-->
             <span flex></span>
             <md-button class="md-icon-button" aria-label="Locate" ng-show="location.hasAddr();"
@@ -16,7 +18,9 @@
             </md-button>
         </div>
         <!-- Show a brief description if the card is not expanded -->
-        <p class="layout-margin md-subhead" ng-show="!cardCtrl.isExpanded">{{location.locationType + ": " + location.getFormattedServices();}}</p>
+        <p class="layout-margin md-subhead" ng-show="!cardCtrl.isExpanded">
+            {{location.locationType + ": " + location.getFormattedServices() | limitTo: 40}}
+            <span ng-if="(location.locationType + ': ' + location.getFormattedServices()).length > 40">...</span></p>
         </md-toolbar>
 
         <!-- Only show the tabs if the card has been expanded -->

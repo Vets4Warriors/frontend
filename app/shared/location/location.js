@@ -7,7 +7,7 @@
 
     app.config(['$httpProvider', function ($httpProvider) {
         // We need to setup some parameters for http requests
-        // These three lines are all you need for CORS support
+        // These three lines are all we need for CORS support
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.withCredentials = false;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -21,11 +21,11 @@
             var listCtrl = this;
             var map = $scope.$root.map;
             var Location = locationService.Location;
+            //$scope.searchText = '';
             $scope.locations = [];
             
-             // Start by getting all locations if the we don't already have a list
-            if ($scope.locations.length == 0)
-                getLocations({});
+            // Start by getting all locations if the we don't already have a list
+            getLocations({});
 
             listCtrl.updateLocations = function(newLocs) {
                 // Remove all the previous markers from the mapContainer
@@ -66,6 +66,14 @@
                         map.fitBounds(bounds);
             };
 
+            /**
+             *
+             * @param location
+             */
+            $scope.locFilter = function(location) {
+                return true;
+            };
+
 
             function getLocations(queries) {
                 locationService.query(queries)
@@ -74,29 +82,30 @@
                         listCtrl.updateLocations(newLocs);
                     })
                     .error(function() {
-                        /*
-                            {
-                                text: "Sorry, we couldn't connect to the server. " +
-                                "Have you checked your internet connection?",
-                                duration: 0
-                            }*/
+                        $mdToast.showSimple("Sorry, we couldn't connect to the server. " +
+                            "Have you checked your internet connection?");
                     });
-            };
+            }
     }]);
 
     app.directive('locationSearchBox', function() {
         return {
             restrict: 'E',
             templateUrl: '/app/shared/location/location-search-box.html',
+            scope: {
+                searchModel: '=searchModel'
+            },
             controller: ['$scope', function($scope) {
                 var searchCtrl = this;
+                var locCtrl = $scope.locCtrl;
 
-                var searchBox = document.querySelector('.locationSearchBox>paper-input');
+               /* 
+                Old stuff from polymer, may be useful at somepoint. Probably not. 
+                
+               var searchBox = document.querySelector('.locationSearchBox>paper-input');
                 var filtersBox = document.querySelector('paper-listbox');
                 var filters = ['name', 'website', 'phone', 'email',
                     'locationType', 'coverage', 'services', 'tags'];
-
-                var locCtrl = $scope.locCtrl;
 
                 this.getQueryBy = function() {
                     var queryTerm = filters[filtersBox.selected];
@@ -114,13 +123,12 @@
                         locCtrl.getLocations(query);
                     }
                 };
+                */
             }],
             controllerAs: 'locSearchCtrl'
         }
     });
-
-
-
+    
     /**
      * The form to add locations
      */

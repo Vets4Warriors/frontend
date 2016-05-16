@@ -1,11 +1,12 @@
 /**
  * Created by austin on 3/1/16.
  */
-
-
 (function() {
     var app = angular.module('listPage', ['ngMaterial', 'ngRoute', 'ui.router', 'locationDirectives']);
-    
+
+    /**
+     * Todo: Implement callView
+     */
     app.config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/list");
 
@@ -31,7 +32,9 @@
             });
     });
 
-    
+    /**
+     * Loads the Google Map, sets the center to the user's current location
+     */
     app.controller('ListPageCtrl', ['$scope', '$rootScope',
         function($scope, $rootScope) {
             var listPageCtrl = this;
