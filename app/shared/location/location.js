@@ -2,7 +2,8 @@
  * Created by austin on 2/26/16.
  */
 (function() {
-    var app = angular.module('locationDirectives', ['locationCard', 'locationServices', 'mapAddressInput']);
+    var app = angular.module('locationDirectives', ['locationCard', 'locationServices', 'checklist-model',
+        'mapAddressInput', 'ngMaterial']);
 
     app.config(['$httpProvider', function ($httpProvider) {
         // We need to setup some parameters for http requests
@@ -18,12 +19,13 @@
     app.controller('LocationsController', ['$scope', '$log', 'locationService',
         function($scope, $log, locationService) {
             var listCtrl = this;
-            var map = $scope.listPageCtrl.map;
+            var map = $scope.$root.map;
             var Location = locationService.Location;
             $scope.locations = [];
             
-             // Start by getting all locations
-            getLocations({});
+             // Start by getting all locations if the we don't already have a list
+            if ($scope.locations.length == 0)
+                getLocations({});
 
             listCtrl.updateLocations = function(newLocs) {
                 // Remove all the previous markers from the mapContainer
@@ -61,13 +63,10 @@
 
                         // Fit the map around the bounds
                         // Todo: account for the search / list area
-                        //map.fitBounds(bounds);
+                        map.fitBounds(bounds);
             };
 
 
-            /*
-            Todo: This is turning into spaghetti code with the mapContainer. Need to centralize mapContainer functions.
-             */
             function getLocations(queries) {
                 locationService.query(queries)
                     .success(function(data) {
@@ -129,54 +128,31 @@
         return {
             restrict: 'E',
             templateUrl: '/app/shared/location/location-add.html',
-            controller: ['$scope', '$log', '$http', 'locationService', function($scope, $log, $http, locationService) {
-
-                /**
-                 * Allow for enter key to be used as submission.
-                 * Todo: This should be made into an attribute directive for all forms
-                 * @param key pressed. The $event var in angular
-                 */
+            controller: ['$scope', '$log', '$http', 'locationService', '$mdConstant',
+                function($scope, $log, $http, locationService, $mdConstant) {
+                
                 var locAddCtrl = this;
+                locAddCtrl.separatorKeys = [$mdConstant.KEY_CODE.COMMA];
+                $scope.location = locationService.Location.makeEmpty();
                 $scope.addressInputs = document.getElementsByTagName('map-address-input');
-                $scope.addr = locationService.LocationAddress.makeEmpty();
-                $scope.hqAddr = locationService.LocationAddress.makeEmpty();
-
-                $scope.keyPressed = function(key) {
-                    if (key.keyCode == 13) {
-                        // hit the enter key
-                        $scope.submitAddForm();
-                    }
-                };
 
                 $scope.submitAddForm = function() {
-                    // validate all address input. Have got to make them extend the iron-input / build with polymer
-                    if ($scope.form.validate()) {
+                    // validate all address input.
+                    if ($scope.addForm.$valid && $scope.location.address.validate()
+                        && $scope.location.hqAddress.validate()) {
                         // Send request to database api
-                        // Format the form data to fit our models
-                        var locationData = $scope.form.serialize();
-                        locationData.services = locationData.services.split(',');
 
-                        if (typeof locationData.coverages === 'string') {
-                            // Need it to be an array
-                            locationData.coverages = [locationData.coverages];
-                        }
+                        //locationData.website = 'http://' + locationData.website;
 
-                        //Todo: regex. This almost works buuut ((#(\S?!,)*)(\s*)(,))*((\s*)(#\S*)())
-                        if (locationData.tags != "") {
-                            locationData.tags = locationData.tags.split(',');
-                        } else {
-                            locationData.tags = [];
-                        }
-                        locationData.website = 'http://' + locationData.website;
                         // Only add the addresses if valid!
-                        if ($scope.addr.isValid) {
+                        /*if ($scope.addr.isValid) {
                             locationData.address = $scope.addr;
                         }
                         if ($scope.hqAddr.isValid) {
                             locationData.hqAddress = $scope.hqAddr;
-                        }
+                        }*/
 
-                        var location = new locationService.Location(locationData, true);
+                        var location = new locationService.Location($scope.location, true);
 
                         locationService.add(location)
                             .success(function(data) {
@@ -205,9 +181,8 @@
                  * Must reset the target addresses as well as the whole form
                  */
                 $scope.resetForm = function() {
-                    $scope.form.reset();
-                    $scope.addr = {};
-                    $scope.hqAddr = {};
+                    $scope.location.address = locationService.Location.makeEmpty();
+                    $scope.hqAddr = locationService.Location.makeEmpty();
                 };
 
             }],
@@ -216,8 +191,6 @@
                 // Fired second after created
                 // Create a link in the scope so it can be referenced as a container for the dialogs
                 $scope.$parentElem = $elem[0].parentElement;
-                $scope.form = $elem[0].querySelector('form');
-                $scope.mapContainer = document.querySelector('google-map');
             }
         }
     });

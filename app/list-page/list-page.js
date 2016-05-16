@@ -36,7 +36,7 @@
         function($scope, $rootScope) {
             var listPageCtrl = this;
             listPageCtrl.currentLatLng = null;
-            listPageCtrl.map = null;
+            $rootScope.map = null;
 
             document.addEventListener('google-maps-api-loaded', function() {
                 console.log("Google maps loaded from the listPage");
@@ -47,15 +47,17 @@
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
                     disableDefaultUI: true
                 };
-                listPageCtrl.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                $rootScope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         function (position) {
                             //success
                             console.log("Got the users current location!");
-                            listPageCtrl.currentLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
-                            listPageCtrl.zoomToLocation(listPageCtrl.currentLatLng);
+                            listPageCtrl.zoomToLocation({
+                                lat: position.coords.latitude, 
+                                lng: position.coords.longitude
+                                });
                         }, function (error) {
                             console.log("Couldn't get user's current location: " + error);
                         });
@@ -70,8 +72,7 @@
              * @param latLng, {{lat: float, lng: float}}
              */
             listPageCtrl.zoomToLocation = function(latLng) {
-                listPageCtrl.currentLatLng = new google.maps.LatLng(latLng);
-                listPageCtrl.map.panTo(listPageCtrl.currentLatLng);
+                $rootScope.map.panTo(new google.maps.LatLng(latLng));
             }
     }]);
 

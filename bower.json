@@ -29,11 +29,12 @@
     "angular": "angularjs#^1.5.0",
     "arg.js": "argjs#^1.3.1",
     "angular-route": "^1.5.0",
-    "jquery": "^2.2.1",
+    "jquery": "~2.2.3",
     "angular-ui-router": "^0.2.18",
     "geocomplete": "^1.6.5",
     "angular-material": "^1.0.7",
-    "angular-input-stars-directive": "angular-input-stars#^1.5.5"
+    "angular-input-stars-directive": "angular-input-stars#^1.5.5",
+    "checklist-model": "^0.9.0"
   },
   "resolutions": {
     "angular": "1.5.3"

@@ -144,6 +144,24 @@
                         this.addedBy = jsonData['addedBy'];
                     }
                 }
+                
+                static makeEmpty() {
+                    var empty = {};
+                    empty.name = "";
+                    empty.phone = "";
+                    empty.email = "";
+                    empty.website = "";
+                    empty.address = service.LocationAddress.makeEmpty();
+                    empty.hqAddress = service.LocationAddress.makeEmpty();
+                    empty.locationType = "";
+                    empty.coverages = [];
+                    empty.services = [];
+                    empty.tags = [];
+                    empty.comments = "";
+                    empty.rating = 0;
+                    empty.ratings = [];
+                    return new this(empty, true);
+                }
 
                 /**
                  * Format the phone number so it's nice and read-able
@@ -158,7 +176,7 @@
                  * @returns {string}
                  */
                 getFormattedAddr() {
-                    return this.address ? this.address.getFormatted() : '';
+                    return (this.address && this.address.address1 !== '') ? this.address.getFormatted() : '';
                 }
 
                 /**
@@ -166,7 +184,7 @@
                  * @returns {string}
                  */
                 getFormattedHqAddr() {
-                    return this.hqAddress ? this.hqAddress.getFormatted() : '';
+                    return (this.hqAddress && this.hqAddress.address1 !== '') ? this.hqAddress.getFormatted() : '';
                 }
 
                 /**

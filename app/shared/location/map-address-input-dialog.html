@@ -11,10 +11,14 @@
             </div>
         </md-toolbar>
 
-        <ng-form id="addressForm" layout="column" layout-padding>
-            <md-input-container>
-                <label for="autoComplete">Address</label>
-                <input id="autoComplete" name="autoComplete" aria-label="Address">
+        <ng-form id="addressForm" name="addressForm" layout="column" layout-padding>
+            <md-input-container md-no-float>
+                <input id="autoComplete" name="autoComplete"
+                       aria-label="Address" ng-click="setupGeocomplete()">
+                <div id="addressDetails">
+                    <input type="hidden" name="lat" ng-model="address.latLng.lat" value="">
+                    <input type="hidden" name="lng" ng-model="address.latLng.lng" value="">
+                </div>
             </md-input-container>
 
             <md-input-container>
@@ -22,8 +26,11 @@
                 <input id="address2" name="address2" type="text" ng-model="address.address2">
             </md-input-container>
 
+            <!-- Details to be filled in by the geocomplete -->
+
+
             <p>{{formattedAddress}}</p>
-            <md-button type="submit" ng-click="confirm()">Confirm</md-button>
+            <md-button ng-click="confirm()">Confirm</md-button>
         </ng-form>
     </md-dialog-content>
 </md-dialog>

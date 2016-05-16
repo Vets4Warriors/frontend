@@ -41,10 +41,15 @@
 	    background: rgba(176, 190, 197,0.9);
     }
     #addForm {
-	    height: 802px;
 	    overflow-y: auto;
 	    overflow-x: hidden;
+		height: 800px;
     }
+	#addForm .errors {
+		font-size: 12px;
+		color: #dd2c00;
+		margin-top: 10px;
+	}
 </style>
 
 <section class="locationAdd" md-whiteframe="3">
@@ -59,7 +64,8 @@
 			</md-button>
 		</div>
     </md-toolbar>
-	<form id="addForm" name="addForm" ng-submit=""
+
+	<form id="addForm" name="addForm" ng-submit="submitAddForm()"
 		  ng-keypress="keyPressed($event)"
 		  layout="column">
 		<!-- Basics -->
@@ -82,17 +88,16 @@
 		</md-input-container>
 
 		<md-input-container>
-			<label for="phone">Phone Number <br>(XXX-XXX-XXXX)</label>
-			<!-- Todo: change to ngPattern -->
+			<label for="phone">Phone Number (XXX-XXX-XXXX)</label>
 			<input id="phone" name="phone" type="tel" ng-model="location.phone"
-				   pattern="/^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/">
+				   ng-pattern="/^(\d{3})-(\d{3})-(\d{4})/">
 			<div ng-messages="addForm.phone.$error">
 				<div ng-message="tel">Please enter a valid phone number.</div>
 			</div>
 		</md-input-container>
 
 		<md-input-container>
-			<label for="website">Website</label>
+			<label for="website">Website (http:// ... )</label>
 			<input id="website" name="website" type="url" required ng-model="location.website">
 			<div ng-messages="addForm.website.$error">
 				<div ng-message="required">Need a webiste!</div>
@@ -110,29 +115,37 @@
 		</md-input-container>
 
 		<!-- Todo: add tagging input -->
-		<md-input-container>
-			<label for="services">Services</label>
-			<input id="services" type="text" ng-model="location.services" required>
-			<div ng-messages="addForm.services.$error">
-				<div ng-message="required">Resources need services!</div>
-			</div>
-		</md-input-container>
 
-		<md-input-container>
-			<label for="tags">#tags</label>
-			<input id="tags" type="text" ng-model="location.tags">
-			<!--<div ng-messages="addForm.tags.$error">
-				<div ng-message="required">Resources need tags!</div>
-			</div>-->
-		</md-input-container>
+		<md-chips name="services"
+				  ng-model="location.services"
+				  placeholder="Services, Comma Separated"
+				  secondary-placeholder="Comma Separated"
+				  md-separator-keys="locAddCtrl.separatorKeys">
+		</md-chips>
+		<div class="errors" ng-show="addForm.services.$dirty && location.services.length < 1">
+			<div>Resources need services!</div>
+		</div>
 
-		<p class="checkboxes">Coverage</p>
+		<md-chips name="tags"
+				  ng-model="location.tags"
+				  placeholder="Tags, Comma Separated"
+				  secondary-placeholder="Comma Separated"
+				  md-separator-keys="locAddCtrl.separatorKeys">
+		</md-chips>
+
+		<br>
+		<p class="checkboxes md-subhead">Coverage</p>
 		<section class="checkboxes">
-			<md-checkbox name="coverages" aria-label="Local" md-no-ink>Local</md-checkbox>
-			<md-checkbox name="coverages" aria-label="State" md-no-ink>State</md-checkbox>
-			<md-checkbox name="coverages" aria-label="Regional" md-no-ink>Regional</md-checkbox>
-			<md-checkbox name="coverages" aria-label="National" md-no-ink>National</md-checkbox>
-			<md-checkbox name="coverages" aria-label="International" md-no-ink>International</md-checkbox>
+			<md-checkbox name="coverages" checklist-model="location.coverages"
+						 value="Local" aria-label="Local" md-no-ink>Local</md-checkbox>
+			<md-checkbox name="coverages" checklist-model="location.coverages"
+						 value="State" aria-label="State" md-no-ink>State</md-checkbox>
+			<md-checkbox name="coverages" checklist-model="location.coverages"
+						 value="Regional" aria-label="Regional" md-no-ink>Regional</md-checkbox>
+			<md-checkbox name="coverages" checklist-model="location.coverages"
+						 value="National" aria-label="National" md-no-ink>National</md-checkbox>
+			<md-checkbox name="coverages" checklist-model="location.coverages"
+						 value="International" aria-label="International" md-no-ink>International</md-checkbox>
 		</section>
 
 		<!-- Extras -->
@@ -153,17 +166,14 @@
 		</md-input-container>
 
 		<!-- Addresses -->
-		<!-- Can't have a form inside of a form :( -->
-		<map-address-input name='addressInput' title="Address" target="addr"
-						   map="mapContainer"></map-address-input>
-		<map-address-input name='hqAddressInput' title="HQ Address"
-						   target="hqAddr" map="mapContainer"></map-address-input>
+		<!-- Right now expects a map in $rootScope.map -->
+		<map-address-input name='addressInput' title="Address" address-model="location.address"></map-address-input>
+		<map-address-input name='hqAddressInput' title="HQ Address" address-model="location.hqAddress"></map-address-input>
 
 		<div class="buttonContainer" layout="row">
-			<md-button type="submit" ng-click="submitAddForm()">Add to database</md-button>
-			<md-button type="reset" ng-click="resetForm();">Reset</md-button>
+			<md-button type="submit">Add to database</md-button>
+			<md-button type="reset" ng-click="resetForm()">Reset</md-button>
 		</div>
 	</form>
+
 </section>
-<!--<paper-toast class="failureToast" text="Failed to add the location!"></paper-toast>-->
-<!--<paper-toast class="successToast" text="Added location to the database!"></paper-toast>-->
