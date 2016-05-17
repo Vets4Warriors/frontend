@@ -208,9 +208,11 @@
                 id: '@', // Required
                 onClose: '&'    // Function
             },
-            controller: ['$scope', '$http', 'locationService', '$mdToast', '$mdDialog',
-                function($scope, $http, locationService, $mdToast, $mdDialog) {
+            controller: ['$scope', '$http', 'locationService', '$mdToast', '$mdDialog', '$mdConstant',
+                function($scope, $http, locationService, $mdToast, $mdDialog, $mdConstant) {
                     var locEditCtrl = this;
+                    locEditCtrl.separatorKeys = [$mdConstant.KEY_CODE.COMMA];
+
                     $scope.locationCopy = locationService.Location.makeEmpty();
 
                     // First load the data

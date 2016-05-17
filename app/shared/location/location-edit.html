@@ -78,7 +78,7 @@
              <input id="website" name="website" type="url" required ng-model="locationCopy.website">
              <div ng-messages="editForm.website.$error">
                  <div ng-message="required">Need a webiste!</div>
-                 <div ng-message="url">Please enter a valid website.</div>
+                 <div ng-message="url">Please enter a valid website. (hint: http://)</div>
              </div>
          </md-input-container>
 
@@ -100,7 +100,7 @@
                    md-separator-keys="locAddCtrl.separatorKeys">
          </md-chips>
          <div class="errors" ng-show="editForm.services.$dirty && locationCopy.services.length < 1">
-             <div>Resources need services!</div>
+             <div>Resources need a least one service!</div>
          </div>
 
          <md-chips name="tags"
