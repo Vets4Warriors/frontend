@@ -100,7 +100,7 @@
     app.directive('locationSearchBox', function() {
         return {
             restrict: 'E',
-            templateUrl: '/app/shared/location/location-search-box.html',
+            templateUrl: '/app/directives/location/location-search-box.html',
             scope: {
                 searchModel: '=searchModel'
             },
@@ -144,7 +144,7 @@
     app.directive('locationAdd', function() {
         return {
             restrict: 'E',
-            templateUrl: '/app/shared/location/location-add.html',
+            templateUrl: '/app/directives/location/location-add.html',
             controller: ['$scope', '$log', '$http', 'locationService', '$mdConstant',
                 function($scope, $log, $http, locationService, $mdConstant) {
                 
@@ -203,7 +203,7 @@
     app.directive('locationEdit', function() {
         return {
             restrict: 'E',
-            templateUrl: '/app/shared/location/location-edit.html',
+            templateUrl: '/app/directives/location/location-edit.html',
             scope: {
                 id: '@', // Required
                 onClose: '&'    // Function
@@ -253,7 +253,7 @@
                     $scope.deleteLocation = function(event) {
                         $mdDialog.show({
                             controller: DeleteDialogController,
-                            templateUrl: '/app/shared/location/location-delete-dialog.html',
+                            templateUrl: '/app/directives/location/location-delete-dialog.html',
                             scope: $scope,
                             parent: $scope.$elem,
                             targetEvent: event,

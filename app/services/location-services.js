@@ -59,6 +59,8 @@
                  * @returns {string}
                  */
                 getFormatted() {
+                    if (this.state === '') return ''; // We know that it is empty. Quick fix. Is it harrible? 
+                    
                     var addrLine = this.address1 + ((this.address2 === '') ? '' : ", " + this.address2);
                     return addrLine + ", " + this.city + ", " + this.state + ", " + this.country + ", " + this.zipcode;
                 }

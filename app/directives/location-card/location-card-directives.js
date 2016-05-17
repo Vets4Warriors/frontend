@@ -10,7 +10,7 @@
     app.directive('locationCard', function() {
         return {
             restrict: 'E',
-            templateUrl: '/app/shared/location/location-card.html',
+            templateUrl: '/app/directives/location-card/location-card.html',
             controller: ['$element', '$scope', '$location', function($element, $scope, $location) {
                 this.isExpanded = false;
                 this.tab = 0;
@@ -41,7 +41,7 @@
     app.directive('locationRating', function() {
         return {
             restrict: 'E',
-            templateUrl: '/app/shared/location/location-rating.html',
+            templateUrl: '/app/directives/location-card/location-rating.html',
             controller: ['$scope', 'locationService', function($scope,locationService) {
                 var locRatingCtrl = this;
                 
@@ -96,7 +96,7 @@
     app.directive('locationInfo', function() {
         return {
             restrict: 'E',
-            templateUrl: '/app/shared/location/location-info.html'
+            templateUrl: '/app/directives/location-card/location-info.html'
         }
     });
 
@@ -106,9 +106,7 @@
     app.directive('locationContact', function() {
         return {
             restrict: 'E',
-            templateUrl: '/app/shared/location/location-contact.html',
-            controller: ['locationService', function(locService) {}],
-            controllerAs: 'contactController'
+            templateUrl: '/app/directives/location-card/location-contact.html'
         }
     });
 })();

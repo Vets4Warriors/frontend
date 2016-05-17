@@ -16,10 +16,10 @@
     app.directive('mapAddressInput', function() {
         return {
             restrict: 'E',
-            templateUrl: '/app/shared/location/map-address-input.html',
+            templateUrl: '/app/directives/map-address-input/map-address-input.html',
             scope: {
                 address: '=addressModel', //Required
-                formattedAddress: '=formattedModel',
+                formattedAddress: '=?formattedModel',
                 title: '@',   // Required, readOnly
                 required: '=required',
                 onClose: '&'
@@ -40,7 +40,7 @@
                 $scope.open = function(event) {
                     $mdDialog.show({
                         controller: InputController,
-                        templateUrl: '/app/shared/location/map-address-input-dialog.html',
+                        templateUrl: '/app/directives/map-address-input/map-address-input-dialog.html',
                         parent: $scope.parent,
                         scope: $scope,
                         preserveScope: true,
