@@ -1,0 +1,119 @@
+<style>
+    #search .locationSearchBox {
+        margin-bottom: 24px;
+    }
+
+    .locationList {
+        position: absolute;
+        left: 2%;
+        top: 24px;
+        width: calc(350px + 15%);
+        overflow: hidden;
+    }
+    .locationList #list {
+        height:800px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .locationList .listContainer {
+        max-height: 100%;
+        box-sizing: border-box;
+        pointer-events: visiblePainted;
+    }
+    .locationList .listContainer > * {
+        display: block;
+    }
+
+    .locationList .locationCard {
+        margin-bottom: 16px;
+    }
+
+    #search {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    #locationFilter {
+        height: auto;
+        padding: 8px;
+        background: white;
+        margin-right: 16px;
+    }
+
+    /* Action styles */
+    #actions {
+        width: 48px;
+        height: 48px;
+        position: absolute;
+        right: 48px;
+        bottom: 48px;
+    }
+</style>
+
+<section class="locationList" ng-controller="LocationsController as locCtrl">
+    <!-- Search box -->
+    <location-search-box id="search" ng-focus search-model="search.text"></location-search-box>
+    <div layout="row">
+        <div id="locationFilterWrapper" flex="33">
+            <!-- Setup similar to amazon/google/all other search pages -->
+            <section id="locationFilter" md-whiteframe="3" >
+                <md-subheader>Search by</md-subheader>
+                <!-- Each value maps to a location property -->
+                <md-list class="filters">
+                    <md-list-item>
+                        <p>Name</p>
+                        <md-checkbox class="md-secondary" value="name"
+                                     checklist-model="search.filters"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Website</p>
+                        <md-checkbox class="md-secondary" value="website"
+                                     checklist-model="search.filters"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Phone</p>
+                        <md-checkbox class="md-secondary" value="phone"
+                                     checklist-model="search.filters"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Email</p>
+                        <md-checkbox class="md-secondary" value="email"
+                                     checklist-model="search.filters"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Resource Type</p>
+                        <md-checkbox class="md-secondary" value="locationType"
+                                     checklist-model="search.filters"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Coverage</p>
+                        <md-checkbox class="md-secondary" value="coverages"
+                                     checklist-model="search.filters"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Services</p>
+                        <md-checkbox class="md-secondary" value="services"
+                                     checklist-model="search.filters"></md-checkbox>
+                    </md-list-item>
+                    <md-list-item>
+                        <p>Tags</p>
+                        <md-checkbox class="md-secondary" value="tags"
+                                     checklist-model="search.filters"></md-checkbox>
+                    </md-list-item>
+                </md-list>
+            </section>
+        </div>
+        <!-- Results -->
+        <article class="listContainer" id="list" flex="66">
+            <location-card ng-repeat="location in locations | locationFilter:search.text:search.filters
+                | orderBy:'+name' as filteredList track by location.id"></location-card>
+        </article>
+    </div>
+</section>
+
+<section id="actions">
+    <!--<paper-fab icon="add" ng-click="listPageCtrl.setIsAdding(true);"></paper-fab>-->
+    <md-button class="md-fab" aria-label="Add" ui-sref="addView">
+        <md-icon md-svg-src="/assets/icons/48/ic_add_white.svg"></md-icon>
+    </md-button>
+</section>

@@ -1,0 +1,22 @@
+<!-- This should be linked to the form and will be used to populate the tough data
+        Could potentially be built with Polymer as a custom element in the future. Right now just sticking to angular.
+ -->
+
+<style>
+    .addressInputContainer .displayContainer {
+        margin: 8px;
+    }
+
+    .addressInputContainer md-dialog {
+        padding: 0;
+        margin: 0;
+        background-color: white;
+    }
+</style>
+
+<article class="addressInputContainer">
+    <section class="displayContainer">
+        <md-button ng-click="open($event)">{{title}}</md-button>
+        <p>{{formattedAddress}}</p>
+    </section>
+</article>

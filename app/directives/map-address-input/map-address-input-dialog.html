@@ -1,0 +1,36 @@
+<!-- Should pop up and take focus -->
+<md-dialog>
+    <md-dialog-content>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h1 class="title">Add {{title}}</h1>
+                <span flex></span>
+                <md-button class="md-icon-button" aria-label="Close" ng-click="close()">
+                    <md-icon md-svg-src="/_assets/icons/48/ic_close_white.svg"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <ng-form id="addressForm" name="addressForm" layout="column" layout-padding>
+            <md-input-container md-no-float>
+                <input id="autoComplete" name="autoComplete"
+                       aria-label="Address" ng-click="setupGeocomplete()">
+                <div id="addressDetails">
+                    <input type="hidden" name="lat" ng-model="address.latLng.lat" value="">
+                    <input type="hidden" name="lng" ng-model="address.latLng.lng" value="">
+                </div>
+            </md-input-container>
+
+            <md-input-container>
+                <label for="address2">Address (cont.)</label>
+                <input id="address2" name="address2" type="text" ng-model="address.address2">
+            </md-input-container>
+
+            <!-- Details to be filled in by the geocomplete -->
+
+
+            <p>{{formattedAddress}}</p>
+            <md-button ng-click="confirm()">Confirm</md-button>
+        </ng-form>
+    </md-dialog-content>
+</md-dialog>
