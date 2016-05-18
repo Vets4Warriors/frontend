@@ -3,19 +3,21 @@
 
 html {
     background: #d9cebf;
-    font-family: "Trebuchet MS", Helvetica, Arial, SansSerif;
+    font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
     color: #000;
+    overflow-x: hidden;
 }
 
 body {
     width: 100%;
+    margin: 0;
 }
 
 header {
     width:100%;
     background-color: #B7A287;
     margin-top: 50px;
-    box-shadow: 0px 3px 6px 3px rgba(0,0,0,.7);
+    box-shadow: 0 3px 6px 3px rgba(0,0,0,.7);
     height: 100px;
 }
 
@@ -36,7 +38,6 @@ header h1 {
     top: 50%;
     transform: translateY(-50%);
     font-size: 24pt;
-
 }
 
 /*Classes*/
@@ -92,36 +93,23 @@ header h1 {
 
 /*IDs*/
 
-div#main {
+#main {
+    float: left;
     display: flex;
     flex-direction: row;
-    height: 580px;
-    margin: 0 auto;
-    margin-top: 50px;
+    justify-content: space-around;
+    margin: 75px 50px 50px 50px;
+    width: 60%;
 }
 
-div#left {
-    margin-left:50px;
-    display: flex;
-    flex-direction:column;
-    padding:30px;
-    width:520px;
-}
-
-div#right {
-    display: flex;
-    flex-direction:column;
-    padding: 30px;
-    width: 220px;
-}
-
-#formMain {
-    margin:50px;
+#main .circle {
+    margin: 16px;
 }
 
 #clocks {
+    float: left;
     background: #B7A287;
-    width: 400px;
+    width: auto;
     height: auto;
     position: absolute;
     top: 30%;
@@ -132,7 +120,7 @@ div#right {
 #clocks table {
     border: none;
     text-align: center;
-    margin: 0px 20px;
+    margin: 0 50px;
 }
 
 #clocks table td, #clocks table th {
@@ -143,4 +131,81 @@ div#right {
 
 #clocks table th {
     font-weight: bold;
+}
+
+/* Small */
+header h1#small {
+    display: none;
+}
+
+#tableBottomSpacer {
+    display: none;
+    height: 10px;
+}
+
+#disclaimer {
+    margin-top: 24px;
+    background: #B7A287;
+    bottom: 0;
+}
+#disclaimer p {
+    text-align: center;
+    width: 70%;
+    margin-left: 15%;
+    padding: 8px;
+}
+
+@media screen and (max-width: 1200px) {
+    .smallCircle {
+        width: 140px;
+        padding-bottom: 140px;
+    }
+    .largeCircle {
+        width: 380px;
+        padding-bottom: 380px;
+    }
+    .circle a {
+        font-size: 10pt;
+    }
+    .circle a img {
+        height: 30px;
+        width: 30px;
+    }
+    .largeCircle a {
+        font-size: 20pt;
+    }
+    .largeCircle a img {
+        height: 80px;
+        width: 80px;
+    }
+    header h1 {
+        display: none;
+    }
+    header h1#small {
+        display: inline;
+    }
+
+    #clocks {
+        margin-top: 50px;
+        margin-right: 50px;
+    }
+
+    #main {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin: 50px 50px 50px 50px;
+        width: 20%;
+    }
+
+    #disclaimer {
+        float: left;
+        width: 100%;
+    }
+
+    #disclaimer p {
+        text-align: center;
+        width: 70%;
+        margin-left: 15%;
+    }
 }

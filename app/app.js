@@ -67,7 +67,7 @@
                 }
 
                 $rootScope.$broadcast('google-maps-loaded');
-                $scope.$root.$broadcast('google-maps-loaded');
+                //$scope.$root.$broadcast('google-maps-loaded');
             });
 
             /**

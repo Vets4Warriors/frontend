@@ -24,9 +24,18 @@
             //$scope.searchText = '';
             $scope.locations = [];
             
-            // Todo: Only do this when the map is loaded, from the broadcast
+            // Todo: This needs to be cleaned up and made nice and not shitty. Agree?
+            // Sometimes the map is loaded before the event can be called
+            if (map) 
+                getLocations({});
+
+            // Todo: Create a event service as seen here: http://stackoverflow.com/questions/24830679/why-do-we-use-rootscope-broadcast-in-angularjs
             // Start by getting all locations if the we don't already have a list
-            getLocations({});
+            $scope.$root.$on('google-maps-loaded', function() {
+                console.log("Maps loaded!");
+                map = $scope.$root.map;
+                getLocations({});
+            });
 
             /**
              * Called when newLocations are pulled from the server
@@ -44,7 +53,7 @@
                             if ($scope.locations[0].marker) {
                                 $scope.locations[0].marker.setMap(null);
                             }
-                            console.log("Popping: " + $scope.locations.pop());
+                            //console.log("Popping: " + $scope.locations.pop());
                         }
 
                         // Add all the new ones and make bounds
