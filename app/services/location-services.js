@@ -71,9 +71,20 @@
                  * @param search {string}
                  */
                 contains(search) {
-                    return ~this.address1.indexOf(search) || ~this.address2.indexOf(search)
-                        || ~this.city.indexOf(search) || ~this.state.indexOf(search) || ~this.country.indexOf(search)
-                        || ~this.zipcode.indexOf(search);
+                    var result = false;
+                    if (this.address1)
+                        result = result || ~this.address1.indexOf(search);
+                    if (this.address2)
+                        result = result || ~this.address2.indexOf(search);
+                    if (this.city)
+                        result = result || ~this.city.indexOf(search);
+                    if (this.state)
+                        result = result || ~this.state.indexOf(search);
+                    if (this.country)
+                        result = result || ~this.country.indexOf(search);
+                    if (this.zipcode)
+                        result = result || ~this.zipcode.indexOf(search);
+                    return result;
                 }
             };
 
