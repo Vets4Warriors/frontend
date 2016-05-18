@@ -2,6 +2,7 @@
 
 ## About
 Vets4Warriors UI. Purpose is to allow V4W counselors to easily view and add resources.
+To run: node 
 
 ## Components
 
