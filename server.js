@@ -23,14 +23,14 @@ require('del');
         .default('e', 'prod')
         .argv;
 
+    // Set the environment and then get the configuration
     var env = argv.e;
     utils.setEnv(env);
     var config = utils.config();
 
     app.use(morgan(config['morgan-level'])); // log every request to the console
 
-    // Todo: compile _assets and app into one static directory
-    app.use('/_assets', express.static(__dirname + '/_assets'));
+    app.use('/assets', express.static(__dirname + '/assets'));
     app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
     /* Routes */
@@ -43,7 +43,7 @@ require('del');
         });
 
         app.get('/resources', function(req, res) {
-            res.sendFile(__dirname + '/app/list-page/list-page.html');
+            res.sendFile(__dirname + '/app/app.html');
         });
 
         app.get('/_config', function(req, res) {
@@ -60,7 +60,7 @@ require('del');
         });
 
         app.get('/resources', function(req, res) {
-            res.sendFile(__dirname + '/dist/list-page/list-page.html');
+            res.sendFile(__dirname + '/dist/partials/partials.html');
         });
     }
 

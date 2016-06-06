@@ -1,0 +1,44 @@
+<!--
+    A template for each location
+-->
+<md-card layout="column" layout-fill>
+    <md-toolbar class="md-medium-tall">
+        <div class="md-toolbar-tools">
+            <!-- Max 20 characters including ... -->
+            <h1 class="md-title">{{location.name | limitTo: 17}}
+                <span ng-if="location.name.length > 17">...</span></h1>
+            <!-- Fill the space between left and right sections-->
+            <span flex></span>
+            <md-button class="md-icon-button" aria-label="Locate" ng-show="location.hasAddr();"
+                       ng-click="listPageCtrl.zoomToLocation(location.getAddrLatLng());">
+                <md-icon md-svg-src="/assets/icons/48/ic_my_location_white.svg"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Expand" ng-click="cardCtrl.toggleContent();">
+                <md-icon md-svg-src="/assets/icons/48/ic_expand_more_white.svg"></md-icon>
+            </md-button>
+        </div>
+        <!-- Show a brief description if the card is not expanded -->
+        <p class="layout-margin md-subhead" ng-show="!cardCtrl.isExpanded">
+            {{location.locationType + ": " + location.getFormattedServices() | limitTo: 40}}
+            <span ng-if="(location.locationType + ': ' + location.getFormattedServices()).length > 40">...</span></p>
+        </md-toolbar>
+
+        <!-- Only show the tabs if the card has been expanded -->
+        <md-tabs md-selected="0" class="md-dynamic-height md-border-bottom" ng-show="cardCtrl.isExpanded">
+            <md-tab label="Info">
+                <md-content>
+                    <location-info class="contentContainer"></location-info>
+                </md-content>
+            </md-tab>
+            <md-tab label="Contact">
+                <md-content>
+                    <location-contact class="contentContainer"></location-contact>
+                </md-content>
+            </md-tab>
+            <md-tab label="Ratings">
+                <md-content>
+                    <location-rating class="contentContainer"></location-rating>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+</md-card><br/>

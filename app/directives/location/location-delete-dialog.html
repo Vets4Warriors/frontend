@@ -1,0 +1,17 @@
+<!-- Should pop up and take focus
+ Considered making this a toast but I think this will be more prominent and easy to use
+ -->
+<md-dialog>
+    <md-dialog-content>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h1 class="title">Are you sure you want to delete {{title}} ?</h1>
+            </div>
+        </md-toolbar>
+
+        <section>
+            <md-button ng-click="confirm()">Delete!</md-button>
+            <md-button ng-click="close()">No ...</md-button>
+        </section>
+    </md-dialog-content>
+</md-dialog>

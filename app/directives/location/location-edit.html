@@ -1,0 +1,127 @@
+<!-- The add form template for locations -->
+<section class="locationEdit" md-whiteframe="3">
+    <md-toolbar class="small">
+        <div class="md-toolbar-tools">
+            <h1 class="title">Edit</h1>
+            <span flex></span>
+            <md-button class="md-icon-button"
+                       aria-label="Close"
+                       ng-click="onClose()">
+                <md-icon md-svg-src="/assets/icons/48/ic_close_white.svg"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+     <form id="editForm" name="editForm" ng-submit="submitEditForm()" layout="column">
+        <!-- Basics -->
+         <md-input-container>
+             <label for="name">Resource name</label>
+             <input id="name" name="name" type="text" ng-model="locationCopy.name"
+                    required
+                    md-autofocus>
+             <div ng-messages="editForm.name.$error">
+                 <div ng-message="required">Need a name!</div>
+             </div>
+         </md-input-container>
+
+         <md-input-container>
+             <label for="email">Email</label>
+             <input id="email" name="email" type="email" ng-model="locationCopy.email">
+             <div ng-messages="editForm.email.$error">
+                 <div ng-message="email">Please enter a valid email.</div>
+             </div>
+         </md-input-container>
+
+         <md-input-container>
+             <label for="phone">Phone Number (XXX-XXX-XXXX)</label>
+             <input id="phone" name="phone" type="tel" ng-model="locationCopy.phone"
+                    ng-pattern="/^(\d{3})-(\d{3})-(\d{4})/">
+             <div ng-messages="editForm.phone.$error">
+                 <div ng-message="tel">Please enter a valid phone number.</div>
+             </div>
+         </md-input-container>
+
+         <md-input-container>
+             <label for="website">Website (http:// ... )</label>
+             <input id="website" name="website" type="url" required ng-model="locationCopy.website">
+             <div ng-messages="editForm.website.$error">
+                 <div ng-message="required">Need a webiste!</div>
+                 <div ng-message="url">Please enter a valid website. (hint: http://)</div>
+             </div>
+         </md-input-container>
+
+         <!-- Deeper info -->
+         <md-input-container>
+             <label for="locationType">Resource Type</label>
+             <input id="locationType" type="text" required ng-model="locationCopy.locationType">
+             <div ng-messages="editForm.locationType.$error">
+                 <div ng-message="required">Need a resource type!</div>
+             </div>
+         </md-input-container>
+
+         <!-- Todo: add tagging input -->
+
+         <md-chips name="services"
+                   ng-model="locationCopy.services"
+                   placeholder="Services, Comma Separated"
+                   secondary-placeholder="Comma Separated"
+                   md-separator-keys="locAddCtrl.separatorKeys">
+         </md-chips>
+         <div class="errors" ng-show="editForm.services.$dirty && locationCopy.services.length < 1">
+             <div>Resources need a least one service!</div>
+         </div>
+
+         <md-chips name="tags"
+                   ng-model="locationCopy.tags"
+                   placeholder="Tags, Comma Separated"
+                   secondary-placeholder="Comma Separated"
+                   md-separator-keys="locEditCtrl.separatorKeys">
+         </md-chips>
+
+         <br>
+         <p class="checkboxes md-subhead">Coverage</p>
+         <section class="checkboxes">
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="Local" aria-label="Local" md-no-ink>Local</md-checkbox>
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="State" aria-label="State" md-no-ink>State</md-checkbox>
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="Regional" aria-label="Regional" md-no-ink>Regional</md-checkbox>
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="National" aria-label="National" md-no-ink>National</md-checkbox>
+             <md-checkbox name="coverages" checklist-model="locationCopy.coverages"
+                          value="International" aria-label="International" md-no-ink>International</md-checkbox>
+         </section>
+
+         <!-- Extras -->
+         <md-input-container>
+             <label for="comments">Comments</label>
+             <textarea id="comments" md-maxlength="500" ng-model="locationCopy.comments"></textarea>
+             <div ng-messages="editForm.comments.$error">
+                 <div ng-message="md-maxlength">Too long!</div>
+             </div>
+         </md-input-container>
+
+         <md-input-container>
+             <label for="editBy">Your name</label>
+             <input id="editBy" name="editBy" type="text" ng-model="locationCopy.addedBy" required>
+             <div ng-messages="editForm.editBy.$error">
+                 <div ng-message="required">Need to provide your name!</div>
+             </div>
+         </md-input-container>
+
+        <!-- Addresses -->
+        <!-- Right now expects a map in $rootScope.map -->
+        <map-address-input name='addressInput' title="Address"
+                           formatted-model="locationCopy.formattedAddr" address-model="locationCopy.address"></map-address-input>
+        <map-address-input name='hqAddressInput' title="HQ Address"
+                           formatted-model="locationCopy.formattedHqAddr" address-model="locationCopy.hqAddress"></map-address-input>
+
+        <div class="buttonContainer" layout="row">
+            <md-button type="submit" aria-label="Save">Save to database</md-button>
+            <md-button class="md-icon-button deleteButton" aria-label="Delete" ng-click="deleteLocation($event);">
+                <md-icon md-svg-src="/_assets/icons/48/ic_delete_black.svg"></md-icon>
+            </md-button>
+        </div>
+    </form>
+</section>
