@@ -1,0 +1,15 @@
+<article class="cardItemContainer md-body-1">
+    <p>{{location.getPhone()}}</p>
+    <div ng-if="location.address">
+        <p>Address:</p>
+        <p>{{location.getFormattedAddr() }}</p>
+    </div>
+    <div ng-if="location.hqAddress">
+        <p>HQ Address:</p>
+        <p>{{location.getFormattedHqAddr() }}</p>
+    </div>
+    <div ng-if="location.email">
+        <p><a href="mailto:{{location.email}}">{{location.email}}</a></p>
+    </div>
+    <p><a href="{{location.website}}" target="_blank">{{location.website}}</a></p>
+</article>

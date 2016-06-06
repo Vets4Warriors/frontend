@@ -1,0 +1,75 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    position: relative;
+}
+
+#map {
+    height: 100%;
+}
+/* Header */
+#iconLinks {
+    width:300px;
+    height: 92px;
+    position: absolute;
+    top:24px;
+    right: 2%;
+    background: none;
+}
+#iconLinks img {
+    margin: 0 auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#iconLinks a:hover {
+    opacity: .7;
+}
+#iconLinks > div {
+    height:100%;
+    display: inline-block;
+    text-align: center;
+}
+#headImg {
+    width:220px;
+    float: right;
+}
+#headHome {
+    width: 80px;
+    float: left;
+}
+
+/* List styles */
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(96, 125, 139,0.7);
+    border-radius: 25px;
+    box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(96, 125, 139,0.9);
+}
+::-webkit-scrollbar-thumb:active {
+    background: rgba(38, 50, 56,0.9);
+}
+::-webkit-scrollbar-track {
+    background: rgba(176, 190, 197,0.5);
+    border-radius: 25px;
+}
+::-webkit-scrollbar-track:hover {
+    background: rgba(176, 190, 197,0.9);
+}
+
+/* Add styles */
+location-add, location-edit {
+    position: absolute;
+    top: 24px;
+    left: 16px;
+    width: 500px;
+    height: 90%;
+}

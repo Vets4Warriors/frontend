@@ -1,0 +1,39 @@
+<article class="cardItemContainer">
+    <h1 class="md-subhead">Average rating: {{averageRating(location.ratings)}}</h1>
+    <div class="scroll">
+        <md-list-item ng-repeat="rating in location.ratings track by $index">
+            <div class="md-list-item-text  md-body-1">
+                <p> <b>{{rating.value}}/5</b> -- {{rating.comment}} </p>
+                <!--<p> {{rating.comment !== 'Comment' ? rating.comment : ''}}</p>-->
+                <p><em>{{rating.user}}</em></p>
+            </div>
+            <md-divider ng-if="!$last"></md-divider>
+        </md-list-item>
+    </div>
+
+    <ng-form id="ratingForm" class="addRatingForm" name="ratingForm"
+             ng-submit="submitRatingForm()"
+             ng-keypress="keyPressed($event)" layout="column">
+
+        <h4 class="md-subhead" layout-align="center">Rate it</h4>
+        <input-stars max="5" ng-model="locRatingCtrl.value"></input-stars>
+
+        <md-input-container class="md-body-1">
+            <label for="user">Your name</label>
+            <input id="user" name="user" type="text" required ng-model="rating.user">
+            <div ng-messages="ratingForm.user.$error">
+                <div ng-message="required">Need to provide your name!</div>
+            </div>
+        </md-input-container>
+
+        <md-input-container class="md-body-1">
+            <label for="comment">Comments</label>
+            <textarea id="comment" md-maxlength="500" ng-model="rating.comment"></textarea>
+            <div ng-messages="ratingForm.comment.$error">
+                <div ng-message="md-maxlength">Too long!</div>
+            </div>
+        </md-input-container>
+
+        <md-button class="" type="submit" ng-click="submitRatingForm()">Rate!</md-button>
+    </ng-form>
+</article>

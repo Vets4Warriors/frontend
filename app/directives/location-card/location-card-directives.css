@@ -1,0 +1,59 @@
+/* Card */
+location-card md-toolbar {
+    text-align: left;
+}
+
+location-card h1 {
+    text-align: left;
+}
+
+.cardItemContainer {
+    padding: 8px;
+}
+
+/* Rating */
+
+.cardItemContainer .addRatingForm {
+    height: auto;
+    margin-top: 8px;
+    color: black;
+}
+
+.cardItemContainer .addRatingForm .md-button {
+    color: black;
+}
+
+/*.cardItemContainer ::-webkit-scrollbar {
+    width: 5px;
+}
+.cardItemContainer ::-webkit-scrollbar-thumb {
+    background: rgba(96, 125, 139,0.7);
+    border-radius: 25px;
+    box-shadow: inset 0px 1px 1px 1px rgba(38, 50, 56, 0.1);
+}
+.cardItemContainer ::-webkit-scrollbar-thumb:hover {
+    background: rgba(96, 125, 139,0.9);
+}
+.cardItemContainer ::-webkit-scrollbar-thumb:active {
+    background: rgba(38, 50, 56,0.9);
+}
+.cardItemContainer ::-webkit-scrollbar-track {
+    background: rgba(176, 190, 197,0.5);
+    border-radius: 25px;
+}
+.cardItemContainer ::-webkit-scrollbar-track:hover {
+    background: rgba(176, 190, 197,0.9);
+}*/
+.cardItemContainer .scroll {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+/* Info */
+.cardItemContainer .edit-button {
+    --iron-icon-fill-color: black;
+    position: absolute;
+    margin: 8px;
+    bottom: 0;
+    right: 0;
+}
