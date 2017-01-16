@@ -2,12 +2,12 @@
  * Created by austin on 3/1/16.
  */
 (function() {
-    var app = angular.module('listPage', ['ngMaterial', 'ngRoute', 'ui.router', 'locationDirectives']);
+    var app = angular.module('listPage', ['ngMaterial', 'ngRoute', 'ui.router', 'uiGmapgoogle-maps', 'locationDirectives']);
 
     /**
      * Todo: Implement callView
      */
-    app.config(function ($stateProvider, $urlRouterProvider) {
+    app.config(function ($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {
         $urlRouterProvider.otherwise("/list");
 
         $stateProvider
@@ -30,18 +30,49 @@
                 templateUrl: "/app/partials/call-partial.html",
                 controller: 'CallViewCtrl'
             });
+        
+        uiGmapGoogleMapApiProvider.configure({
+            libraries: 'places',
+            key: 'AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE'
+        })
     });
 
     /**
      * Loads the Google Map, sets the center to the user's current location
      */
-    app.controller('ListPageCtrl', ['$scope', '$rootScope',
-        function($scope, $rootScope) {
+    app.controller('ListPageCtrl', ['$scope', '$rootScope', 'uiGmapIsReady',
+        function($scope, $rootScope, uiGmapIsReady) {
             var listPageCtrl = this;
             listPageCtrl.currentLatLng = null;
-            $rootScope.map = null;
-
-            document.addEventListener('google-maps-api-loaded', function() {
+            $rootScope.mapCtrl = null;
+            
+            $scope.mapCenter = {latitude: 40.730610, longitude: -73.935242};
+            $scope.mapOptions = {
+                center: {lat: 40.730610, lng: -73.935242},
+                zoom: 8,
+                tilt: 0,
+                //mapTypeId: 'ROADMAP',
+                disableDefaultUI: true
+            };
+            
+            uiGmapIsReady.promise(1).then(function(instances) {
+               console.log("Gmap Ready!");
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            //success
+                            console.log("Got the users current location!");
+                            listPageCtrl.zoomToLocation({
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            });
+                        }, function (error) {
+                            console.log("Couldn't get user's current location: " + error);
+                        });
+                }
+            });
+            
+            /*document.addEventListener('google-maps-api-loaded', function() {
                 console.log("Google maps loaded from the listPage");
                 var mapOptions = {
                     center: {lat: 40.730610, lng: -73.935242},
@@ -68,7 +99,7 @@
 
                 $rootScope.$broadcast('google-maps-loaded');
                 //$scope.$root.$broadcast('google-maps-loaded');
-            });
+            });*/
 
             /**
              *  Easier to work with google maps api

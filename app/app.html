@@ -35,8 +35,10 @@ The main landing page for the app.
         <script src="/bower_components/angular-input-stars-directive/angular-input-stars.js"></script>
         <script src="/bower_components/jquery/dist/jquery.min.js"></script>
         <script src="/bower_components/checklist-model/checklist-model.js"></script>
-
         <script src="/bower_components/geocomplete/jquery.geocomplete.min.js"></script>
+        <script src="/bower_components/lodash/dist/lodash.min.js"></script>
+        <script src="/bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+        <script src="/bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
 
         <!-- Our stuff -->
         <link rel="stylesheet" href="/app/directives/location-card/location-card-directives.css">
@@ -50,11 +52,15 @@ The main landing page for the app.
         <script src="/app/app.js"></script>
         <script src="/app/filters/locationFilter.js"></script>
 
-        <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE&callback=initMap"></script>
+        <!--<script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAbH91Y_ikGOeXR5rupXe1ARQzxLuvw7SE&callback=initMap"></script>-->
 	</head>
 
 	<body ng-controller="ListPageCtrl as listPageCtrl">
-        <div id="map"></div>
+        <!--<div id="map"></div>-->
+        <div id="map-canvas">
+            <ui-gmap-google-map center="mapCenter" zoom="mapOptions.zoom" options="mapOptions"></ui-gmap-google-map>
+        </div>
+
         <section id="content">
             <header id="iconLinks">
                 <div id="headHome">
