@@ -59,7 +59,7 @@
                         var rating = new locationService.LocationRating($scope.rating, true);
 
                         locationService.rate($scope.location.id, rating)
-                            .success(function(data) {
+                            .then(function(data) {
                                 // Reset the form
                                 $scope.ratingForm.$setPristine();
                                 $scope.ratingForm.$setUntouched();
@@ -68,7 +68,7 @@
                                 // push the rating into the locations ratings hehe
                                 $scope.location.ratings.push(rating);
                             })
-                            .error(function(data) {
+                            .catch(function(data) {
                                 console.log(data);
                             });
                     } else {
