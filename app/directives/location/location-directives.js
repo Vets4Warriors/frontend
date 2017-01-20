@@ -95,11 +95,11 @@
 
             function getLocations(queries) {
                 locationService.query(queries)
-                    .success(function(data) {
-                        var newLocs = Location.fromJsonArray(angular.fromJson(data));
+                    .then(function(req) {
+                        var newLocs = Location.fromJsonArray(angular.fromJson(req.data));
                         listCtrl.updateLocations(newLocs);
                     })
-                    .error(function() {
+                    .catch(function() {
                         $mdToast.showSimple("Sorry, we couldn't connect to the server. " +
                             "Have you checked your internet connection?");
                     });
@@ -173,14 +173,14 @@
                         var location = new locationService.Location($scope.location, true);
 
                         locationService.add(location)
-                            .success(function(data) {
+                            .then(function(req) {
                                 $mdToast.showSimple("Added " + location.name + " to the database!");
                                 $scope.resetForm();
                                 
-                                var newLocation = new locationService.Location(angular.fromJson(data), false);
+                                var newLocation = new locationService.Location(angular.fromJson(req.data), false);
                                 $scope.locations.push(newLocation);
                             })
-                            .error(function(data) {
+                            .catch(function(data) {
                                 $mdToast.showSimple("Failed to add the location!");
                             });
                     }
@@ -226,15 +226,15 @@
 
                     // First load the data
                     locationService.get($scope.id)
-                        .success(function(data) {
-                            $scope.location = new locationService.Location(angular.fromJson(data), false);
+                        .then(function(req) {
+                            $scope.location = new locationService.Location(angular.fromJson(req.data), false);
                             // Make a deep copy to preserve the original,
                             // though this doesn't really matter as we aren't pulling straight from the main list
                             angular.copy($scope.location, $scope.locationCopy);
                             $scope.locationCopy.formattedAddr = $scope.locationCopy.getFormattedAddr();
                             $scope.locationCopy.formattedHqAddr = $scope.locationCopy.getFormattedHqAddr();
                         })
-                        .error( function() {
+                        .catch( function() {
                             console.log("Error loading location with id " + $scope.id );
                         });
 
@@ -248,11 +248,11 @@
                             // Send request to database api
 
                             locationService.update($scope.locationCopy)
-                                .success(function(data) {
+                                .then(function(req) {
                                     angular.copy($scope.locationCopy, $scope.location);
                                     $mdToast.showSimple("Updated " + $scope.location.name + "!");
                                 })
-                                .error(function(data){
+                                .catch(function(req){
                                     $mdToast.showSimple("Failed to edit the location!");
                                 });
                         }
@@ -270,11 +270,11 @@
                         }).then(function() {
                             // Delete upon confirmation
                             locationService.delete($scope.location.id)
-                                .success(function(data){
+                                .then(function(req){
                                     $mdToast.showSimple("Deleted " + $scope.location.name + "!");
                                     $scope.onClose();
                                 })
-                                .error(function(data){
+                                .catch(function(req){
                                     $mdToast.showSimple("Failed to delete the location!");
                                 });
                         });

@@ -41,7 +41,8 @@
             listPageCtrl.currentLatLng = null;
             $rootScope.map = null;
 
-            document.addEventListener('google-maps-api-loaded', function() {
+
+            mapLoadFunction = function() {
                 console.log("Google maps loaded from the listPage");
                 var mapOptions = {
                     center: {lat: 40.730610, lng: -73.935242},
@@ -68,7 +69,7 @@
 
                 $rootScope.$broadcast('google-maps-loaded');
                 //$scope.$root.$broadcast('google-maps-loaded');
-            });
+            };
 
             /**
              *  Easier to work with google maps api
@@ -112,11 +113,22 @@
     }]);
 })();
 
+var mapLoadFunction = null;
+
 /**
  * The Callback function for google maps api loading */
 function initMap() {
-    var loadedEvent = new Event('google-maps-api-loaded');
-    document.dispatchEvent(loadedEvent);
+    // var loadedEvent = new Event('google-maps-api-loaded');
+    // document.dispatchEvent(loadedEvent);
+    // Perhaps the shittiest workaround I could think of for IE fix while we work on next
+    function load() {
+        if (mapLoadFunction != null) {
+            mapLoadFunction();
+        } else {
+            setTimeout(load, 250);
+        }
+    }
+    setTimeout(load, 250);
 }
 
 

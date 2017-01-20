@@ -10,9 +10,9 @@
         // Not currently using the resource. Want to be explicit. When I get better at angular.
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
-            var baseApiUrl = 'http://vets.cawleyedwards.com/api/1.0/locations';
-            // var baseApiUrl = 'http://localhost/api/1.0/locations';
-            //var baseApiUrl = 'http://localhost:8000/1.0/locations';
+            var baseApiUrl = 'https://vets.cawleyedwards.com/api/1.0/locations';
+            // var baseApiUrl = 'https://localhost/api/1.0/locations';
+            // var baseApiUrl = 'https://localhost:8000/1.0/locations';
             const service = this;
 
             /**
