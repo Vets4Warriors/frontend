@@ -154,8 +154,8 @@
         return {
             restrict: 'E',
             templateUrl: '/app/directives/location/location-add.html',
-            controller: ['$scope', '$log', '$http', 'locationService', '$mdConstant',
-                function($scope, $log, $http, locationService, $mdConstant) {
+            controller: ['$scope', '$log', '$http', '$mdToast', 'locationService', '$mdConstant',
+                function($scope, $log, $http, $mdToast, locationService, $mdConstant) {
                 
                 var locAddCtrl = this;
                 locAddCtrl.separatorKeys = [$mdConstant.KEY_CODE.COMMA];
