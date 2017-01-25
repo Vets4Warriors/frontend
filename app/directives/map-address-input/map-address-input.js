@@ -49,7 +49,7 @@
                     }).then(function(newAddr, fr) {
                         // Update the addr
                         addrInput.$pristine = false;
-                       addrInput.$valid = true;
+                        addrInput.$valid = true;
                         $scope.address = newAddr;
                         // Update the formatted address
                         $scope.formattedAddress = newAddr.getFormatted();

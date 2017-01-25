@@ -99,8 +99,15 @@
                 return result;
             };
 
+          /**
+           * TODO
+           * @return {boolean}
+           */
+          service.LocationAddress.prototype.validate = function() {
+                return true;
+            };
+
             /**
-             *
              * @type {LocationRating}
              */
             service.LocationRating = function(jsonData, fromForm) {

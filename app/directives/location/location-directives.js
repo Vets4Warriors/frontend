@@ -182,8 +182,8 @@
                             })
                             .catch(function(error) {
                                 var message = 'Failed to add resource!';
-                                if (error.data.message) {
-                                    message += error.data.message;
+                                if (error.data && error.data.message) {
+                                    message += ' ' + error.data.message;
                                 }
                                 $mdToast.showSimple(message);
                             });
