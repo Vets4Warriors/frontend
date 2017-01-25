@@ -180,8 +180,12 @@
                                 var newLocation = new locationService.Location(angular.fromJson(req.data), false);
                                 $scope.locations.push(newLocation);
                             })
-                            .catch(function(data) {
-                                $mdToast.showSimple("Failed to add the location!");
+                            .catch(function(error) {
+                                var message = 'Failed to add resource!';
+                                if (error.data.message) {
+                                    message += error.data.message;
+                                }
+                                $mdToast.showSimple(message);
                             });
                     }
                     return false;
