@@ -15,7 +15,7 @@
      <form id="editForm" name="editForm" ng-submit="submitEditForm()" layout="column">
         <!-- Basics -->
          <md-input-container>
-             <label for="name">Resource name</label>
+             <label for="name">Resource name *</label>
              <input id="name" name="name" type="text" ng-model="locationCopy.name"
                     required
                     md-autofocus>
@@ -43,9 +43,9 @@
 
          <md-input-container>
              <label for="website">Website (http:// ... )</label>
-             <input id="website" name="website" type="url" required ng-model="locationCopy.website">
+             <input id="website" name="website" type="url" ng-model="locationCopy.website">
              <div ng-messages="editForm.website.$error">
-                 <div ng-message="required">Need a webiste!</div>
+                 <!--<div ng-message="required">Need a webiste!</div>-->
                  <div ng-message="url">Please enter a valid website. (hint: http://)</div>
              </div>
          </md-input-container>
@@ -53,9 +53,9 @@
          <!-- Deeper info -->
          <md-input-container>
              <label for="locationType">Resource Type</label>
-             <input id="locationType" type="text" required ng-model="locationCopy.locationType">
+             <input id="locationType" type="text" ng-model="locationCopy.locationType">
              <div ng-messages="editForm.locationType.$error">
-                 <div ng-message="required">Need a resource type!</div>
+                 <!--<div ng-message="required">Need a resource type!</div>-->
              </div>
          </md-input-container>
 
@@ -103,7 +103,7 @@
          </md-input-container>
 
          <md-input-container>
-             <label for="editBy">Your name</label>
+             <label for="editBy">Your name *</label>
              <input id="editBy" name="editBy" type="text" ng-model="locationCopy.addedBy" required>
              <div ng-messages="editForm.editBy.$error">
                  <div ng-message="required">Need to provide your name!</div>

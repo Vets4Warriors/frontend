@@ -6,13 +6,18 @@
     "use strict";
     var locationService = angular.module('locationServices', []);
 
+    // Utility function
+    function emptyOrStringField(field) {
+        return field === '' ? undefined : field;
+    }
+
     locationService.service('locationService', [/*'$resource',*/ '$http',
         // Not currently using the resource. Want to be explicit. When I get better at angular.
         // Will probably be rewritten using $resource
         function(/*$resource,*/ $http) {
             var baseApiUrl = 'https://vets.cawleyedwards.com/api/1.0/locations';
-            // var baseApiUrl = 'https://localhost/api/1.0/locations';
-            // var baseApiUrl = 'https://localhost:8000/1.0/locations';
+            // var baseApiUrl = 'http://localhost/api/1.0/locations';
+            // var baseApiUrl = 'http://localhost:5000/1.0/locations';
             const service = this;
 
             /**
@@ -38,7 +43,7 @@
 
             /**
              * Todo: refactor this to be opposite. Aka constructor makes empty
-             * @returns {LocationAddress}
+             * @returns {service.LocationAddress}
              */
             service.LocationAddress.makeEmpty = function() {
                 return new service.LocationAddress({
@@ -120,25 +125,27 @@
             };
 
             /**
-             *
+             * Only addedBy and name are required
              * @type {Location}
              */
             service.Location = function(jsonData, fromForm) {
                 /* Meant explicitly to send to the server */
                 if (fromForm) {
                     console.log("Building location from form!");
+                    // required
                     this.name = jsonData['name'];
-                    this.phone = jsonData['phone'];
-                    this.email = jsonData['email'];
+                    this.addedBy  = jsonData['addedBy'];
+
+                    this.phone = emptyOrStringField(jsonData['phone']);
+                    this.email = emptyOrStringField(jsonData['email']);
                     this.address = jsonData['address'];
                     this.hqAddress = jsonData['hqAddress'];
                     this.locationType = jsonData['locationType'];
                     this.coverages = jsonData['coverages'];
                     this.services = jsonData['services'];
                     this.tags = jsonData['tags'];
-                    this.comments = jsonData['comments'];
-                    this.website = jsonData['website'];
-                    this.addedBy  = jsonData['addedBy'];
+                    this.comments = emptyOrStringField(jsonData['comments']);
+                    this.website = emptyOrStringField(jsonData['website']);
                 } else {
                     // From server
                     //this.rawData = jsonData;

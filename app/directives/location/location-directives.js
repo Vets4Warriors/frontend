@@ -191,7 +191,8 @@
                  * Must reset the target addresses as well as the whole form
                  */
                 $scope.resetForm = function() {
-                    $scope.location.address = locationService.Location.makeEmpty();
+
+                    $scope.location = locationService.Location.makeEmpty();
                     $scope.hqAddr = locationService.Location.makeEmpty();
                 };
 

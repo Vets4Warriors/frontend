@@ -15,7 +15,7 @@
 	<form id="addForm" name="addForm" ng-submit="submitAddForm()" layout="column">
 		<!-- Basics -->
 		<md-input-container>
-			<label for="name">Resource name</label>
+			<label for="name">Resource name *</label>
 			<input id="name" name="name" type="text" ng-model="location.name"
 				   required
 				   md-autofocus>
@@ -43,9 +43,9 @@
 
 		<md-input-container>
 			<label for="website">Website (http:// ... )</label>
-			<input id="website" name="website" type="url" required ng-model="location.website">
+			<input id="website" name="website" type="url" ng-model="location.website">
 			<div ng-messages="addForm.website.$error">
-				<div ng-message="required">Need a webiste!</div>
+				<!--<div ng-message="required">Need a webiste!</div>-->
 				<div ng-message="url">Please enter a valid website.</div>
 			</div>
 		</md-input-container>
@@ -53,9 +53,9 @@
 		<!-- Deeper info -->
 		<md-input-container>
 			<label for="locationType">Resource Type</label>
-			<input id="locationType" type="text" required ng-model="location.locationType">
+			<input id="locationType" type="text" ng-model="location.locationType">
 			<div ng-messages="addForm.locationType.$error">
-				<div ng-message="required">Need a resource type!</div>
+				<!--<div ng-message="required">Need a resource type!</div>-->
 			</div>
 		</md-input-container>
 
@@ -103,7 +103,7 @@
 		</md-input-container>
 
 		<md-input-container>
-			<label for="addedBy">Your name</label>
+			<label for="addedBy">Your name *</label>
 			<input id="addedBy" type="text" ng-model="location.addedBy" required>
 			<div ng-messages="addForm.addedBy.$error">
 				<div ng-message="required">Need to provide your name!</div>
