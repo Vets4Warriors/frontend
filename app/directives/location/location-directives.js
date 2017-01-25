@@ -64,7 +64,7 @@
                             // Some locations just won't have addresses.
                             // Only add markers for those that do
                             var addr = locationToAdd.getLatLngAddr();
-                            if (addr) {
+                            if (addr && !addr.isEmpty()) {
                                 var marker = new google.maps.Marker({
                                     map: map,
                                     position: new google.maps.LatLng(locationToAdd.getAddrLatLng()),

@@ -15,7 +15,7 @@
      <form id="editForm" name="editForm" ng-submit="submitEditForm()" layout="column">
         <!-- Basics -->
          <md-input-container>
-             <label for="name">Resource name *</label>
+             <label for="name">Resource name</label>
              <input id="name" name="name" type="text" ng-model="locationCopy.name"
                     required
                     md-autofocus>
@@ -103,7 +103,7 @@
          </md-input-container>
 
          <md-input-container>
-             <label for="editBy">Your name *</label>
+             <label for="editBy">Your name</label>
              <input id="editBy" name="editBy" type="text" ng-model="locationCopy.addedBy" required>
              <div ng-messages="editForm.editBy.$error">
                  <div ng-message="required">Need to provide your name!</div>

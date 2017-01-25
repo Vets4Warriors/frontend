@@ -53,8 +53,16 @@
                     state: '',
                     country: '',
                     zipcode: '',
-                    latLng: {lat: 0.0, lng: 0.0}
+                    latLng: { lat: 0.0, lng: 0.0 }
                 }, true);
+            };
+
+          /**
+           *
+           * @return {boolean}
+           */
+            service.LocationAddress.prototype.isEmpty = function() {
+                return this.latLng.lat == 0.0 && this.latLng.lng == 0.0;
             };
 
 
@@ -140,7 +148,7 @@
                     this.email = emptyOrStringField(jsonData['email']);
                     this.address = jsonData['address'];
                     this.hqAddress = jsonData['hqAddress'];
-                    this.locationType = jsonData['locationType'];
+                    this.locationType = emptyOrStringField(jsonData['locationType']);
                     this.coverages = jsonData['coverages'];
                     this.services = jsonData['services'];
                     this.tags = jsonData['tags'];
@@ -221,7 +229,8 @@
             };
 
             service.Location.prototype.hasAddr = function() {
-                return this.address !== undefined || this.hqAddress !== undefined;
+                return (this.address !== undefined  && !this.address.isEmpty())
+                    || (this.hqAddress !== undefined && !this.hqAddress.isEmpty());
             };
 
             /**
@@ -233,10 +242,18 @@
             };
 
 
+          /**
+           *
+           * @return {string}
+           */
             service.Location.prototype.getFormattedServices = function() {
                 return service.Location.formatArrayToStr(this.services, ', ', '');
             };
 
+          /**
+           *
+           * @return {string}
+           */
             service.Location.prototype.getFormattedCoverage = function() {
                 return service.Location.formatArrayToStr(this.coverages, ', ', '');
             };
