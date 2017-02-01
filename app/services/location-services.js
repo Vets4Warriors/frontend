@@ -33,16 +33,17 @@
                     this.latLng.lat = jsonData['latLng'].coordinates[1];
                     this.latLng.lng = jsonData['latLng'].coordinates[0];
                 }
-                this.address1 = jsonData['address1'];
-                this.address2 = jsonData['address2'];
-                this.city = jsonData['city'];
-                this.state = jsonData['state'];
-                this.country = jsonData['country'];
-                this.zipcode = jsonData['zipcode'];
+                this.address1 = jsonData['address1'] ? jsonData['address1'] : '';
+                this.address2 = jsonData['address2'] ? jsonData['address2'] : '';
+                this.city = jsonData['city'] ? jsonData['city'] : '';
+                this.state = jsonData['state'] ? jsonData['state'] : '';
+                this.country = jsonData['country'] ? jsonData['country'] : '';
+                this.zipcode = jsonData['zipcode'] ? jsonData['zipcode'] : '';
             };
 
             /**
              * Todo: refactor this to be opposite. Aka constructor makes empty
+             * @static
              * @returns {service.LocationAddress}
              */
             service.LocationAddress.makeEmpty = function() {
@@ -127,7 +128,7 @@
             };
 
             /**
-             *
+             * @static
              * @param jsonArray
              * @returns {Array}
              */
@@ -185,6 +186,10 @@
                 }
             };
 
+          /**
+           * @static
+           * @return {service.Location}
+           */
             service.Location.makeEmpty = function() {
                 var empty = {};
                 empty.name = "";
@@ -288,7 +293,7 @@
             };
 
             /**
-             *
+             * @static
              * @param arr
              * @param delimiter
              * @param prefix
@@ -312,7 +317,7 @@
             };
 
             /**
-             *
+             * @static
              * @param jsonArray
              * @returns {Array} of Locations
              */

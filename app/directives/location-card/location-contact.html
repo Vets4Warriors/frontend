@@ -1,6 +1,9 @@
 <article class="cardItemContainer md-body-1">
     <div ng-if="location.getPhone()">
-        <p><b>Phone:</b><br>{{location.getPhone()}}</p>
+        <p><b>Phone:</b>
+            <br>
+            <a href="tel:{{location.getPhone()}}">{{location.getPhone()}}</a>
+        </p>
     </div>
     <div ng-if="location.email">
         <p><a href="mailto:{{location.email}}">{{location.email}}</a></p>
