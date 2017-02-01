@@ -5,8 +5,8 @@
     <md-toolbar class="md-medium-tall">
         <div class="md-toolbar-tools">
             <!-- Max 20 characters including ... -->
-            <h1 class="md-title">{{location.name | limitTo: 17}}
-                <span ng-if="location.name.length > 17">...</span></h1>
+            <h1 class="md-title">{{ location.name | limitTo: 22 }}
+                <span ng-if="location.name.length > 22">...</span></h1>
             <!-- Fill the space between left and right sections-->
             <span flex></span>
             <md-button class="md-icon-button" aria-label="Locate" ng-show="location.hasAddr();"
