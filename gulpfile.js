@@ -12,8 +12,6 @@ var cleanCSS = require('gulp-clean-css');
 const del = require('del');
 const merge = require('merge-stream');
 
-const print = require('gulp-print');
-
 const buildDest = {
     prod: "dist",
     dev: "dist-dev"
@@ -35,7 +33,6 @@ gulp.task('build', function() {
 /** Main goal is to minify all css and html */
 gulp.task('optimize', function() {
     return gulp.src(compileDir + '/*.html')
-        .pipe(print())
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(cleanCSS())
         .pipe(gulp.dest('dist'));
